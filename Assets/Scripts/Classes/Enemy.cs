@@ -48,8 +48,8 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
-        animator = GetComponentInChildren<Animator>();
-        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         currentHealth = maxHealth;
         currentMovementSpeed = baseMovementSpeed;
@@ -172,11 +172,7 @@ public class Enemy : MonoBehaviour
     void HandleMovement()
     {
         if (!canMove || targetPlayer == null || currentMovementSpeed <= 0 || isKnockbacked)
-        {
-            if (animator != null)
-                animator.SetFloat("RunState", 0.5f);
             return;
-        }
 
         Vector2 direction = new Vector2(targetPlayer.position.x - transform.position.x, 0f).normalized;
         float distanceToPlayer = Vector2.Distance(transform.position, targetPlayer.position);
@@ -189,13 +185,17 @@ public class Enemy : MonoBehaviour
                 spriteRenderer.flipX = direction.x < 0;
 
             if (animator != null)
-                animator.SetFloat("RunState", 0.5f);
+            {
+                animator.SetBool("IsMoving", true);
+                animator.SetFloat("MoveX", direction.x);
+                animator.SetFloat("MoveY", direction.y);
+            }
         }
         else
         {
             rb.linearVelocity = Vector2.zero;
             if (animator != null)
-                animator.SetFloat("RunState", 0f);
+                animator.SetBool("IsMoving", false);
         }
     }
 

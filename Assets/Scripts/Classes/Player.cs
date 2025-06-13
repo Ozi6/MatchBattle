@@ -167,6 +167,8 @@ public class Player : MonoBehaviour
         if (isInvulnerable && Time.time - lastDamageTime >= invulnerabilityDuration)
         {
             isInvulnerable = false;
+            if (spriteRenderer != null)
+                spriteRenderer.color = Color.white;
         }
     }
 

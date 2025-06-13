@@ -3,18 +3,15 @@ using System;
 
 public class Projectile : MonoBehaviour
 {
+    [Header("Visual Effects")]
+    [SerializeField] private GameObject explosionEffectPrefab;
     [SerializeField] private TrailRenderer trailRenderer;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Collider2D projectileCollider;
-    [SerializeField] private string enemyTag = "Enemy";
+    [SerializeField] private const string enemyTag = "Enemy";
 
     private ProjectileData data;
-    private IKnockback knockbackComponent;
-    private IExplosive explosionComponent;
-    private IArcTrajectory arcTrajectoryComponent;
-    private IDebuffable debuffComponent;
-    private IHoming homingComponent;
-    private GameObject explosionEffectPrefab;
+    private Enemy targetEnemy;
     private Vector2 direction;
     private Vector3 targetPosition;
     private bool isInitialized = false;
@@ -23,6 +20,12 @@ public class Projectile : MonoBehaviour
     private float currentLifetime;
     private int pierceCount = 0;
     private bool hasHitTarget = false;
+
+    private Vector3 startPosition;
+    private float arcProgress = 0f;
+    private bool usingArcTrajectory = false;
+    private float totalDistance;
+    private float arcSpeed;
 
     public Action<Projectile> OnProjectileDestroyed;
     public Action<Projectile, Enemy> OnProjectileHitEnemy;
@@ -40,49 +43,58 @@ public class Projectile : MonoBehaviour
 
     public void Initialize(Vector2 dir, ProjectileData projectileData, Enemy target = null)
     {
-        data = projectileData.Clone();
         direction = dir.normalized;
+        data = projectileData.Clone();
+        targetEnemy = target;
         isInitialized = true;
         hasExploded = false;
         currentLifetime = data.lifetime;
         pierceCount = 0;
         hasHitTarget = false;
 
-        if (data.hasKnockback)
-            knockbackComponent = new KnockbackComponent(data.knockbackForce, data.knockbackDuration);
-
-        if (data.hasAreaEffect || data.explodesOnContact)
-            explosionComponent = gameObject.AddComponent<ExplosionComponent>().Initialize(data.areaRadius, explosionEffectPrefab, this);
-
-        if (data.usesArc)
-            arcTrajectoryComponent = gameObject.AddComponent<ArcTrajectoryComponent>().Initialize(transform, rb);
-
-        if (data.debuffDuration > 0f)
-            debuffComponent = new DebuffComponent(data.debuffType, data.debuffDuration, data.debuffIntensity);
-
-        if (data.isHoming)
-            homingComponent = gameObject.AddComponent<HomingComponent>().Initialize(data.homingStrength, data.homingRange, transform);
-
         if (data.explosionTimer > 0f)
             explosionTimer = data.explosionTimer;
 
         if (data.usesArc && targetPosition != Vector3.zero)
-            arcTrajectoryComponent?.SetupArc(transform.position, targetPosition, data.arcHeight, data.speed);
-        else if (rb != null)
-            rb.linearVelocity = direction * data.speed;
+            SetupArcTrajectory();
+        else
+        {
+            if (rb != null)
+                rb.linearVelocity = direction * data.speed;
+        }
 
         if (trailRenderer != null)
         {
             trailRenderer.enabled = true;
             trailRenderer.Clear();
         }
+
+        Debug.Log($"Projectile initialized: Arc={data.usesArc}, Homing={data.isHoming}, Direction={direction}, Speed={data.speed}");
     }
 
     public void SetTargetPosition(Vector3 target)
     {
         targetPosition = target;
+
         if (isInitialized && data.usesArc)
-            arcTrajectoryComponent?.SetupArc(transform.position, targetPosition, data.arcHeight, data.speed);
+            SetupArcTrajectory();
+    }
+
+    void SetupArcTrajectory()
+    {
+        startPosition = transform.position;
+        totalDistance = Vector3.Distance(startPosition, targetPosition);
+        arcSpeed = data.speed;
+        arcProgress = 0f;
+        usingArcTrajectory = true;
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+
+        Debug.Log($"Arc trajectory setup: Start={startPosition}, Target={targetPosition}, Distance={totalDistance}");
     }
 
     void Update()
@@ -102,28 +114,19 @@ public class Projectile : MonoBehaviour
             explosionTimer -= Time.deltaTime;
             if (explosionTimer <= 0f)
             {
-                explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
-                hasExploded = true;
-                DestroyProjectile();
+                ExplodeProjectile();
                 return;
             }
         }
 
-        if (arcTrajectoryComponent != null)
+        if (usingArcTrajectory)
         {
-            arcTrajectoryComponent.UpdateArcMovement();
-            if (arcTrajectoryComponent.IsArcComplete())
-            {
-                if (data.explodesOnContact)
-                    explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
-                else
-                    CheckForEnemiesAtPosition(transform.position);
-            }
+            UpdateArcMovement();
         }
         else
         {
-            if (homingComponent != null)
-                homingComponent.UpdateHoming();
+            if (data.isHoming && !hasHitTarget)
+                HandleHoming();
 
             if (rb != null)
                 rb.linearVelocity = direction * data.speed;
@@ -136,55 +139,80 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void HandleHoming()
     {
-        if (!isInitialized || hasExploded)
-            return;
+        if (targetEnemy == null || targetEnemy.IsDead())
+            targetEnemy = FindClosestEnemy();
 
-        if (arcTrajectoryComponent != null && !arcTrajectoryComponent.IsArcComplete())
-            return;
-
-        if (other.CompareTag(enemyTag))
+        if (targetEnemy != null)
         {
-            Enemy enemy = other.GetComponent<Enemy>();
-            if (enemy != null && !enemy.IsDead() && pierceCount < data.maxPierceCount)
-                HitEnemy(enemy);
+            Vector2 targetDirection = ((Vector2)targetEnemy.transform.position - (Vector2)transform.position).normalized;
+            direction = Vector2.Lerp(direction, targetDirection, data.homingStrength * Time.deltaTime).normalized;
         }
     }
 
-    void HitEnemy(Enemy enemy)
+    Enemy FindClosestEnemy()
     {
-        if (enemy == null || enemy.IsDead())
+        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(transform.position, data.homingRange);
+        Enemy closestEnemy = null;
+        float closestDistance = Mathf.Infinity;
+
+        foreach (Collider2D col in nearbyColliders)
+        {
+            if (col.CompareTag(enemyTag))
+            {
+                Enemy enemy = col.GetComponent<Enemy>();
+                if (enemy != null && !enemy.IsDead())
+                {
+                    float distance = Vector2.Distance(transform.position, enemy.transform.position);
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        closestEnemy = enemy;
+                    }
+                }
+            }
+        }
+
+        return closestEnemy;
+    }
+
+    void UpdateArcMovement()
+    {
+        if (hasExploded)
             return;
 
-        hasHitTarget = true;
-        enemy.TakeDamage(data.damage);
-        debuffComponent?.ApplyDebuff(enemy);
+        arcProgress += (arcSpeed / totalDistance) * Time.deltaTime;
 
-        if (knockbackComponent != null)
+        if (arcProgress >= 1f)
         {
-            Vector2 knockbackDirection = arcTrajectoryComponent != null
-                ? (enemy.transform.position - transform.position).normalized
-                : new Vector2(direction.x, 0f).normalized;
-            knockbackComponent.ApplyKnockback(enemy, knockbackDirection, 1f, data.knockbackDuration);
-        }
+            transform.position = targetPosition;
 
-        OnProjectileHitEnemy?.Invoke(this, enemy);
-        Debug.Log($"Projectile hit {enemy.name} for {data.damage} damage");
-
-        if (data.piercing && pierceCount < data.maxPierceCount)
-        {
-            pierceCount++;
-            Debug.Log($"Projectile pierced enemy! Pierce count: {pierceCount}/{data.maxPierceCount}");
-            if (data.hasAreaEffect)
-                explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
-        }
-        else
-        {
-            if (data.hasAreaEffect)
-                explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
+            if (data.explosionTimer > 0f || !data.explodesOnContact)
+                ExplodeProjectile();
             else
-                DestroyProjectile();
+                CheckForEnemiesAtPosition(targetPosition);
+            return;
+        }
+
+        Vector3 currentPos = Vector3.Lerp(startPosition, targetPosition, arcProgress);
+
+        float arcHeightMultiplier = 4f * arcProgress * (1f - arcProgress);
+        currentPos.y += data.arcHeight * arcHeightMultiplier;
+
+        transform.position = currentPos;
+
+        if (arcProgress > 0.01f)
+        {
+            Vector3 lastPos = Vector3.Lerp(startPosition, targetPosition, arcProgress - 0.01f);
+            lastPos.y += data.arcHeight * 4f * (arcProgress - 0.01f) * (1f - (arcProgress - 0.01f));
+
+            Vector3 moveDirection = (currentPos - lastPos).normalized;
+            if (moveDirection != Vector3.zero)
+            {
+                float angle = Mathf.Atan2(moveDirection.y, moveDirection.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            }
         }
     }
 
@@ -207,61 +235,182 @@ public class Projectile : MonoBehaviour
         }
 
         if (hitEnemy || data.hasAreaEffect)
-            explosionComponent?.Explode(position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
+            ExplodeProjectile();
         else
             DestroyProjectile();
     }
 
-    public void DestroyProjectile()
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!isInitialized || hasExploded)
+            return;
+
+        if (usingArcTrajectory && arcProgress < 0.95f)
+            return;
+
+        if (other.CompareTag(enemyTag))
+        {
+            Enemy enemy = other.GetComponent<Enemy>();
+            if (enemy != null && !enemy.IsDead() && pierceCount < data.maxPierceCount)
+                HitEnemy(enemy);
+        }
+    }
+
+    void HitEnemy(Enemy enemy)
+    {
+        if (enemy == null || enemy.IsDead())
+            return;
+
+        hasHitTarget = true;
+
+        enemy.TakeDamage(data.damage);
+
+        if (data.debuffDuration > 0f)
+        {
+            Debuff debuff = new Debuff(data.debuffType, data.debuffDuration, data.debuffIntensity);
+            enemy.ApplyDebuff(debuff);
+        }
+
+        if (data.hasKnockback)
+        {
+            Vector2 knockbackDirection;
+            if (usingArcTrajectory)
+                knockbackDirection = (enemy.transform.position - transform.position).normalized;
+            else
+                knockbackDirection = new Vector2(direction.x, 0f).normalized;
+
+            enemy.ApplyKnockback(knockbackDirection, data.knockbackForce, data.knockbackDuration);
+        }
+
+        OnProjectileHitEnemy?.Invoke(this, enemy);
+
+        Debug.Log($"Projectile hit {enemy.name} for {data.damage} damage");
+
+        if (data.piercing && pierceCount < data.maxPierceCount)
+        {
+            pierceCount++;
+            Debug.Log($"Projectile pierced enemy! Pierce count: {pierceCount}/{data.maxPierceCount}");
+
+            if (data.hasAreaEffect)
+                ExplodeProjectile();
+        }
+        else
+        {
+            if (data.hasAreaEffect)
+                ExplodeProjectile();
+            else
+                DestroyProjectile();
+        }
+    }
+
+    void ExplodeProjectile()
+    {
+        if (hasExploded)
+            return;
+
+        hasExploded = true;
+
+        Debug.Log($"Projectile exploding at {transform.position}");
+
+        if (explosionEffectPrefab != null)
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+
+        if (data.hasAreaEffect)
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, data.areaRadius);
+
+            foreach (Collider2D col in colliders)
+            {
+                if (col.CompareTag(enemyTag))
+                {
+                    Enemy enemy = col.GetComponent<Enemy>();
+                    if (enemy != null && !enemy.IsDead())
+                    {
+                        float distance = Vector2.Distance(transform.position, enemy.transform.position);
+                        float damageMultiplier = 1f - (distance / data.areaRadius);
+                        damageMultiplier = Mathf.Clamp01(damageMultiplier);
+
+                        float areaDamage = data.damage * damageMultiplier;
+                        enemy.TakeDamage(areaDamage);
+
+                        if (data.debuffDuration > 0f)
+                        {
+                            Debuff debuff = new Debuff(data.debuffType, data.debuffDuration, data.debuffIntensity);
+                            enemy.ApplyDebuff(debuff);
+                        }
+
+                        if (data.hasKnockback)
+                        {
+                            Vector2 knockbackDirection = (enemy.transform.position - transform.position).normalized;
+                            float knockbackMultiplier = damageMultiplier;
+                            enemy.ApplyKnockback(knockbackDirection, data.knockbackForce * knockbackMultiplier, data.knockbackDuration);
+                        }
+
+                        Debug.Log($"Area explosion hit {enemy.name} for {areaDamage} damage (multiplier: {damageMultiplier})");
+                    }
+                }
+            }
+
+            Debug.Log($"Area effect hit {colliders.Length} enemies with {data.areaRadius} radius");
+        }
+
+        DestroyProjectile();
+    }
+
+    void DestroyProjectile()
     {
         if (trailRenderer != null)
+        {
             trailRenderer.enabled = false;
+        }
 
         OnProjectileDestroyed?.Invoke(this);
+
         gameObject.SetActive(false);
     }
 
-    public ProjectileData GetProjectileData() => data;
+    public ProjectileData GetProjectileData()
+    {
+        return data;
+    }
+
     public float GetRemainingLifetime() => currentLifetime;
     public int GetPierceCount() => pierceCount;
 
     void OnDrawGizmos()
     {
-        if (data != null)
+        if (data != null && data.usesArc && targetPosition != Vector3.zero)
         {
-            if (data.usesArc && targetPosition != Vector3.zero)
+            Gizmos.color = Color.yellow;
+            Vector3 start = transform.position;
+            Vector3 end = targetPosition;
+
+            for (int i = 0; i <= 20; i++)
             {
-                Gizmos.color = Color.yellow;
-                Vector3 start = transform.position;
-                Vector3 end = targetPosition;
+                float t = i / 20f;
+                Vector3 pos = Vector3.Lerp(start, end, t);
+                pos.y += data.arcHeight * 4f * t * (1f - t);
 
-                for (int i = 0; i <= 20; i++)
+                if (i > 0)
                 {
-                    float t = i / 20f;
-                    Vector3 pos = Vector3.Lerp(start, end, t);
-                    pos.y += data.arcHeight * 4f * t * (1f - t);
-
-                    if (i > 0)
-                    {
-                        float prevT = (i - 1) / 20f;
-                        Vector3 prevPos = Vector3.Lerp(start, end, prevT);
-                        prevPos.y += data.arcHeight * 4f * prevT * (1f - prevT);
-                        Gizmos.DrawLine(prevPos, pos);
-                    }
+                    float prevT = (i - 1) / 20f;
+                    Vector3 prevPos = Vector3.Lerp(start, end, prevT);
+                    prevPos.y += data.arcHeight * 4f * prevT * (1f - prevT);
+                    Gizmos.DrawLine(prevPos, pos);
                 }
             }
+        }
 
-            if (data.hasAreaEffect)
-            {
-                Gizmos.color = Color.red;
-                Gizmos.DrawWireSphere(transform.position, data.areaRadius);
-            }
+        if (data != null && data.hasAreaEffect)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(transform.position, data.areaRadius);
+        }
 
-            if (data.isHoming)
-            {
-                Gizmos.color = Color.blue;
-                Gizmos.DrawWireSphere(transform.position, data.homingRange);
-            }
+        if (data != null && data.isHoming)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(transform.position, data.homingRange);
         }
     }
 }

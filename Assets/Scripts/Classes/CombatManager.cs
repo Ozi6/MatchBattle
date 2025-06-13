@@ -38,10 +38,6 @@ public class CombatAction
     public float arcHeight = 2f;
     public float explosionDelay = 2f;
     public bool explodesOnTimer = false;
-    public bool explodesOnContact = true;
-    public bool isHoming = false;
-    public float homingStrength = 2f;
-    public float homingRange = 3f;
 }
 
 public enum ProjectileType
@@ -141,7 +137,10 @@ public class CombatManager : MonoBehaviour
     {
         combineManager = FindAnyObjectByType<CombineManager>();
         if (combineManager == null)
+        {
+            Debug.LogError("CombineManager not found! Combat system requires CombineManager.");
             return;
+        }
 
         InitializeCombatActions();
         InitializeUI();
@@ -216,7 +215,10 @@ public class CombatManager : MonoBehaviour
     public void HandlePuzzleMatch(BlockType blockType, int comboSize, List<PuzzleBlock> matchedBlocks)
     {
         if (!combatActionDict.ContainsKey(blockType))
+        {
+            Debug.LogWarning($"No combat action defined for block type: {blockType}");
             return;
+        }
 
         CombatAction action = combatActionDict[blockType];
 
@@ -258,23 +260,15 @@ public class CombatManager : MonoBehaviour
         {
             damage = damage,
             speed = action.projectileSpeed,
-            lifetime = 5f,
             debuffType = action.debuffType,
             debuffDuration = action.debuffDuration,
             debuffIntensity = action.debuffIntensity,
             piercing = action.isPiercing,
             hasAreaEffect = action.hasAreaEffect,
             areaRadius = action.areaRadius,
-            hasKnockback = action.baseKnockbackForce > 0f,
+            hasKnockback = true,
             knockbackForce = action.baseKnockbackForce,
-            knockbackDuration = action.knockbackDuration,
-            usesArc = action.usesArcTrajectory,
-            arcHeight = action.arcHeight,
-            explodesOnContact = action.explodesOnContact,
-            explosionTimer = action.explosionDelay,
-            isHoming = action.isHoming,
-            homingStrength = action.homingStrength,
-            homingRange = action.homingRange
+            knockbackDuration = action.knockbackDuration
         };
 
         switch (action.projectileType)
@@ -289,6 +283,8 @@ public class CombatManager : MonoBehaviour
                 LaunchStandardProjectiles(action, projectileData, comboSize);
                 break;
         }
+
+        Debug.Log($"Launched {action.actionName} attack with {damage} damage!");
     }
 
     void LaunchBowProjectiles(CombatAction action, ProjectileData projectileData, int comboSize)
@@ -298,6 +294,8 @@ public class CombatManager : MonoBehaviour
 
         int extraCombos = Mathf.Max(0, comboSize - 3);
         int projectileCount = action.baseProjectileCount + (extraCombos * action.projectileCountPerCombo);
+
+        Debug.Log($"Bow Attack: Combo size {comboSize}, Extra combos: {extraCombos}, Total projectiles: {projectileCount}");
 
         Vector3 spawnPosition = playerTransform.position + Vector3.up * 0.5f;
 
@@ -315,7 +313,7 @@ public class CombatManager : MonoBehaviour
                 float currentAngle = startAngle + (i * angleStep);
                 Vector2 direction = RotateVector2(baseDirection, currentAngle);
 
-                projectileQueue.Enqueue((action, projectileData.Clone(), targetEnemy, spawnPosition, direction, action.usesArcTrajectory));
+                projectileQueue.Enqueue((action, projectileData, targetEnemy, spawnPosition, direction, false));
             }
         }
     }
@@ -325,6 +323,7 @@ public class CombatManager : MonoBehaviour
         if (activeEnemies.Count == 0)
             return;
 
+        // Bomb: Usually 1 projectile per combo, but can be configured
         int projectileCount = action.baseProjectileCount + Mathf.Max(0, comboSize - 3) * action.projectileCountPerCombo;
 
         Vector3 spawnPosition = playerTransform.position + Vector3.up * 0.5f;
@@ -334,16 +333,28 @@ public class CombatManager : MonoBehaviour
             Enemy targetEnemy = GetNextTarget(i % activeEnemies.Count);
             if (targetEnemy != null)
             {
+                // Bomb projectiles use arc trajectory and timer explosion
                 ProjectileData bombData = projectileData.Clone();
-                bombData.usesArc = action.usesArcTrajectory;
-                bombData.arcHeight = action.arcHeight;
-                bombData.explodesOnContact = action.explodesOnContact;
-                bombData.explosionTimer = action.explosionDelay;
-                bombData.isHoming = action.isHoming;
 
+                // Set bomb-specific properties
+                if (action.explodesOnTimer)
+                {
+                    bombData.explosionTimer = action.explosionDelay;
+                    bombData.explodesOnContact = false;
+                }
+
+                if (action.usesArcTrajectory)
+                {
+                    bombData.arcHeight = action.arcHeight;
+                    bombData.usesArc = true;
+                }
+
+                // Direction for bomb is still towards enemy, but projectile will handle arc
                 Vector2 direction = (targetEnemy.transform.position - spawnPosition).normalized;
 
-                projectileQueue.Enqueue((action, bombData, targetEnemy, spawnPosition, direction, action.usesArcTrajectory));
+                projectileQueue.Enqueue((action, bombData, targetEnemy, spawnPosition, direction, true));
+
+                Debug.Log($"Queued bomb projectile {i + 1}/{projectileCount} with arc trajectory and {action.explosionDelay}s timer");
             }
         }
     }
@@ -383,7 +394,7 @@ public class CombatManager : MonoBehaviour
                     direction = RotateVector2(direction, spreadAngle);
                 }
 
-                projectileQueue.Enqueue((action, modifiedData, targetEnemy, spawnPosition, direction, action.usesArcTrajectory));
+                projectileQueue.Enqueue((action, modifiedData, targetEnemy, spawnPosition, direction, false));
             }
         }
     }
@@ -410,9 +421,18 @@ public class CombatManager : MonoBehaviour
                     {
                         Projectile projectile = projectileObj.GetComponent<Projectile>();
                         if (projectile != null)
+                        {
                             projectile.SetTargetPosition(targetEnemy.transform.position);
+
+                            Debug.Log($"Set up arc projectile targeting {targetEnemy.name} at {targetEnemy.transform.position}");
+                        }
                     }
                 }
+
+                if (isArcProjectile)
+                    Debug.Log($"Launched bomb projectile with arc trajectory");
+                else
+                    Debug.Log($"Launched projectile with {projectileData.knockbackForce} knockback force");
             }
 
             lastProjectileLaunchTime = Time.time;
@@ -443,21 +463,25 @@ public class CombatManager : MonoBehaviour
 
     float CalculateActionValue(float baseValue, int comboSize, float comboScaling, int maxComboBonus)
     {
+        Debug.Log($"CalculateActionValue called - baseValue: {baseValue}, comboSize: {comboSize}, comboScaling: {comboScaling}, maxComboBonus: {maxComboBonus}");
+
         int bonusBlocks = Mathf.Max(0, Mathf.Min(comboSize - 3, maxComboBonus));
         float multiplier = 1f + (bonusBlocks * (comboScaling - 1f));
         float result = baseValue * multiplier;
+
+        Debug.Log($"Calculated - bonusBlocks: {bonusBlocks}, multiplier: {multiplier}, result: {result}");
 
         return result;
     }
 
     void HandleComboExecuted(BlockType blockType, int comboSize)
     {
-
+        Debug.Log($"Combo executed: {blockType} x{comboSize}");
     }
 
     void HandleBlocksMatched(List<PuzzleBlock> matchedBlocks)
     {
-
+        Debug.Log($"Blocks matched: {matchedBlocks.Count} blocks");
     }
 
     void HandleEnemySpawning()
@@ -475,7 +499,10 @@ public class CombatManager : MonoBehaviour
     void SpawnEnemy()
     {
         if (currentWaveData.enemyPrefabs.Length == 0)
+        {
+            Debug.LogWarning("No enemy prefabs defined for current wave!");
             return;
+        }
 
         GameObject enemyPrefab = currentWaveData.enemyPrefabs[UnityEngine.Random.Range(0, currentWaveData.enemyPrefabs.Length)];
 
@@ -503,6 +530,7 @@ public class CombatManager : MonoBehaviour
         }
 
         enemiesSpawned++;
+        Debug.Log($"Spawned enemy {enemiesSpawned}/{currentWaveData.totalEnemies}");
     }
 
     void OnEnemyKilled(Enemy enemy)
@@ -511,6 +539,7 @@ public class CombatManager : MonoBehaviour
             activeEnemies.Remove(enemy);
 
         enemiesKilled++;
+        Debug.Log($"Enemy killed! {enemiesKilled}/{currentWaveData.totalEnemies}");
 
         CheckWaveCompletion();
     }
@@ -528,6 +557,8 @@ public class CombatManager : MonoBehaviour
 
         playerDefense = Mathf.Max(0, playerDefense - damage * 0.5f);
 
+        Debug.Log($"Player took {actualDamage} damage. Health: {playerHealth}/{maxPlayerHealth}");
+
         if (playerHealth <= 0)
         {
             OnPlayerDeath?.Invoke();
@@ -538,6 +569,7 @@ public class CombatManager : MonoBehaviour
     void HealPlayer(float healAmount)
     {
         player.Heal(healAmount);
+        Debug.Log($"Player healed for {healAmount}. Health: {playerHealth}/{maxPlayerHealth}");
     }
 
     void CheckWaveCompletion()

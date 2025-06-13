@@ -1,18 +1,16 @@
 using UnityEngine;
 
-public class KnockbackComponent : IKnockback
+public class KnockbackComponent : MonoBehaviour
 {
-    private readonly float force;
-    private readonly float duration;
-
-    public KnockbackComponent(float force, float duration)
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
     {
-        this.force = force;
-        this.duration = duration;
+        
     }
 
-    public void ApplyKnockback(Enemy enemy, Vector2 direction, float forceMultiplier, float duration)
+    // Update is called once per frame
+    void Update()
     {
-        enemy.ApplyKnockback(direction, force * forceMultiplier, this.duration);
+        
     }
 }
