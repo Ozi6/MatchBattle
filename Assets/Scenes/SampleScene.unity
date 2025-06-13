@@ -199,7 +199,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!224 &257364874
 RectTransform:
@@ -550,6 +550,10 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
+    explodesOnContact: 1
+    isHoming: 0
+    homingStrength: 2
+    homingRange: 3
   - blockType: 5
     baseDamage: 15
     baseDefense: 0
@@ -574,6 +578,10 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
+    explodesOnContact: 1
+    isHoming: 0
+    homingStrength: 2
+    homingRange: 3
   - blockType: 2
     baseDamage: 20
     baseDefense: 20
@@ -598,6 +606,10 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
+    explodesOnContact: 1
+    isHoming: 0
+    homingStrength: 2
+    homingRange: 3
   - blockType: 3
     baseDamage: 5
     baseDefense: 0
@@ -622,6 +634,10 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
+    explodesOnContact: 1
+    isHoming: 0
+    homingStrength: 2
+    homingRange: 3
   - blockType: 6
     baseDamage: 5
     baseDefense: 0
@@ -646,6 +662,10 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
+    explodesOnContact: 1
+    isHoming: 0
+    homingStrength: 2
+    homingRange: 3
   currentWave: 1
   totalWaves: 5
   waveClearDelay: 2
@@ -1109,6 +1129,7 @@ GameObject:
   - component: {fileID: 1895979682}
   - component: {fileID: 1895979681}
   - component: {fileID: 1895979680}
+  - component: {fileID: 1895979683}
   m_Layer: 5
   m_Name: PuzzleHalf
   m_TagString: Untagged
@@ -1190,6 +1211,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1895979678}
   m_CullTransparentMesh: 1
+--- !u!223 &1895979683
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1895979678}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 10
+  m_TargetDisplay: 0
 --- !u!1001 &1922904537
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -232,7 +232,6 @@ public class CombineManager : MonoBehaviour
         currentSelection.Clear();
         currentSelection.Add(block);
         block.Highlight(true);
-        Debug.Log($"Started selection with block at ({block.gridX}, {block.gridY}) of type {block.blockType}");
     }
 
     public void OnBlockTouchContinue(PuzzleBlock block)

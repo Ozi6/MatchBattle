@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 12
   m_Sprite: {fileID: -4102395379695302140, guid: 7f9344a4917effa4585cba084a3e12ad, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -175,10 +175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5ced5c3e73391846b280f2dcb1a0ac0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  explosionEffectPrefab: {fileID: 0}
   trailRenderer: {fileID: 0}
   rb: {fileID: 6730531185528607755}
   projectileCollider: {fileID: 2092835784452327725}
-  enemyLayerMask:
-    serializedVersion: 2
-    m_Bits: 1
+  enemyTag: Enemy
