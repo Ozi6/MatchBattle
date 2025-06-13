@@ -1,0 +1,593 @@
+fileFormatVersion: 2
+guid: eaa3f97a771a1634c80e53ccc3c21bb8
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 1595553865318985222
+    second: Unit000_6_5_Skill_Magic_0_0
+  - first:
+      213: -1880914505832615561
+    second: Unit000_6_5_Skill_Magic_0_1
+  - first:
+      213: -5008578834851376685
+    second: Unit000_6_5_Skill_Magic_0_2
+  - first:
+      213: 5102813723488372916
+    second: Unit000_6_5_Skill_Magic_0_3
+  - first:
+      213: 8873189376870942535
+    second: Unit000_6_5_Skill_Magic_0_4
+  - first:
+      213: 1081959399750298985
+    second: Unit000_6_5_Skill_Magic_0_5
+  - first:
+      213: -8695774089178215744
+    second: Unit000_6_5_Skill_Magic_0_6
+  - first:
+      213: 8117384504763332767
+    second: Unit000_6_5_Skill_Magic_0_7
+  - first:
+      213: 4473866349240381020
+    second: Unit000_6_5_Skill_Magic_0_8
+  - first:
+      213: 2435826848613920141
+    second: Unit000_6_5_Skill_Magic_0_9
+  - first:
+      213: -2370158914745273442
+    second: Unit000_6_5_Skill_Magic_0_10
+  - first:
+      213: -405619160076266967
+    second: Unit000_6_5_Skill_Magic_0_11
+  - first:
+      213: -3319538747174675803
+    second: Unit000_6_5_Skill_Magic_0_12
+  - first:
+      213: 306687400027989280
+    second: Unit000_6_5_Skill_Magic_0_13
+  - first:
+      213: -2302564423395533141
+    second: Unit000_6_5_Skill_Magic_0_14
+  - first:
+      213: 4424985974102971842
+    second: Unit000_6_5_Skill_Magic_0_15
+  - first:
+      213: 5289042109789594379
+    second: Unit000_6_5_Skill_Magic_0_16
+  - first:
+      213: 3843799521852258569
+    second: Unit000_6_5_Skill_Magic_0_17
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_0
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 1686
+        width: 110
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 60ee65279cb842610800000000000000
+      internalID: 1595553865318985222
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_1
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 1687
+        width: 111
+        height: 157
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 771b7f2f836a5e5e0800000000000000
+      internalID: -1880914505832615561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_2
+      rect:
+        serializedVersion: 2
+        x: 1246
+        y: 1722
+        width: 111
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3d1d4271614fd7ab0800000000000000
+      internalID: -5008578834851376685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_3
+      rect:
+        serializedVersion: 2
+        x: 1759
+        y: 1736
+        width: 116
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4b8438fab06d0d640800000000000000
+      internalID: 5102813723488372916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_4
+      rect:
+        serializedVersion: 2
+        x: 1227
+        y: 1687
+        width: 120
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7478921e9b6e32b70800000000000000
+      internalID: 8873189376870942535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_5
+      rect:
+        serializedVersion: 2
+        x: 1738
+        y: 1687
+        width: 124
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 96de2837754e30f00800000000000000
+      internalID: 1081959399750298985
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_6
+      rect:
+        serializedVersion: 2
+        x: 223
+        y: 1231
+        width: 112
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0ca8c7fb987625780800000000000000
+      internalID: -8695774089178215744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_7
+      rect:
+        serializedVersion: 2
+        x: 730
+        y: 1233
+        width: 115
+        height: 135
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f98bda7033eb6a070800000000000000
+      internalID: 8117384504763332767
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_8
+      rect:
+        serializedVersion: 2
+        x: 1241
+        y: 1224
+        width: 121
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c5eeb07bdbd561e30800000000000000
+      internalID: 4473866349240381020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_9
+      rect:
+        serializedVersion: 2
+        x: 1748
+        y: 1223
+        width: 119
+        height: 133
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d8dedfdfc9bcdc120800000000000000
+      internalID: 2435826848613920141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_10
+      rect:
+        serializedVersion: 2
+        x: 202
+        y: 1175
+        width: 124
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e93f16156018b1fd0800000000000000
+      internalID: -2370158914745273442
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_11
+      rect:
+        serializedVersion: 2
+        x: 714
+        y: 1175
+        width: 124
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 922df81e583fe5af0800000000000000
+      internalID: -405619160076266967
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_12
+      rect:
+        serializedVersion: 2
+        x: 1226
+        y: 1175
+        width: 124
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5aa128cd811aee1d0800000000000000
+      internalID: -3319538747174675803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_13
+      rect:
+        serializedVersion: 2
+        x: 1736
+        y: 1175
+        width: 124
+        height: 31
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 025a1cfb092914400800000000000000
+      internalID: 306687400027989280
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_14
+      rect:
+        serializedVersion: 2
+        x: 194
+        y: 716
+        width: 109
+        height: 132
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bae9e0f3bd5ab00e0800000000000000
+      internalID: -2302564423395533141
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_15
+      rect:
+        serializedVersion: 2
+        x: 709
+        y: 703
+        width: 108
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2c55e728c45b86d30800000000000000
+      internalID: 4424985974102971842
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_16
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 663
+        width: 118
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b03671cb6c3766940800000000000000
+      internalID: 5289042109789594379
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Unit000_6_5_Skill_Magic_0_17
+      rect:
+        serializedVersion: 2
+        x: 710
+        y: 663
+        width: 108
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 909f1dfbc4be75530800000000000000
+      internalID: 3843799521852258569
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable: {}
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

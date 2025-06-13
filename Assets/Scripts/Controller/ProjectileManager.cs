@@ -40,14 +40,13 @@ public class ProjectileManager : MonoBehaviour
             InitializePool();
         }
         else if (instance != this)
-        {
             Destroy(gameObject);
-        }
     }
 
     void InitializePool()
     {
-        if (!usePooling || defaultProjectilePrefab == null) return;
+        if (!usePooling || defaultProjectilePrefab == null)
+            return;
 
         if (projectileContainer == null)
         {
