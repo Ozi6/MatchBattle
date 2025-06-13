@@ -110,12 +110,14 @@ public class ProjectileManager : MonoBehaviour
     public static ProjectileData CreateProjectileData(float damage, float speed, DebuffType debuffType = DebuffType.Bleed,
                                                      float debuffDuration = 0f, float debuffIntensity = 0f)
     {
-        ProjectileData data = new ProjectileData();
-        data.damage = damage;
-        data.speed = speed;
-        data.debuffType = debuffType;
-        data.debuffDuration = debuffDuration;
-        data.debuffIntensity = debuffIntensity;
+        ProjectileData data = new ProjectileData
+        {
+            damage = damage,
+            speed = speed,
+            debuffType = debuffType,
+            debuffDuration = debuffDuration,
+            debuffIntensity = debuffIntensity
+        };
         return data;
     }
 }
