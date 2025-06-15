@@ -63,6 +63,25 @@ public class Enemy : MonoBehaviour
 
         InitializeHealthBar();
         FindAndSetPlayerTarget();
+
+        if (animator != null && animator.runtimeAnimatorController != null)
+        {
+            bool hasDeathState = false;
+            foreach (var state in animator.runtimeAnimatorController.animationClips)
+            {
+                if (state.name.ToLower().Contains("death"))
+                {
+                    hasDeathState = true;
+                    break;
+                }
+            }
+            if (!hasDeathState)
+                Debug.LogWarning($"No 'Death' animation found in Animator for {gameObject.name}. Ensure the death animation is set up in the Animator Controller.");
+        }
+        else
+        {
+            Debug.LogWarning($"Animator or AnimatorController missing on {gameObject.name}. Death animation will not play.");
+        }
     }
 
     private void FindAndSetPlayerTarget()
@@ -268,7 +287,7 @@ public class Enemy : MonoBehaviour
         StartCoroutine(DamageFlash());
 
         if (currentHealth <= 0)
-            Die();
+            StartCoroutine(Die());
 
         Debug.Log($"{gameObject.name} took {damage} damage. Health: {currentHealth}/{maxHealth}");
     }
@@ -460,16 +479,32 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    void Die()
+    IEnumerator Die()
     {
         if (isDead)
-            return;
+            yield break;
 
         isDead = true;
         canMove = false;
 
         if (animator != null)
+        {
             animator.SetTrigger("Death");
+
+            float deathAnimationLength = 0f;
+            foreach (var clip in animator.runtimeAnimatorController.animationClips)
+            {
+                if (clip.name.ToLower().Contains("death"))
+                {
+                    deathAnimationLength = clip.length;
+                    break;
+                }
+            }
+
+            yield return new WaitForSeconds(deathAnimationLength);
+        }
+        else
+            yield return new WaitForSeconds(2f);
 
         OnEnemyDeath?.Invoke(this);
 
@@ -485,7 +520,7 @@ public class Enemy : MonoBehaviour
 
         Debug.Log($"{gameObject.name} died!");
 
-        Destroy(gameObject, 2f);
+        Destroy(gameObject);
     }
 
     public float GetCurrentHealth() => currentHealth;
