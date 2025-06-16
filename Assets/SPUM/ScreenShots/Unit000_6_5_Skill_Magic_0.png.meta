@@ -585,7 +585,25 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Unit000_6_5_Skill_Magic_0_0: 1595553865318985222
+      Unit000_6_5_Skill_Magic_0_1: -1880914505832615561
+      Unit000_6_5_Skill_Magic_0_10: -2370158914745273442
+      Unit000_6_5_Skill_Magic_0_11: -405619160076266967
+      Unit000_6_5_Skill_Magic_0_12: -3319538747174675803
+      Unit000_6_5_Skill_Magic_0_13: 306687400027989280
+      Unit000_6_5_Skill_Magic_0_14: -2302564423395533141
+      Unit000_6_5_Skill_Magic_0_15: 4424985974102971842
+      Unit000_6_5_Skill_Magic_0_16: 5289042109789594379
+      Unit000_6_5_Skill_Magic_0_17: 3843799521852258569
+      Unit000_6_5_Skill_Magic_0_2: -5008578834851376685
+      Unit000_6_5_Skill_Magic_0_3: 5102813723488372916
+      Unit000_6_5_Skill_Magic_0_4: 8873189376870942535
+      Unit000_6_5_Skill_Magic_0_5: 1081959399750298985
+      Unit000_6_5_Skill_Magic_0_6: -8695774089178215744
+      Unit000_6_5_Skill_Magic_0_7: 8117384504763332767
+      Unit000_6_5_Skill_Magic_0_8: 4473866349240381020
+      Unit000_6_5_Skill_Magic_0_9: 2435826848613920141
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

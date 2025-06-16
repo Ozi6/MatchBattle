@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Unit006_2_Attack_Magic_0: -8988918349675991807
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

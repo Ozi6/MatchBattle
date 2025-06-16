@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Unit006_3_Debuff_Stun_0: -3830436283888283388
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
