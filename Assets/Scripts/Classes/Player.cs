@@ -326,7 +326,7 @@ public class Player : MonoBehaviour
     }
 }
 
-[System.Serializable]
+[Serializable]
 public class PlayerBuff
 {
     public PlayerBuffType type;

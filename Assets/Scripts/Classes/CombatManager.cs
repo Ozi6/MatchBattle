@@ -481,11 +481,11 @@ public class CombatManager : MonoBehaviour
 
         Vector3 spawnPos = enemySpawnPoint.position + new Vector3(
             UnityEngine.Random.Range(-2f, 2f),
-            UnityEngine.Random.Range(-1f, 1f),
+            0f,
             0f
         );
 
-        GameObject enemyObj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity);
+        GameObject enemyObj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity, enemySpawnPoint);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
 
         if (enemy != null)
