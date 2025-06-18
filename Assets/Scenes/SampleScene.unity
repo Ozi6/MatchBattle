@@ -639,8 +639,8 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
-    explodesOnContact: 1
-    isHoming: 0
+    explodesOnContact: 0
+    isHoming: 1
     homingStrength: 2
     homingRange: 3
   - blockType: 5
@@ -667,8 +667,8 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
-    explodesOnContact: 1
-    isHoming: 0
+    explodesOnContact: 0
+    isHoming: 1
     homingStrength: 2
     homingRange: 3
   - blockType: 2
@@ -695,8 +695,8 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
-    explodesOnContact: 1
-    isHoming: 0
+    explodesOnContact: 0
+    isHoming: 1
     homingStrength: 2
     homingRange: 3
   - blockType: 3
@@ -723,8 +723,8 @@ MonoBehaviour:
     arcHeight: 2
     explosionDelay: 2
     explodesOnTimer: 0
-    explodesOnContact: 1
-    isHoming: 0
+    explodesOnContact: 0
+    isHoming: 1
     homingStrength: 2
     homingRange: 3
   - blockType: 6
@@ -853,8 +853,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1358685880}
   - {fileID: 1448853758}
+  - {fileID: 1358685880}
   m_Father: {fileID: 257364874}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
