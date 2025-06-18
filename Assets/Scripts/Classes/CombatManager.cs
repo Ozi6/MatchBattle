@@ -53,7 +53,7 @@ public enum ProjectileType
     Axe
 }
 
-[System.Serializable]
+[Serializable]
 public class WaveData
 {
     [Header("Wave Settings")]
@@ -68,7 +68,7 @@ public class WaveData
     public float enemySpeedMultiplier = 1f;
 }
 
-[System.Serializable]
+[Serializable]
 public class RewardData
 {
     public string rewardName;
@@ -115,6 +115,11 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private List<BlockType> playerDeck = new List<BlockType>();
     public Player player;
 
+    [Header("Level Integration")]
+    [SerializeField] private LevelData currentLevelData;
+    private bool levelWasLoadedExternally = false;
+
+
     [HideInInspector]
     public Dictionary<BlockType, CombatAction> combatActionDict;
     private Dictionary<BlockType, float> blockUpgrades = new Dictionary<BlockType, float>();
@@ -150,6 +155,25 @@ public class CombatManager : MonoBehaviour
 
     void Start()
     {
+        if (LevelManager.Instance != null)
+        {
+            LevelData selectedLevel = LevelManager.Instance.GetCurrentLevel();
+            if (selectedLevel != null)
+                InitializeWithLevel(selectedLevel);
+            LevelManager.Instance.OnLevelSelected += InitializeWithLevel;
+        }
+
+        if (!levelWasLoadedExternally && currentLevelData == null)
+        {
+            Debug.LogWarning("No level data found! Using default settings.");
+            if (LevelManager.Instance != null)
+            {
+                LevelData defaultLevel = LevelManager.Instance.GetLevel(0);
+                if (defaultLevel != null)
+                    InitializeWithLevel(defaultLevel);
+            }
+        }
+
         if (combineManager != null)
         {
             combineManager.OnComboExecuted += HandleComboExecuted;
@@ -160,12 +184,37 @@ public class CombatManager : MonoBehaviour
         if (playerDeck.Count == 0)
         {
             playerDeck.AddRange(new BlockType[] {
-                BlockType.Sword, BlockType.Shield, BlockType.Potion,
-                BlockType.Bow, BlockType.Magic, BlockType.Axe
-            });
+            BlockType.Sword, BlockType.Shield, BlockType.Potion,
+            BlockType.Bow, BlockType.Magic, BlockType.Axe
+        });
         }
 
-        StartWave(currentWave);
+        if (currentLevelData != null)
+            StartWave(currentWave);
+    }
+
+    public void InitializeWithLevel(LevelData levelData)
+    {
+        if (levelData == null)
+        {
+            Debug.LogError("Cannot initialize CombatManager with null level data!");
+            return;
+        }
+
+        currentLevelData = levelData;
+        levelWasLoadedExternally = true;
+
+        totalWaves = levelData.totalWaves;
+        waveDataArray = levelData.waves;
+        availableRewards = levelData.availableRewards;
+
+        maxPlayerHealth *= levelData.playerHealthModifier;
+        playerHealth = maxPlayerHealth;
+        playerDefense *= levelData.playerDefenseModifier;
+
+        InitializeUI();
+
+        Debug.Log($"Initialized combat with level: {levelData.levelName}");
     }
 
     void Update()
@@ -657,6 +706,12 @@ public class CombatManager : MonoBehaviour
         OnLevelCompleted?.Invoke();
         Debug.Log("Level completed!");
 
+        if (currentLevelData != null && LevelManager.Instance != null)
+        {
+            int levelIndex = LevelManager.Instance.GetLevelIndex(currentLevelData);
+            LevelManager.Instance.CompleteLevel(levelIndex);
+        }
+
         if (victoryUI != null)
             victoryUI.SetActive(true);
 
@@ -733,5 +788,8 @@ public class CombatManager : MonoBehaviour
             combineManager.OnBlocksMatched -= HandleBlocksMatched;
             combineManager.OnCombatActionTriggered -= HandlePuzzleMatch;
         }
+
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.OnLevelSelected -= InitializeWithLevel;
     }
 }

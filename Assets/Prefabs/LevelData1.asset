@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8475173262010c4fab8b32a4ee2a589, type: 3}
+  m_Name: LevelData1
+  m_EditorClassIdentifier: 
+  levelName: Humble Beginnings
+  description: You set out on your Journey!
+  levelIcon: {fileID: 0}
+  levelNumber: 1
+  requiredPreviousLevel: -1
+  isUnlocked: 1
+  totalWaves: 3
+  waves:
+  - waveNumber: 1
+    totalEnemies: 2
+    spawnInterval: 1
+    enemyPrefabs:
+    - {fileID: 4986407354661558968, guid: b461e4e7e696d8c4ead9b3d9b9a7860d, type: 3}
+    enemyHealthMultiplier: 0
+    enemyDamageMultiplier: 0
+    enemySpeedMultiplier: 0
+  - waveNumber: 2
+    totalEnemies: 5
+    spawnInterval: 3
+    enemyPrefabs:
+    - {fileID: 4986407354661558968, guid: b461e4e7e696d8c4ead9b3d9b9a7860d, type: 3}
+    enemyHealthMultiplier: 0
+    enemyDamageMultiplier: 0
+    enemySpeedMultiplier: 0
+  - waveNumber: 3
+    totalEnemies: 8
+    spawnInterval: 2
+    enemyPrefabs:
+    - {fileID: 4986407354661558968, guid: b461e4e7e696d8c4ead9b3d9b9a7860d, type: 3}
+    enemyHealthMultiplier: 0
+    enemyDamageMultiplier: 0
+    enemySpeedMultiplier: 0
+  availableRewards: []
+  globalDifficultyMultiplier: 1
+  playerHealthModifier: 1
+  playerDefenseModifier: 1
+  allowedBlocks: 
+  bannedBlocks: 
+  hasTimeLimit: 0
+  timeLimitSeconds: 300
