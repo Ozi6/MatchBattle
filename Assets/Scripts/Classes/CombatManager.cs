@@ -102,7 +102,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private GameObject rewardSelectionUI;
     [SerializeField] private Transform rewardButtonContainer;
     [SerializeField] private GameObject rewardButtonPrefab;
-    [SerializeField] private RewardData[] availableRewards;
 
     [Header("UI References")]
     [SerializeField] private Slider playerHealthBar;
@@ -119,6 +118,12 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private LevelData currentLevelData;
     private bool levelWasLoadedExternally = false;
 
+    [Header("Reward System")]
+    [SerializeField] private RewardScreen rewardScreen;
+    [SerializeField] private RewardGenerator rewardGenerator;
+
+    public GameObject puzzleHalf;
+    public GameObject rewardScreenHalf;
 
     [HideInInspector]
     public Dictionary<BlockType, CombatAction> combatActionDict;
@@ -147,6 +152,12 @@ public class CombatManager : MonoBehaviour
         combineManager = FindAnyObjectByType<CombineManager>();
         if (combineManager == null)
             return;
+
+        if (rewardScreen != null)
+        {
+            rewardScreen.OnRewardSelected += HandleRewardSelected;
+            rewardScreen.OnRewardScreenClosed += HandleRewardScreenClosed;
+        }
 
         InitializeCombatActions();
         InitializeUI();
@@ -206,7 +217,6 @@ public class CombatManager : MonoBehaviour
 
         totalWaves = levelData.totalWaves;
         waveDataArray = levelData.waves;
-        availableRewards = levelData.availableRewards;
 
         maxPlayerHealth *= levelData.playerHealthModifier;
         playerHealth = maxPlayerHealth;
@@ -613,13 +623,55 @@ public class CombatManager : MonoBehaviour
     {
         yield return new WaitForSeconds(waveClearDelay);
 
-        if (rewardSelectionUI != null)
+        if (rewardScreen != null && rewardGenerator != null)
         {
-            rewardSelectionUI.SetActive(true);
-            GenerateRandomRewards();
+            if (puzzleHalf != null)
+                puzzleHalf.SetActive(false);
+            if (rewardScreenHalf != null)
+                rewardScreenHalf.SetActive(true);
+
+            PauseInput(true);
+
+            List<Item> rewards = rewardGenerator.GenerateRewards(currentLevelData, currentWave);
+            rewardScreen.ShowRewardScreen(rewards, $"Wave {currentWave} Cleared!", "Choose a reward to enhance your abilities:");
         }
         else
+        {
+            Debug.LogWarning("RewardScreen or RewardGenerator not assigned!");
             StartWave(currentWave + 1);
+        }
+    }
+
+    void HandleRewardSelected(Item selectedItem)
+    {
+        Debug.Log($"Player selected reward: {selectedItem.name}");
+
+        if (selectedItem.healthBonus > 0)
+            HealPlayer(selectedItem.healthBonus);
+
+        if (selectedItem.armorBonus > 0)
+            playerDefense += selectedItem.armorBonus;
+
+        if (selectedItem.damageBonus > 0)
+        {
+            foreach (var blockType in blockUpgrades.Keys.ToArray())
+                blockUpgrades[blockType] += selectedItem.damageBonus / 100f;
+        }
+    }
+
+    void HandleRewardScreenClosed()
+    {
+        if (rewardScreenHalf != null)
+            rewardScreenHalf.SetActive(false);
+        if (puzzleHalf != null)
+            puzzleHalf.SetActive(true);
+
+        PauseInput(false);
+
+        if (currentWave < totalWaves)
+            StartWave(currentWave + 1);
+        else
+            CompleteLevel();
     }
 
     void GenerateRandomRewards()
@@ -791,5 +843,11 @@ public class CombatManager : MonoBehaviour
 
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnLevelSelected -= InitializeWithLevel;
+
+        if (rewardScreen != null)
+        {
+            rewardScreen.OnRewardSelected -= HandleRewardSelected;
+            rewardScreen.OnRewardScreenClosed -= HandleRewardScreenClosed;
+        }
     }
 }

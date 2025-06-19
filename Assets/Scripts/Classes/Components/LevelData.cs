@@ -16,7 +16,8 @@ public class LevelData : ScriptableObject
     [Header("Combat Settings")]
     public int totalWaves = 5;
     public WaveData[] waves;
-    public RewardData[] availableRewards;
+    public LevelRewardData levelCompletionRewards;
+    public WaveRewardData[] waveCompletionRewards;
 
     [Header("Level Modifiers")]
     public float globalDifficultyMultiplier = 1f;
@@ -28,4 +29,17 @@ public class LevelData : ScriptableObject
     public BlockType[] bannedBlocks;
     public bool hasTimeLimit = false;
     public float timeLimitSeconds = 300f;
+}
+
+[System.Serializable]
+public class LevelRewardData
+{
+    public Item[] rewards;
+}
+
+[System.Serializable]
+public class WaveRewardData
+{
+    public int waveNumber;
+    public Item[] rewards;
 }
