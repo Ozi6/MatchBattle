@@ -616,30 +616,13 @@ public class CombatManager : MonoBehaviour
         if (currentWave >= totalWaves)
             CompleteLevel();
         else
-            StartCoroutine(ShowWaveRewards());
+            StartCoroutine(StartNextWave());
     }
 
-    IEnumerator ShowWaveRewards()
+    IEnumerator StartNextWave()
     {
         yield return new WaitForSeconds(waveClearDelay);
-
-        if (rewardScreen != null && rewardGenerator != null)
-        {
-            if (puzzleHalf != null)
-                puzzleHalf.SetActive(false);
-            if (rewardScreenHalf != null)
-                rewardScreenHalf.SetActive(true);
-
-            PauseInput(true);
-
-            List<Item> rewards = rewardGenerator.GenerateRewards(currentLevelData, currentWave);
-            rewardScreen.ShowRewardScreen(rewards, $"Wave {currentWave} Cleared!", "Choose a reward to enhance your abilities:");
-        }
-        else
-        {
-            Debug.LogWarning("RewardScreen or RewardGenerator not assigned!");
-            StartWave(currentWave + 1);
-        }
+        StartWave(currentWave + 1);
     }
 
     void HandleRewardSelected(Item selectedItem)

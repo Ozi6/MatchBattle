@@ -82,12 +82,18 @@ public class RewardItemUI : MonoBehaviour
     {
         switch (rarity)
         {
-            case ItemRarity.Common: return commonColor;
-            case ItemRarity.Uncommon: return uncommonColor;
-            case ItemRarity.Rare: return rareColor;
-            case ItemRarity.Epic: return epicColor;
-            case ItemRarity.Legendary: return legendaryColor;
-            default: return Color.white;
+            case ItemRarity.Common:
+                return commonColor;
+            case ItemRarity.Uncommon:
+                return uncommonColor;
+            case ItemRarity.Rare:
+                return rareColor;
+            case ItemRarity.Epic:
+                return epicColor;
+            case ItemRarity.Legendary:
+                return legendaryColor;
+            default:
+                return Color.white;
         }
     }
 
