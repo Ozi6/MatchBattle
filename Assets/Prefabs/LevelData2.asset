@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e8475173262010c4fab8b32a4ee2a589, type: 3}
-  m_Name: LevelData1
+  m_Name: LevelData2
   m_EditorClassIdentifier: 
   levelName: Humble Beginnings
   description: You set out on your Journey!
   levelIcon: {fileID: 0}
-  levelNumber: 1
-  requiredPreviousLevel: -1
+  levelNumber: 2
+  requiredPreviousLevel: 1
   isUnlocked: 1
   totalWaves: 3
   waves:
   - waveNumber: 1
-    totalEnemies: 2
+    totalEnemies: 30
     spawnInterval: 1
     enemyPrefabs:
     - {fileID: 8744291143342233303, guid: b461e4e7e696d8c4ead9b3d9b9a7860d, type: 3}

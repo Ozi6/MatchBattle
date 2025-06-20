@@ -232,11 +232,6 @@ MonoBehaviour:
   rareRewards: []
   epicRewards: []
   legendaryRewards: []
-  commonDropRate: 50
-  uncommonDropRate: 30
-  rareDropRate: 15
-  epicDropRate: 4
-  legendaryDropRate: 1
 --- !u!4 &212213970
 Transform:
   m_ObjectHideFlags: 0
@@ -1150,7 +1145,6 @@ MonoBehaviour:
   rewardSelectionUI: {fileID: 0}
   rewardButtonContainer: {fileID: 0}
   rewardButtonPrefab: {fileID: 0}
-  availableRewards: []
   playerHealthBar: {fileID: 0}
   waveText: {fileID: 0}
   enemyCountText: {fileID: 0}
