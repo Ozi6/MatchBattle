@@ -264,7 +264,8 @@ public class LevelSelectionUI : MonoBehaviour
 
     void UpdateButtonProgressText(LevelButtonData buttonData)
     {
-        if (buttonData.progressText == null) return;
+        if (buttonData.progressText == null)
+            return;
 
         if (buttonData.isCompleted)
         {
@@ -292,7 +293,6 @@ public class LevelSelectionUI : MonoBehaviour
             var buttonData = levelButtons[i];
             StartCoroutine(AnimateButtonScale(buttonData.buttonObject, Vector3.zero, Vector3.one, buttonAnimationDuration));
 
-            // Play sound effect
             if (buttonClickSound != null && buttonData.isUnlocked)
                 buttonClickSound.Play();
 
@@ -321,18 +321,16 @@ public class LevelSelectionUI : MonoBehaviour
 
     void SelectLevelWithAnimation(int levelIndex)
     {
-        if (isAnimating) return;
+        if (isAnimating)
+            return;
 
         selectedLevelIndex = levelIndex;
 
-        // Highlight selected button
         HighlightSelectedButton(levelIndex);
 
-        // Play selection sound
         if (buttonClickSound != null)
             buttonClickSound.Play();
 
-        // Start level after short delay
         StartCoroutine(LoadLevelWithDelay(0.5f));
     }
 
@@ -349,10 +347,7 @@ public class LevelSelectionUI : MonoBehaviour
                     StartCoroutine(AnimateButtonScale(buttonData.buttonObject, Vector3.one, Vector3.one * 1.1f, 0.2f));
                 }
                 else
-                {
-                    // Restore original color
                     ConfigureButtonState(buttonData);
-                }
             }
         }
     }
@@ -364,15 +359,14 @@ public class LevelSelectionUI : MonoBehaviour
         if (selectedLevelIndex >= 0)
         {
             LevelManager.Instance.SelectLevel(selectedLevelIndex);
-
-            // Fade out or transition effect here
             SceneManager.LoadScene(combatSceneName);
         }
     }
 
     void GoBackWithAnimation()
     {
-        if (isAnimating) return;
+        if (isAnimating)
+            return;
 
         StartCoroutine(AnimateButtonsOut());
     }
@@ -381,7 +375,6 @@ public class LevelSelectionUI : MonoBehaviour
     {
         isAnimating = true;
 
-        // Animate buttons out in reverse order
         for (int i = levelButtons.Count - 1; i >= 0; i--)
         {
             var buttonData = levelButtons[i];
@@ -398,7 +391,6 @@ public class LevelSelectionUI : MonoBehaviour
     {
         UpdateProgressText();
 
-        // Find and update the completed button
         var buttonData = levelButtons.Find(b => b.levelIndex == levelIndex);
         if (buttonData != null)
         {
@@ -406,7 +398,6 @@ public class LevelSelectionUI : MonoBehaviour
             ConfigureButtonState(buttonData);
             UpdateButtonProgressText(buttonData);
 
-            // Play unlock particles if available
             if (unlockParticles != null)
             {
                 unlockParticles.transform.position = buttonData.buttonObject.transform.position;
@@ -417,7 +408,6 @@ public class LevelSelectionUI : MonoBehaviour
                 levelUnlockSound.Play();
         }
 
-        // Check for newly unlocked levels
         RefreshLevelButtons();
     }
 

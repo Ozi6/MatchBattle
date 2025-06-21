@@ -11,57 +11,29 @@ public class RewardGenerator : MonoBehaviour
     [SerializeField] private List<Item> epicRewards = new List<Item>();
     [SerializeField] private List<Item> legendaryRewards = new List<Item>();
 
-    public List<Item> GenerateRewards(LevelData levelData, int waveNumber = 0, bool isBossDefeat = false, bool isTreasureChest = false)
+    public List<Item> GenerateRewards(LevelData levelData)
     {
         List<Item> rewards = new List<Item>();
 
-        if (isBossDefeat)
-            rewards.AddRange(GetBossRewards(levelData));
-        else if (isTreasureChest)
-            rewards.AddRange(GetTreasureChestRewards(levelData));
-        else if (waveNumber > 0)
-            rewards.AddRange(GetWaveRewards(levelData, waveNumber));
-        else
-            rewards.AddRange(GetLevelRewards(levelData));
+        Item[] levelRewards = GetLevelRewards(levelData);
+        rewards.AddRange(levelRewards);
 
         if (rewards.Count == 0)
         {
-            Debug.LogWarning("No deterministic rewards defined, using fallback pool.");
+            Debug.LogWarning("no level-specific rewards found, using fallback rewards");
             rewards.AddRange(GetFallbackRewards(3, ItemRarity.Common));
         }
 
-        return rewards;
+        if (rewards.Count == 0)
+            Debug.LogError("no rewards available to generate");
+
+        return rewards.Take(3).ToList();
     }
 
     private Item[] GetLevelRewards(LevelData levelData)
     {
         if (levelData != null && levelData.levelCompletionRewards != null && levelData.levelCompletionRewards.rewards != null)
-            return levelData.levelCompletionRewards.rewards;
-        return new Item[0];
-    }
-
-    private Item[] GetWaveRewards(LevelData levelData, int waveNumber)
-    {
-        if (levelData != null && levelData.waveCompletionRewards != null)
-        {
-            WaveRewardData waveReward = levelData.waveCompletionRewards.FirstOrDefault(w => w.waveNumber == waveNumber);
-            if (waveReward != null && waveReward.rewards != null)
-                return waveReward.rewards;
-        }
-        return new Item[0];
-    }
-
-    private Item[] GetBossRewards(LevelData levelData)
-    {
-        if (rareRewards.Count > 0)
-            return rareRewards.GetRange(0, Mathf.Min(3, rareRewards.Count)).ToArray();
-        return new Item[0];
-    }
-
-    private Item[] GetTreasureChestRewards(LevelData levelData)
-    {
-        if (uncommonRewards.Count > 0)
-            return uncommonRewards.GetRange(0, Mathf.Min(2, uncommonRewards.Count)).ToArray();
+            return levelData.levelCompletionRewards.rewards.Where(item => item != null).ToArray();
         return new Item[0];
     }
 
@@ -69,8 +41,13 @@ public class RewardGenerator : MonoBehaviour
     {
         List<Item> rewards = new List<Item>();
         List<Item> pool = GetRewardPoolByRarity(minRarity);
+
+        pool = pool.OrderBy(x => Random.value).ToList();
+
         for (int i = 0; i < count && i < pool.Count; i++)
-            rewards.Add(pool[i]);
+            if (pool[i] != null)
+                rewards.Add(pool[i]);
+
         return rewards;
     }
 
@@ -95,6 +72,8 @@ public class RewardGenerator : MonoBehaviour
 
     public void AddItemToPool(Item item, ItemRarity rarity)
     {
+        if (item == null)
+            return;
         List<Item> pool = GetRewardPoolByRarity(rarity);
         if (!pool.Contains(item))
             pool.Add(item);

@@ -366,12 +366,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd9f3318f0cf4ed4487e381660010ab5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemIcon: {fileID: 0}
-  itemName: {fileID: 0}
+  itemIcon: {fileID: 2937768188553378740}
+  itemName: {fileID: 6770863495510374805}
   itemDescription: {fileID: 0}
   itemStats: {fileID: 0}
   rarityBorder: {fileID: 0}
-  selectButton: {fileID: 0}
+  selectButton: {fileID: 250424270414723271}
   selectedIndicator: {fileID: 0}
   commonColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   uncommonColor: {r: 0, g: 1, b: 0, a: 1}

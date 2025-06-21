@@ -121,6 +121,9 @@ public class CombatManager : MonoBehaviour
     [Header("Reward System")]
     [SerializeField] private RewardScreen rewardScreen;
     [SerializeField] private RewardGenerator rewardGenerator;
+    [Header("Reward Trigger")]
+    [SerializeField] private RewardTrigger rewardTrigger;
+
 
     public GameObject puzzleHalf;
     public GameObject rewardScreenHalf;
@@ -158,6 +161,9 @@ public class CombatManager : MonoBehaviour
             rewardScreen.OnRewardSelected += HandleRewardSelected;
             rewardScreen.OnRewardScreenClosed += HandleRewardScreenClosed;
         }
+
+        if (rewardTrigger == null)
+            rewardTrigger = FindAnyObjectByType<RewardTrigger>();
 
         InitializeCombatActions();
         InitializeUI();
@@ -707,8 +713,11 @@ public class CombatManager : MonoBehaviour
                 blockUpgrades[blockType] += 0.2f;
         }
 
-        if (rewardSelectionUI != null)
-            rewardSelectionUI.SetActive(false);
+        if (rewardScreenHalf != null)
+        {
+            puzzleHalf.SetActive(false);
+            rewardScreenHalf.SetActive(true);
+        }
 
         StartWave(currentWave + 1);
     }
@@ -747,13 +756,13 @@ public class CombatManager : MonoBehaviour
             LevelManager.Instance.CompleteLevel(levelIndex);
         }
 
-        if (victoryUI != null)
-            victoryUI.SetActive(true);
-
-        // Handle level completion logic here
-        // - Save progress
-        // - Unlock next level
-        // - Show completion screen
+        if (rewardTrigger != null)
+            rewardTrigger.TriggerLevelCompleteReward();
+        else
+        {
+            if (victoryUI != null)
+                victoryUI.SetActive(true);
+        }
     }
 
     void GameOver()

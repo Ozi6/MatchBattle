@@ -276,20 +276,6 @@ public class RewardTrigger : MonoBehaviour
         rewardScreen.ShowRewardScreen(rewards, "Level Complete!", "Choose your reward for completing this level:");
     }
 
-    public void TriggerBossDefeatReward()
-    {
-        LevelData currentLevel = levelManager?.GetCurrentLevel();
-        List<Item> rewards = rewardGenerator.GenerateRewards(currentLevel, isBossDefeat: true);
-        rewardScreen.ShowRewardScreen(rewards, "Boss Defeated!", "Select a powerful reward for your victory:");
-    }
-
-    public void TriggerTreasureChestReward()
-    {
-        LevelData currentLevel = levelManager?.GetCurrentLevel();
-        List<Item> rewards = rewardGenerator.GenerateRewards(currentLevel, isTreasureChest: true);
-        rewardScreen.ShowRewardScreen(rewards, "Treasure Found!", "What's inside the chest?");
-    }
-
     void HandleRewardSelected(Item selectedItem)
     {
         Debug.Log($"Player selected: {selectedItem.name}");

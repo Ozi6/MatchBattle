@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87be760cedfef9a4aa2f6bde9c46c491, type: 3}
+  m_Name: TempRewardItem2
+  m_EditorClassIdentifier: 
+  itemID: 0
+  itemName: 
+  description: 
+  icon: {fileID: -50605273352174802, guid: 1fa56ccec588aaa4aaa9e322690898d2, type: 3}
+  rarity: 0
+  itemType: 0
+  healthBonus: 0
+  armorBonus: 0
+  damageBonus: 0

@@ -302,9 +302,6 @@ public class CombineManager : MonoBehaviour
         OnBlocksMatched?.Invoke(matchedBlocks);
         OnComboExecuted?.Invoke(comboType, comboSize);
 
-        if (combatManager != null)
-            combatManager.HandlePuzzleMatch(comboType, comboSize, matchedBlocks);
-
         OnCombatActionTriggered?.Invoke(comboType, comboSize, matchedBlocks);
 
         StartCoroutine(DestroyMatchedBlocks(matchedBlocks));
