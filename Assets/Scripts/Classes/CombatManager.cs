@@ -703,20 +703,10 @@ public class CombatManager : MonoBehaviour
     {
         Debug.Log($"Selected reward: {reward}");
 
-        if (reward.Contains("Health"))
-            HealPlayer(30f);
-        else if (reward.Contains("Defense") || reward.Contains("Shield"))
-            playerDefense += 15f;
-        else if (reward.Contains("Damage"))
-        {
-            foreach (var blockType in blockUpgrades.Keys.ToArray())
-                blockUpgrades[blockType] += 0.2f;
-        }
-
         if (rewardScreenHalf != null)
         {
-            puzzleHalf.SetActive(false);
-            rewardScreenHalf.SetActive(true);
+            puzzleHalf.SetActive(true);
+            rewardScreenHalf.SetActive(false);
         }
 
         StartWave(currentWave + 1);
@@ -760,8 +750,11 @@ public class CombatManager : MonoBehaviour
             rewardTrigger.TriggerLevelCompleteReward();
         else
         {
-            if (victoryUI != null)
-                victoryUI.SetActive(true);
+            if (rewardScreenHalf != null)
+            {
+                puzzleHalf.SetActive(false);
+                rewardScreenHalf.SetActive(true);
+            }
         }
     }
 
