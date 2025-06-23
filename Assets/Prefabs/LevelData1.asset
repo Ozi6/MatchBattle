@@ -36,14 +36,6 @@ MonoBehaviour:
     enemyHealthMultiplier: 0
     enemyDamageMultiplier: 0
     enemySpeedMultiplier: 0
-  - waveNumber: 3
-    totalEnemies: 8
-    spawnInterval: 2
-    enemyPrefabs:
-    - {fileID: 8744291143342233303, guid: b461e4e7e696d8c4ead9b3d9b9a7860d, type: 3}
-    enemyHealthMultiplier: 0
-    enemyDamageMultiplier: 0
-    enemySpeedMultiplier: 0
   levelCompletionRewards:
     rewards:
     - {fileID: 11400000, guid: 75c89ff50f8ea1a42b7addc453863eaa, type: 2}

@@ -99,6 +99,7 @@ public class RewardItemUI : MonoBehaviour
 
     void OnButtonClicked()
     {
+        Debug.Log($"Button clicked! currentItem: {(currentItem != null ? currentItem.name : "NULL")}, callback: {(onItemClicked != null ? "assigned" : "NULL")}");
         onItemClicked?.Invoke(currentItem);
     }
 

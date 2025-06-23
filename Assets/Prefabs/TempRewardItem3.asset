@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87be760cedfef9a4aa2f6bde9c46c491, type: 3}
   m_Name: TempRewardItem3
   m_EditorClassIdentifier: 
-  itemID: 0
-  itemName: 
+  itemID: 2
+  itemName: Mint Sweets
   description: 
   icon: {fileID: 1654817493723898094, guid: 07f3a238513a65b40b302cdd329e924f, type: 3}
   rarity: 0

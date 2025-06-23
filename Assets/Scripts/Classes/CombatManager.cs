@@ -747,7 +747,10 @@ public class CombatManager : MonoBehaviour
         }
 
         if (rewardTrigger != null)
+        {
+            puzzleHalf.SetActive(false);
             rewardTrigger.TriggerLevelCompleteReward();
+        }
         else
         {
             if (rewardScreenHalf != null)

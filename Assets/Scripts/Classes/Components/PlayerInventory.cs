@@ -34,14 +34,13 @@ public class PlayerInventory : MonoBehaviour
     {
         inventorySlots = new List<InventorySlot>();
         for (int i = 0; i < inventorySize; i++)
-        {
             inventorySlots.Add(new InventorySlot());
-        }
     }
 
     public bool AddItem(Item item, int quantity = 1)
     {
-        if (item == null) return false;
+        if (item == null)
+            return false;
 
         for (int i = 0; i < inventorySlots.Count; i++)
         {
@@ -113,13 +112,9 @@ public class PlayerInventory : MonoBehaviour
                 break;
             case ItemType.Charm:
                 if (equippedCharm1 == null)
-                {
                     equippedCharm1 = item;
-                }
                 else if (equippedCharm2 == null)
-                {
                     equippedCharm2 = item;
-                }
                 else
                 {
                     previousItem = equippedCharm1;
@@ -193,22 +188,17 @@ public class PlayerInventory : MonoBehaviour
 
     void ApplyEquipmentStats(Item item)
     {
-        if (player == null) return;
+        if (player == null)
+            return;
 
         if (item.healthBonus > 0)
-        {
             player.SetMaxHealth(player.GetMaxHealth() + item.healthBonus);
-        }
 
         if (item.armorBonus > 0)
-        {
             player.SetBaseArmor(player.GetCurrentArmor() + item.armorBonus);
-        }
 
         if (item.damageBonus > 0)
-        {
             player.SetBaseDamageMultiplier(player.GetDamageMultiplier() + item.damageBonus);
-        }
     }
 
     void RemoveEquipmentStats(Item item)
@@ -216,19 +206,13 @@ public class PlayerInventory : MonoBehaviour
         if (player == null) return;
 
         if (item.healthBonus > 0)
-        {
             player.SetMaxHealth(player.GetMaxHealth() - item.healthBonus);
-        }
 
         if (item.armorBonus > 0)
-        {
             player.SetBaseArmor(player.GetCurrentArmor() - item.armorBonus);
-        }
 
         if (item.damageBonus > 0)
-        {
             player.SetBaseDamageMultiplier(player.GetDamageMultiplier() - item.damageBonus);
-        }
     }
 
     public int GetItemCount(Item item)
@@ -237,9 +221,7 @@ public class PlayerInventory : MonoBehaviour
         foreach (InventorySlot slot in inventorySlots)
         {
             if (!slot.IsEmpty() && slot.item.itemID == item.itemID)
-            {
                 count += slot.quantity;
-            }
         }
         return count;
     }
@@ -258,12 +240,18 @@ public class PlayerInventory : MonoBehaviour
     {
         switch (itemType)
         {
-            case ItemType.OffhandWeapon: return equippedOffhandWeapon;
-            case ItemType.Helmet: return equippedHelmet;
-            case ItemType.Boots: return equippedBoots;
-            case ItemType.ChestGuard: return equippedChestGuard;
-            case ItemType.Charm: return charmSlot == 1 ? equippedCharm1 : equippedCharm2;
-            default: return null;
+            case ItemType.OffhandWeapon:
+                return equippedOffhandWeapon;
+            case ItemType.Helmet:
+                return equippedHelmet;
+            case ItemType.Boots:
+                return equippedBoots;
+            case ItemType.ChestGuard:
+                return equippedChestGuard;
+            case ItemType.Charm:
+                return charmSlot == 1 ? equippedCharm1 : equippedCharm2;
+            default:
+                return null;
         }
     }
 

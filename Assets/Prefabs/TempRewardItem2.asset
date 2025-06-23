@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87be760cedfef9a4aa2f6bde9c46c491, type: 3}
   m_Name: TempRewardItem2
   m_EditorClassIdentifier: 
-  itemID: 0
-  itemName: 
+  itemID: 1
+  itemName: Cold Shoulder
   description: 
   icon: {fileID: -50605273352174802, guid: 1fa56ccec588aaa4aaa9e322690898d2, type: 3}
   rarity: 0

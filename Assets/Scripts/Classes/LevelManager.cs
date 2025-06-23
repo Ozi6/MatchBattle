@@ -32,9 +32,7 @@ public class LevelManager : MonoBehaviour
             LoadProgress();
         }
         else if (instance != this)
-        {
             Destroy(gameObject);
-        }
     }
 
     void Start()

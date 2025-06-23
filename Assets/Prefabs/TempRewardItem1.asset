@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TempRewardItem1
   m_EditorClassIdentifier: 
   itemID: 0
-  itemName: 
+  itemName: Blinking Lantern
   description: 
   icon: {fileID: 82204056845224094, guid: d015731fcd481bc4fb98518e7a02138c, type: 3}
   rarity: 0
