@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using System.Collections.Generic;
-using System;
 
 public class RewardScreen : MonoBehaviour
 {
@@ -24,6 +24,7 @@ public class RewardScreen : MonoBehaviour
     private List<Item> availableRewards = new List<Item>();
     private List<RewardItemUI> rewardItemUIs = new List<RewardItemUI>();
     private PlayerInventory playerInventory;
+    private InventoryDisplay inventoryDisplay;
     private AudioSource audioSource;
     private bool hasSelectedReward = false;
     private Item selectedReward;
@@ -35,6 +36,7 @@ public class RewardScreen : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         playerInventory = FindAnyObjectByType<PlayerInventory>();
+        inventoryDisplay = FindAnyObjectByType<InventoryDisplay>();
 
         if (continueButton != null)
             continueButton.onClick.AddListener(ConfirmSelection);
@@ -129,7 +131,8 @@ public class RewardScreen : MonoBehaviour
 
     void ConfirmSelection()
     {
-        if (selectedReward == null) return;
+        if (selectedReward == null)
+            return;
 
         if (playerInventory != null)
         {
@@ -138,14 +141,21 @@ public class RewardScreen : MonoBehaviour
             {
                 Debug.Log($"Added {selectedReward.name} to inventory!");
                 OnRewardSelected?.Invoke(selectedReward);
+                if (inventoryDisplay != null)
+                    inventoryDisplay.ShowInventory(selectedReward);
+                else
+                    CloseRewardScreen();
             }
             else
             {
                 Debug.LogWarning("Failed to add item to inventory - inventory might be full!");
+                CloseRewardScreen();
             }
         }
-
-        CloseRewardScreen();
+        else
+        {
+            CloseRewardScreen();
+        }
     }
 
     void SkipReward()
@@ -212,7 +222,8 @@ public class RewardScreen : MonoBehaviour
             Time.timeScale = 1f;
         }
 
-        OnRewardScreenClosed?.Invoke();
+        if (inventoryDisplay == null)
+            OnRewardScreenClosed?.Invoke();
     }
 
     List<Item> GetRandomRewards(List<Item> allRewards, int count)

@@ -132,7 +132,6 @@ public class LevelSelectionUI : MonoBehaviour
 
         GameObject buttonObj = Instantiate(levelButtonPrefab, levelButtonContainer);
 
-        // Create button data
         LevelButtonData buttonData = new LevelButtonData
         {
             buttonObject = buttonObj,
@@ -142,16 +141,12 @@ public class LevelSelectionUI : MonoBehaviour
             isCompleted = LevelManager.Instance.IsLevelCompleted(levelIndex)
         };
 
-        // Get component references
         SetupButtonComponents(buttonData);
 
-        // Configure button appearance and behavior
         ConfigureButton(buttonData);
 
-        // Add to list
         levelButtons.Add(buttonData);
 
-        // Initially hide for animation
         buttonObj.transform.localScale = Vector3.zero;
         buttonObj.SetActive(true);
     }
@@ -163,7 +158,6 @@ public class LevelSelectionUI : MonoBehaviour
         buttonData.button = buttonObj.GetComponent<Button>();
         buttonData.backgroundImage = buttonObj.GetComponent<Image>();
 
-        // Find child components - adjust these names to match your prefab structure
         buttonData.iconImage = FindChildComponent<Image>(buttonObj, "LevelIcon");
         buttonData.lockIcon = FindChildComponent<Image>(buttonObj, "LockIcon");
         buttonData.completedIcon = FindChildComponent<Image>(buttonObj, "CompletedCheckmark");
@@ -177,7 +171,6 @@ public class LevelSelectionUI : MonoBehaviour
     {
         var levelData = buttonData.levelData;
 
-        // Set text content
         if (buttonData.nameText != null)
             buttonData.nameText.text = levelData.levelName;
 
@@ -187,17 +180,14 @@ public class LevelSelectionUI : MonoBehaviour
         if (buttonData.iconImage != null && levelData.levelIcon != null)
             buttonData.iconImage.sprite = levelData.levelIcon;
 
-        // Configure button state
         ConfigureButtonState(buttonData);
 
-        // Set up click handler
         if (buttonData.button != null && buttonData.isUnlocked)
         {
-            int capturedIndex = buttonData.levelIndex; // Capture for closure
+            int capturedIndex = buttonData.levelIndex;
             buttonData.button.onClick.AddListener(() => SelectLevelWithAnimation(capturedIndex));
         }
 
-        // Configure progress text
         UpdateButtonProgressText(buttonData);
     }
 
@@ -234,7 +224,6 @@ public class LevelSelectionUI : MonoBehaviour
         if (buttonData.button != null)
             buttonData.button.interactable = isInteractable;
 
-        // Configure star rating for completed levels
         ConfigureStarRating(buttonData);
     }
 
@@ -249,15 +238,13 @@ public class LevelSelectionUI : MonoBehaviour
 
         buttonData.starContainer.SetActive(true);
 
-        // You could implement a star rating system based on performance
-        // For now, just show all stars for completed levels
         for (int i = 0; i < buttonData.starContainer.transform.childCount; i++)
         {
             var star = buttonData.starContainer.transform.GetChild(i);
             var starImage = star.GetComponent<Image>();
             if (starImage != null)
             {
-                starImage.color = Color.yellow; // All stars active for completed levels
+                starImage.color = Color.yellow;
             }
         }
     }

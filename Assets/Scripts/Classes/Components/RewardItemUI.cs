@@ -28,7 +28,6 @@ public class RewardItemUI : MonoBehaviour
     {
         if (selectButton != null)
             selectButton.onClick.AddListener(OnButtonClicked);
-
         if (selectedIndicator != null)
             selectedIndicator.SetActive(false);
     }
@@ -37,7 +36,6 @@ public class RewardItemUI : MonoBehaviour
     {
         currentItem = item;
         onItemClicked = clickCallback;
-
         UpdateItemDisplay();
     }
 
@@ -50,7 +48,7 @@ public class RewardItemUI : MonoBehaviour
             itemIcon.sprite = currentItem.icon;
 
         if (itemName != null)
-            itemName.text = currentItem.name;
+            itemName.text = currentItem.itemName;
 
         if (itemDescription != null)
             itemDescription.text = currentItem.description;
@@ -68,10 +66,8 @@ public class RewardItemUI : MonoBehaviour
 
         if (currentItem.healthBonus > 0)
             stats.Add($"+{currentItem.healthBonus} Health");
-
         if (currentItem.armorBonus > 0)
             stats.Add($"+{currentItem.armorBonus} Armor");
-
         if (currentItem.damageBonus > 0)
             stats.Add($"+{currentItem.damageBonus} Damage");
 
@@ -99,7 +95,7 @@ public class RewardItemUI : MonoBehaviour
 
     void OnButtonClicked()
     {
-        Debug.Log($"Button clicked! currentItem: {(currentItem != null ? currentItem.name : "NULL")}, callback: {(onItemClicked != null ? "assigned" : "NULL")}");
+        Debug.Log($"Button clicked! currentItem: {(currentItem != null ? currentItem.itemName : "NULL")}, callback: {(onItemClicked != null ? "assigned" : "NULL")}");
         onItemClicked?.Invoke(currentItem);
     }
 
@@ -107,7 +103,6 @@ public class RewardItemUI : MonoBehaviour
     {
         if (selectedIndicator != null)
             selectedIndicator.SetActive(selected);
-
         if (selectButton != null)
             selectButton.interactable = !selected;
     }
