@@ -88,7 +88,8 @@ public class PlayerInventory : MonoBehaviour
 
     public bool EquipItem(Item item)
     {
-        if (item == null) return false;
+        if (item == null)
+            return false;
 
         Item previousItem = null;
 

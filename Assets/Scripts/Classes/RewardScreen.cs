@@ -110,11 +110,7 @@ public class RewardScreen : MonoBehaviour
 
     void OnRewardItemClicked(Item selectedItem)
     {
-        if (hasSelectedReward)
-            return;
-
         selectedReward = selectedItem;
-        hasSelectedReward = true;
 
         foreach (RewardItemUI rewardUI in rewardItemUIs)
             rewardUI.SetSelected(rewardUI.GetItem() == selectedItem);
