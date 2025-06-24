@@ -200,22 +200,28 @@ public class LevelSelectionUI : MonoBehaviour
         {
             targetColor = completedColor;
             isInteractable = true;
-            if (buttonData.completedIcon != null) buttonData.completedIcon.gameObject.SetActive(true);
-            if (buttonData.lockIcon != null) buttonData.lockIcon.gameObject.SetActive(false);
+            if (buttonData.completedIcon != null)
+                buttonData.completedIcon.gameObject.SetActive(true);
+            if (buttonData.lockIcon != null)
+                buttonData.lockIcon.gameObject.SetActive(false);
         }
         else if (buttonData.isUnlocked)
         {
             targetColor = unlockedColor;
             isInteractable = true;
-            if (buttonData.completedIcon != null) buttonData.completedIcon.gameObject.SetActive(false);
-            if (buttonData.lockIcon != null) buttonData.lockIcon.gameObject.SetActive(false);
+            if (buttonData.completedIcon != null)
+                buttonData.completedIcon.gameObject.SetActive(false);
+            if (buttonData.lockIcon != null)
+                buttonData.lockIcon.gameObject.SetActive(false);
         }
         else
         {
             targetColor = lockedColor;
             isInteractable = false;
-            if (buttonData.completedIcon != null) buttonData.completedIcon.gameObject.SetActive(false);
-            if (buttonData.lockIcon != null) buttonData.lockIcon.gameObject.SetActive(true);
+            if (buttonData.completedIcon != null)
+                buttonData.completedIcon.gameObject.SetActive(false);
+            if (buttonData.lockIcon != null)
+                buttonData.lockIcon.gameObject.SetActive(true);
         }
 
         if (buttonData.backgroundImage != null)
@@ -243,9 +249,7 @@ public class LevelSelectionUI : MonoBehaviour
             var star = buttonData.starContainer.transform.GetChild(i);
             var starImage = star.GetComponent<Image>();
             if (starImage != null)
-            {
                 starImage.color = Color.yellow;
-            }
         }
     }
 

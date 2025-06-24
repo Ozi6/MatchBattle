@@ -24,7 +24,7 @@ public class RewardScreen : MonoBehaviour
     private List<Item> availableRewards = new List<Item>();
     private List<RewardItemUI> rewardItemUIs = new List<RewardItemUI>();
     private PlayerInventory playerInventory;
-    private InventoryDisplay inventoryDisplay;
+    public InventoryDisplay inventoryDisplay;
     private AudioSource audioSource;
     private bool hasSelectedReward = false;
     private Item selectedReward;
@@ -36,7 +36,6 @@ public class RewardScreen : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
         playerInventory = FindAnyObjectByType<PlayerInventory>();
-        inventoryDisplay = FindAnyObjectByType<InventoryDisplay>();
 
         if (continueButton != null)
             continueButton.onClick.AddListener(ConfirmSelection);
@@ -153,9 +152,7 @@ public class RewardScreen : MonoBehaviour
             }
         }
         else
-        {
             CloseRewardScreen();
-        }
     }
 
     void SkipReward()

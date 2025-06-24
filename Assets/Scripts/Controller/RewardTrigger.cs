@@ -7,14 +7,22 @@ public class RewardTrigger : MonoBehaviour
     [SerializeField] private RewardScreen rewardScreen;
     [SerializeField] private RewardGenerator rewardGenerator;
     [SerializeField] private LevelManager levelManager;
+    [SerializeField] private InventoryDisplay inventoryDisplay;
     public GameObject puzzleHalf;
 
     void Start()
     {
         if (rewardScreen != null)
-        {
             rewardScreen.OnRewardSelected += HandleRewardSelected;
-            rewardScreen.OnRewardScreenClosed += HandleRewardScreenClosed;
+        if (inventoryDisplay != null)
+            inventoryDisplay.OnInventoryDisplayClosed += HandleInventoryDisplayClosed;
+        else
+        {
+            inventoryDisplay = FindAnyObjectByType<InventoryDisplay>();
+            if (inventoryDisplay != null)
+                inventoryDisplay.OnInventoryDisplayClosed += HandleInventoryDisplayClosed;
+            else
+                Debug.LogWarning("InventoryDisplay not found in scene!");
         }
         if (levelManager == null)
             levelManager = LevelManager.Instance;
@@ -23,10 +31,9 @@ public class RewardTrigger : MonoBehaviour
     void OnDestroy()
     {
         if (rewardScreen != null)
-        {
             rewardScreen.OnRewardSelected -= HandleRewardSelected;
-            rewardScreen.OnRewardScreenClosed -= HandleRewardScreenClosed;
-        }
+        if (inventoryDisplay != null)
+            inventoryDisplay.OnInventoryDisplayClosed -= HandleInventoryDisplayClosed;
     }
 
     public void TriggerLevelCompleteReward()
@@ -41,9 +48,9 @@ public class RewardTrigger : MonoBehaviour
         Debug.Log($"Player selected: {selectedItem.name}");
     }
 
-    void HandleRewardScreenClosed()
+    void HandleInventoryDisplayClosed()
     {
-        Debug.Log("Reward screen closed");
+        Debug.Log("Inventory display closed");
         puzzleHalf.SetActive(true);
     }
 }

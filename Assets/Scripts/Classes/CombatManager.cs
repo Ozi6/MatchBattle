@@ -635,9 +635,6 @@ public class CombatManager : MonoBehaviour
     {
         Debug.Log($"Player selected reward: {selectedItem.name}");
 
-        if (selectedItem.healthBonus > 0)
-            HealPlayer(selectedItem.healthBonus);
-
         if (selectedItem.armorBonus > 0)
             playerDefense += selectedItem.armorBonus;
 

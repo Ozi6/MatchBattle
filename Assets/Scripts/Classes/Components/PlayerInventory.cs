@@ -9,14 +9,16 @@ public class PlayerInventory : MonoBehaviour
     private Item charm2;
     [SerializeField] private int maxCapacity = 20;
 
+    public static PlayerInventory Instance { get; private set; }
     void Awake()
     {
-        equippedItems[ItemType.OffhandWeapon] = null;
-        equippedItems[ItemType.Helmet] = null;
-        equippedItems[ItemType.ChestGuard] = null;
-        equippedItems[ItemType.Boots] = null;
-        charm1 = null;
-        charm2 = null;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+            Destroy(gameObject);
     }
 
     public bool AddItem(Item item)
@@ -109,9 +111,7 @@ public class PlayerInventory : MonoBehaviour
                     charm2 = null;
             }
             else
-            {
                 equippedItems[slotType] = null;
-            }
 
             if (inventoryIndex >= 0 && inventoryIndex < inventoryItems.Count)
                 inventoryItems[inventoryIndex] = equippedItem;
@@ -131,7 +131,7 @@ public class PlayerInventory : MonoBehaviour
                 return charm1;
             if (charmSlot == 2)
                 return charm2;
-            return charm1 ?? charm2; // Return first non-null charm if no specific slot
+            return charm1 ?? charm2;
         }
 
         equippedItems.TryGetValue(slotType, out Item item);

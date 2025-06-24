@@ -37,7 +37,7 @@ public class InventoryDisplay : MonoBehaviour
     private Dictionary<ItemType, InventorySlotUI> equipmentSlots = new Dictionary<ItemType, InventorySlotUI>();
     private InventorySlotUI charmSlot1UI;
     private InventorySlotUI charmSlot2UI;
-    private PlayerInventory playerInventory;
+    public PlayerInventory playerInventory;
     private AudioSource audioSource;
     private Item lastAddedItem;
 
@@ -46,7 +46,7 @@ public class InventoryDisplay : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        playerInventory = FindAnyObjectByType<PlayerInventory>();
+        playerInventory = PlayerInventory.Instance;
 
         if (closeButton != null)
             closeButton.onClick.AddListener(CloseInventoryDisplay);
@@ -82,10 +82,18 @@ public class InventoryDisplay : MonoBehaviour
         InventorySlotUI slotUI = slotObj.GetComponent<InventorySlotUI>();
         if (slotUI != null)
         {
-            Item equippedItem = playerInventory?.GetEquippedItem(type, type == ItemType.Charm ? (parent == charmSlot1 ? 1 : 2) : 0);
-            slotUI.SetupSlot(equippedItem, -1, type, OnInventorySlotClicked);
-            if (type != ItemType.Charm || parent == charmSlot1)
-                equipmentSlots[type] = slotUI;
+            if (playerInventory == null)
+            {
+                Debug.LogError($"PlayerInventory is null when creating equipment slot for {type}. Ensure PlayerInventory exists in the scene.");
+                slotUI.SetupSlot(null, -1, type, OnInventorySlotClicked);
+            }
+            else
+            {
+                Item equippedItem = playerInventory.GetEquippedItem(type, type == ItemType.Charm ? (parent == charmSlot1 ? 1 : 2) : 0);
+                slotUI.SetupSlot(equippedItem, -1, type, OnInventorySlotClicked);
+                if (type != ItemType.Charm || parent == charmSlot1)
+                    equipmentSlots[type] = slotUI;
+            }
         }
         return slotUI;
     }
@@ -163,14 +171,21 @@ public class InventoryDisplay : MonoBehaviour
 
     void RefreshEquipmentSlots()
     {
+        if (playerInventory == null)
+        {
+            Debug.LogError("PlayerInventory is null in RefreshEquipmentSlots. Cannot refresh equipment slots.");
+            return;
+        }
+
         foreach (var pair in equipmentSlots)
         {
-            Item equippedItem = playerInventory?.GetEquippedItem(pair.Key, pair.Key == ItemType.Charm ? 1 : 0);
-            pair.Value.SetupSlot(equippedItem, -1, pair.Key, OnInventorySlotClicked);
+            Item equippedItem = playerInventory.GetEquippedItem(pair.Key, pair.Key == ItemType.Charm ? 1 : 0);
+            if(equippedItem != null)
+                pair.Value.SetupSlot(equippedItem, -1, pair.Key, OnInventorySlotClicked);
         }
         if (charmSlot2UI != null)
         {
-            Item charm2 = playerInventory?.GetEquippedItem(ItemType.Charm, 2);
+            Item charm2 = playerInventory.GetEquippedItem(ItemType.Charm, 2);
             charmSlot2UI.SetupSlot(charm2, -1, ItemType.Charm, OnInventorySlotClicked);
         }
     }
