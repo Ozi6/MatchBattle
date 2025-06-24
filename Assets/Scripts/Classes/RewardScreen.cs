@@ -135,6 +135,7 @@ public class RewardScreen : MonoBehaviour
 
         if (playerInventory != null)
         {
+            inventoryDisplay.gameObject.SetActive(true);
             bool added = playerInventory.AddItem(selectedReward);
             if (added)
             {
@@ -142,8 +143,7 @@ public class RewardScreen : MonoBehaviour
                 OnRewardSelected?.Invoke(selectedReward);
                 if (inventoryDisplay != null)
                     inventoryDisplay.ShowInventory(selectedReward);
-                else
-                    CloseRewardScreen();
+                CloseRewardScreen();
             }
             else
             {

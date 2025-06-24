@@ -702,7 +702,7 @@ public class CombatManager : MonoBehaviour
 
         if (rewardScreenHalf != null)
         {
-            puzzleHalf.SetActive(true);
+            //puzzleHalf.SetActive(true);
             rewardScreenHalf.SetActive(false);
         }
 
