@@ -1341,7 +1341,7 @@ MonoBehaviour:
     m_Right: 10
     m_Top: 10
     m_Bottom: 10
-  m_ChildAlignment: 1
+  m_ChildAlignment: 0
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -1424,7 +1424,7 @@ MonoBehaviour:
   titleText: {fileID: 0}
   itemCountText: {fileID: 0}
   inventoryGrid: {fileID: 972253723}
-  inventorySlotPrefab: {fileID: 4867120739770942807, guid: fad10039a2ad16d41a147ba97bbec7da, type: 3}
+  inventorySlotPrefab: {fileID: 4867120739770942807, guid: 7e622c57d038cd540b7c404da26211db, type: 3}
   closeButton: {fileID: 1473208003}
   scrollView: {fileID: 972253724}
   offhandWeaponSlot: {fileID: 988430669}

@@ -45,7 +45,12 @@ public class RewardItemUI : MonoBehaviour
             return;
 
         if (itemIcon != null && currentItem.icon != null)
+        {
             itemIcon.sprite = currentItem.icon;
+            Color iconColor = itemIcon.color;
+            iconColor.a = 1f;
+            itemIcon.color = iconColor;
+        }
 
         if (itemName != null)
             itemName.text = currentItem.itemName;
