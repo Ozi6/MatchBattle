@@ -71,7 +71,6 @@ public class PlayerInventory : MonoBehaviour
                 }
                 else
                 {
-                    // Default to first empty charm slot
                     if (charm1 == null)
                         charm1 = item;
                     else if (charm2 == null)

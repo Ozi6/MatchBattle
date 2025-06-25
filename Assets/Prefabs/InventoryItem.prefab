@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &308375049941411241
 CanvasRenderer:
@@ -318,7 +318,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 99.91754, y: 99.697266}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4775997212324553803
 CanvasRenderer:
@@ -431,12 +431,14 @@ MonoBehaviour:
   itemQuantity: {fileID: 0}
   slotBackground: {fileID: 8977544672829045820}
   rarityBorder: {fileID: 0}
-  slotButton: {fileID: 0}
+  slotButton: {fileID: 1257817490551957759}
   emptySlotIndicator: {fileID: 0}
   newItemGlow: {fileID: 0}
+  selectionBorder: {fileID: 0}
   emptySlotColor: {r: 0.3, g: 0.3, b: 0.3, a: 0.5}
   filledSlotColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.8}
   hoverColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+  selectedColor: {r: 0, g: 1, b: 0, a: 0.5}
   commonColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   uncommonColor: {r: 0, g: 1, b: 0, a: 1}
   rareColor: {r: 0, g: 0, b: 1, a: 1}

@@ -15,13 +15,13 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private Button slotButton;
     [SerializeField] private GameObject emptySlotIndicator;
     [SerializeField] private GameObject newItemGlow;
-    [SerializeField] private Image selectionBorder; // New selection border for merging
+    [SerializeField] private Image selectionBorder;
 
     [Header("Visual Settings")]
     [SerializeField] private Color emptySlotColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
     [SerializeField] private Color filledSlotColor = new Color(0.5f, 0.5f, 0.5f, 0.8f);
     [SerializeField] private Color hoverColor = new Color(0.7f, 0.7f, 0.7f, 1f);
-    [SerializeField] private Color selectedColor = new Color(0f, 1f, 0f, 0.5f); // Green for selected items
+    [SerializeField] private Color selectedColor = new Color(0f, 1f, 0f, 0.5f);
 
     [Header("Rarity Colors")]
     [SerializeField] private Color commonColor = Color.gray;

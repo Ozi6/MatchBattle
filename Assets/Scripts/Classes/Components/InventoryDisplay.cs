@@ -14,7 +14,7 @@ public class InventoryDisplay : MonoBehaviour
     [SerializeField] private GameObject inventorySlotPrefab;
     [SerializeField] private Button closeButton;
     [SerializeField] private ScrollRect scrollView;
-    [SerializeField] private Button mergeButton; // New merge button
+    [SerializeField] private Button mergeButton;
 
     [Header("Equipment toughness")]
     [SerializeField] private Transform offhandWeaponSlot;
@@ -41,7 +41,7 @@ public class InventoryDisplay : MonoBehaviour
     public PlayerInventory playerInventory;
     private AudioSource audioSource;
     private Item lastAddedItem;
-    private List<InventorySlotUI> selectedSlots = new List<InventorySlotUI>(); // Track selected slots for merging
+    private List<InventorySlotUI> selectedSlots = new List<InventorySlotUI>();
 
     public Action OnInventoryDisplayClosed;
 
@@ -185,8 +185,7 @@ public class InventoryDisplay : MonoBehaviour
         foreach (var pair in equipmentSlots)
         {
             Item equippedItem = playerInventory.GetEquippedItem(pair.Key, pair.Key == ItemType.Charm ? 1 : 0);
-            if (equippedItem != null)
-                pair.Value.SetupSlot(equippedItem, -1, pair.Key, OnInventorySlotClicked);
+            pair.Value.SetupSlot(equippedItem, -1, pair.Key, OnInventorySlotClicked);
         }
         if (charmSlot2UI != null)
         {
