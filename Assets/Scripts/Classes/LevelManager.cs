@@ -115,7 +115,9 @@ public class LevelManager : MonoBehaviour
             PlayerPrefs.SetInt(key, 1);
             PlayerPrefs.Save();
 
-            UpdateLevelUnlockStatus();
+            if (levelIndex + 1 < allLevels.Length)
+                allLevels[levelIndex + 1].isUnlocked = true;
+
             OnLevelCompleted?.Invoke(levelIndex);
         }
     }

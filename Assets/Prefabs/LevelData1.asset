@@ -15,7 +15,7 @@ MonoBehaviour:
   levelName: Humble Beginnings
   description: You set out on your Journey!
   levelIcon: {fileID: 0}
-  levelNumber: 1
+  levelNumber: 0
   requiredPreviousLevel: -1
   isUnlocked: 1
   totalWaves: 3

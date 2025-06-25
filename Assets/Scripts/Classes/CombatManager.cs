@@ -741,6 +741,24 @@ public class CombatManager : MonoBehaviour
         {
             int levelIndex = LevelManager.Instance.GetLevelIndex(currentLevelData);
             LevelManager.Instance.CompleteLevel(levelIndex);
+
+            int nextLevelIndex = levelIndex + 1;
+            LevelData nextLevel = LevelManager.Instance.GetLevel(nextLevelIndex);
+            currentWave = 0;
+            currentWaveData = nextLevel.waves[0];
+            enemiesKilled = enemiesSpawned = 0;
+
+            if (nextLevel != null && LevelManager.Instance.IsLevelUnlocked(nextLevelIndex))
+            {
+                LevelManager.Instance.SelectLevel(nextLevelIndex);
+                InitializeWithLevel(nextLevel);
+
+                Debug.Log($"Progressed to next level: {nextLevel.levelName}");
+            }
+            else
+            {
+                Debug.Log("No more levels available or next level is locked");
+            }
         }
 
         if (rewardTrigger != null)
@@ -815,6 +833,10 @@ public class CombatManager : MonoBehaviour
     public float GetPlayerDefense() => playerDefense;
     public int GetCurrentWave() => currentWave;
     public bool IsInCombat() => isInCombat;
+    public void SetIsInCombat(bool isInCombat)
+    {
+        this.isInCombat = isInCombat;
+    }
     public List<Enemy> GetActiveEnemies() => new List<Enemy>(activeEnemies);
 
     void OnDestroy()

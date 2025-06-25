@@ -314,11 +314,30 @@ public class InventoryDisplay : MonoBehaviour
         {
             inventoryPanel.SetActive(true);
             Time.timeScale = 0f;
+            PauseCombatForInventory();
+
             StartCoroutine(AnimateScreenShow());
         }
 
         if (audioSource != null && inventoryOpenSound != null)
             audioSource.PlayOneShot(inventoryOpenSound);
+    }
+
+    private void PauseCombatForInventory()
+    {
+        CombatManager combatManager = FindAnyObjectByType<CombatManager>();
+        if (combatManager != null)
+        {
+            combatManager.PauseInput(true);
+            Debug.Log("Combat paused for inventory");
+        }
+
+        CombineManager combineManager = FindAnyObjectByType<CombineManager>();
+        if (combineManager != null)
+        {
+            combineManager.PauseInput(true);
+            Debug.Log("CombineManager paused for inventory");
+        }
     }
 
     public void CloseInventoryDisplay()
@@ -368,7 +387,29 @@ public class InventoryDisplay : MonoBehaviour
         if (audioSource != null && inventoryCloseSound != null)
             audioSource.PlayOneShot(inventoryCloseSound);
 
+        ResumeCombatAfterInventory();
+
         OnInventoryDisplayClosed?.Invoke();
+    }
+
+    private void ResumeCombatAfterInventory()
+    {
+        CombatManager combatManager = FindAnyObjectByType<CombatManager>();
+        if (combatManager != null)
+        {
+            combatManager.PauseInput(false);
+            combatManager.SetProcessingMatches(false);
+            combatManager.SetIsInCombat(true);
+            Debug.Log("Combat resumed after inventory closed");
+        }
+
+        CombineManager combineManager = FindAnyObjectByType<CombineManager>();
+        if (combineManager != null)
+        {
+            combineManager.PauseInput(false);
+            combineManager.SetProcessingMatches(false);
+            Debug.Log("CombineManager resumed after inventory closed");
+        }
     }
 
     public void SwapSlots(InventorySlotUI source, InventorySlotUI target)

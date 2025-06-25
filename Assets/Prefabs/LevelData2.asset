@@ -15,9 +15,9 @@ MonoBehaviour:
   levelName: Humble Beginnings
   description: You set out on your Journey!
   levelIcon: {fileID: 0}
-  levelNumber: 2
-  requiredPreviousLevel: 1
-  isUnlocked: 1
+  levelNumber: 1
+  requiredPreviousLevel: 0
+  isUnlocked: 0
   totalWaves: 3
   waves:
   - waveNumber: 1
@@ -45,7 +45,10 @@ MonoBehaviour:
     enemyDamageMultiplier: 0
     enemySpeedMultiplier: 0
   levelCompletionRewards:
-    rewards: []
+    rewards:
+    - {fileID: 11400000, guid: 75c89ff50f8ea1a42b7addc453863eaa, type: 2}
+    - {fileID: 11400000, guid: 406d0139ef71430428ad2a263c2426c9, type: 2}
+    - {fileID: 11400000, guid: d5d3d1e91434a1d4294b8e1882908cd4, type: 2}
   waveCompletionRewards: []
   globalDifficultyMultiplier: 1
   playerHealthModifier: 1
