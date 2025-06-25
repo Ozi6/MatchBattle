@@ -142,7 +142,6 @@ public class InventoryDisplay : MonoBehaviour
         if (playerInventory == null)
             return;
 
-        List<Item> items = playerInventory.GetAllItems();
         int maxSlots = playerInventory.GetMaxCapacity();
 
         for (int i = 0; i < maxSlots; i++)
@@ -152,7 +151,7 @@ public class InventoryDisplay : MonoBehaviour
 
             if (slotUI != null)
             {
-                Item itemForSlot = (i < items.Count) ? items[i] : null;
+                Item itemForSlot = playerInventory.GetItemAtSlot(i);
                 slotUI.SetupSlot(itemForSlot, i, null, OnInventorySlotClicked);
                 inventorySlots.Add(slotUI);
             }

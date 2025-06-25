@@ -68,7 +68,12 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             itemIcon.gameObject.SetActive(hasItem);
             if (hasItem && currentItem.icon != null)
+            {
                 itemIcon.sprite = currentItem.icon;
+                Color iconColor = itemIcon.color;
+                iconColor.a = 1f;
+                itemIcon.color = iconColor;
+            }
         }
 
         if (itemName != null)
@@ -79,9 +84,7 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         }
 
         if (itemQuantity != null)
-        {
             itemQuantity.gameObject.SetActive(false);
-        }
 
         if (slotBackground != null)
             slotBackground.color = hasItem ? filledSlotColor : emptySlotColor;
@@ -208,9 +211,7 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
         {
             InventoryDisplay inventoryDisplay = FindAnyObjectByType<InventoryDisplay>();
             if (inventoryDisplay != null)
-            {
                 inventoryDisplay.SwapSlots(draggedSlot, this);
-            }
         }
     }
 

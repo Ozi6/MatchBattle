@@ -147,6 +147,12 @@ public class PlayerInventory : MonoBehaviour
             inventoryItems[index2] = temp;
         }
     }
+    public Item GetItemAtSlot(int slotIndex)
+    {
+        if (slotIndex >= 0 && slotIndex < inventoryItems.Count)
+            return inventoryItems[slotIndex];
+        return null;
+    }
 
     public bool SwapEquipmentItems(ItemType sourceType, int sourceCharmSlot, ItemType targetType, int targetCharmSlot)
     {
