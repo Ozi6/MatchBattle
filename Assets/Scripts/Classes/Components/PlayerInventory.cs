@@ -147,6 +147,7 @@ public class PlayerInventory : MonoBehaviour
             inventoryItems[index2] = temp;
         }
     }
+
     public Item GetItemAtSlot(int slotIndex)
     {
         if (slotIndex >= 0 && slotIndex < inventoryItems.Count)
@@ -177,5 +178,39 @@ public class PlayerInventory : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public bool MergeItems(Item item1, Item item2, Item item3)
+    {
+        if (item1 == null || item2 == null || item3 == null)
+            return false;
+
+        if (!inventoryItems.Contains(item1) || !inventoryItems.Contains(item2) || !inventoryItems.Contains(item3))
+            return false;
+
+        if (item1.itemID != item2.itemID || item2.itemID != item3.itemID ||
+            item1.rarity != item2.rarity || item2.rarity != item3.rarity)
+            return false;
+
+        if (item1.rarity == ItemRarity.Legendary)
+            return false;
+
+        Item upgradedItem = ScriptableObject.CreateInstance<Item>();
+        upgradedItem.itemID = item1.itemID;
+        upgradedItem.itemName = item1.itemName;
+        upgradedItem.description = item1.description;
+        upgradedItem.icon = item1.icon;
+        upgradedItem.rarity = (ItemRarity)((int)item1.rarity + 1);
+        upgradedItem.itemType = item1.itemType;
+        upgradedItem.healthBonus = item1.healthBonus;
+        upgradedItem.armorBonus = item1.armorBonus;
+        upgradedItem.damageBonus = item1.damageBonus;
+
+        inventoryItems.Remove(item1);
+        inventoryItems.Remove(item2);
+        inventoryItems.Remove(item3);
+        AddItem(upgradedItem);
+
+        return true;
     }
 }

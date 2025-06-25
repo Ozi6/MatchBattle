@@ -14,6 +14,7 @@ public class InventoryDisplay : MonoBehaviour
     [SerializeField] private GameObject inventorySlotPrefab;
     [SerializeField] private Button closeButton;
     [SerializeField] private ScrollRect scrollView;
+    [SerializeField] private Button mergeButton; // New merge button
 
     [Header("Equipment toughness")]
     [SerializeField] private Transform offhandWeaponSlot;
@@ -40,6 +41,7 @@ public class InventoryDisplay : MonoBehaviour
     public PlayerInventory playerInventory;
     private AudioSource audioSource;
     private Item lastAddedItem;
+    private List<InventorySlotUI> selectedSlots = new List<InventorySlotUI>(); // Track selected slots for merging
 
     public Action OnInventoryDisplayClosed;
 
@@ -50,6 +52,9 @@ public class InventoryDisplay : MonoBehaviour
 
         if (closeButton != null)
             closeButton.onClick.AddListener(CloseInventoryDisplay);
+
+        if (mergeButton != null)
+            mergeButton.onClick.AddListener(OnMergeButtonClicked);
 
         if (inventoryPanel != null)
             inventoryPanel.SetActive(false);
@@ -123,6 +128,7 @@ public class InventoryDisplay : MonoBehaviour
             titleText.text = "Your Inventory";
 
         UpdateItemCount();
+        UpdateMergeButton();
     }
 
     void UpdateItemCount()
@@ -161,11 +167,11 @@ public class InventoryDisplay : MonoBehaviour
     void ClearInventorySlots()
     {
         foreach (InventorySlotUI slot in inventorySlots)
-        {
             if (slot != null)
                 Destroy(slot.gameObject);
-        }
         inventorySlots.Clear();
+        selectedSlots.Clear();
+        UpdateMergeButton();
     }
 
     void RefreshEquipmentSlots()
@@ -179,7 +185,7 @@ public class InventoryDisplay : MonoBehaviour
         foreach (var pair in equipmentSlots)
         {
             Item equippedItem = playerInventory.GetEquippedItem(pair.Key, pair.Key == ItemType.Charm ? 1 : 0);
-            if(equippedItem != null)
+            if (equippedItem != null)
                 pair.Value.SetupSlot(equippedItem, -1, pair.Key, OnInventorySlotClicked);
         }
         if (charmSlot2UI != null)
@@ -195,6 +201,62 @@ public class InventoryDisplay : MonoBehaviour
         {
             Debug.Log($"Clicked on item: {item.itemName} in slot {slotIndex} (Type: {slotType?.ToString() ?? "Inventory"})");
             ShowItemTooltip(item);
+
+            if (slotType == null)
+            {
+                InventorySlotUI clickedSlot = inventorySlots.Find(slot => slot.GetItem() == item && slot.GetSlotIndex() == slotIndex);
+                if (clickedSlot != null)
+                {
+                    if (selectedSlots.Contains(clickedSlot))
+                    {
+                        selectedSlots.Remove(clickedSlot);
+                        clickedSlot.SetSelected(false);
+                    }
+                    else if (selectedSlots.Count < 3)
+                    {
+                        selectedSlots.Add(clickedSlot);
+                        clickedSlot.SetSelected(true);
+                    }
+                    UpdateMergeButton();
+                }
+            }
+        }
+    }
+
+    void UpdateMergeButton()
+    {
+        if (mergeButton != null)
+            mergeButton.interactable = selectedSlots.Count == 3 && CanMergeSelectedItems();
+    }
+
+    bool CanMergeSelectedItems()
+    {
+        if (selectedSlots.Count != 3)
+            return false;
+
+        Item item1 = selectedSlots[0].GetItem();
+        Item item2 = selectedSlots[1].GetItem();
+        Item item3 = selectedSlots[2].GetItem();
+
+        return item1 != null && item2 != null && item3 != null &&
+               item1.itemID == item2.itemID && item2.itemID == item3.itemID &&
+               item1.rarity == item2.rarity && item2.rarity == item3.rarity &&
+               item1.rarity != ItemRarity.Legendary;
+    }
+
+    void OnMergeButtonClicked()
+    {
+        if (selectedSlots.Count == 3 && CanMergeSelectedItems())
+        {
+            Item item1 = selectedSlots[0].GetItem();
+            Item item2 = selectedSlots[1].GetItem();
+            Item item3 = selectedSlots[2].GetItem();
+
+            if (playerInventory.MergeItems(item1, item2, item3))
+            {
+                selectedSlots.Clear();
+                RefreshDisplay();
+            }
         }
     }
 
@@ -323,17 +385,13 @@ public class InventoryDisplay : MonoBehaviour
         {
             int charmSlotIndex = target == charmSlot1UI ? 1 : (target == charmSlot2UI ? 2 : 0);
             if (playerInventory.EquipItem(sourceItem, targetType.Value, charmSlotIndex))
-            {
                 RefreshDisplay();
-            }
         }
         else if (sourceType != null && targetType == null)
         {
             int charmSlotIndex = source == charmSlot1UI ? 1 : (source == charmSlot2UI ? 2 : 0);
             if (playerInventory.UnequipItem(sourceType.Value, charmSlotIndex, targetIndex))
-            {
                 RefreshDisplay();
-            }
         }
         else if (sourceType == null && targetType == null)
         {
@@ -345,9 +403,7 @@ public class InventoryDisplay : MonoBehaviour
             int sourceCharmSlot = source == charmSlot1UI ? 1 : (source == charmSlot2UI ? 2 : 0);
             int targetCharmSlot = target == charmSlot1UI ? 1 : (target == charmSlot2UI ? 2 : 0);
             if (playerInventory.SwapEquipmentItems(sourceType.Value, sourceCharmSlot, targetType.Value, targetCharmSlot))
-            {
                 RefreshDisplay();
-            }
         }
     }
 
@@ -358,6 +414,7 @@ public class InventoryDisplay : MonoBehaviour
             UpdateItemCount();
             PopulateInventoryGrid();
             RefreshEquipmentSlots();
+            UpdateMergeButton();
         }
     }
 }

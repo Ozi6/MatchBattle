@@ -15,11 +15,13 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     [SerializeField] private Button slotButton;
     [SerializeField] private GameObject emptySlotIndicator;
     [SerializeField] private GameObject newItemGlow;
+    [SerializeField] private Image selectionBorder; // New selection border for merging
 
     [Header("Visual Settings")]
     [SerializeField] private Color emptySlotColor = new Color(0.3f, 0.3f, 0.3f, 0.5f);
     [SerializeField] private Color filledSlotColor = new Color(0.5f, 0.5f, 0.5f, 0.8f);
     [SerializeField] private Color hoverColor = new Color(0.7f, 0.7f, 0.7f, 1f);
+    [SerializeField] private Color selectedColor = new Color(0f, 1f, 0f, 0.5f); // Green for selected items
 
     [Header("Rarity Colors")]
     [SerializeField] private Color commonColor = Color.gray;
@@ -33,6 +35,7 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private ItemType? slotType;
     private Action<Item, int, ItemType?> onSlotClicked;
     private bool isHighlighted = false;
+    private bool isSelected = false;
     private static InventorySlotUI draggedSlot;
     private CanvasGroup canvasGroup;
     private Vector2 originalPosition;
@@ -44,6 +47,9 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         if (newItemGlow != null)
             newItemGlow.SetActive(false);
+
+        if (selectionBorder != null)
+            selectionBorder.gameObject.SetActive(false);
 
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null)
@@ -101,6 +107,9 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         if (slotButton != null)
             slotButton.interactable = hasItem;
+
+        if (selectionBorder != null)
+            selectionBorder.gameObject.SetActive(hasItem && isSelected);
     }
 
     Color GetRarityColor(ItemRarity rarity)
@@ -125,6 +134,18 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     void OnSlotClicked()
     {
         onSlotClicked?.Invoke(currentItem, slotIndex, slotType);
+    }
+
+    public void SetSelected(bool selected)
+    {
+        isSelected = selected;
+        if (selectionBorder != null)
+        {
+            selectionBorder.gameObject.SetActive(isSelected && currentItem != null);
+            if (isSelected)
+                selectionBorder.color = selectedColor;
+        }
+        UpdateSlotDisplay();
     }
 
     public void HighlightAsNew(float duration)
@@ -164,13 +185,13 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (slotBackground != null && !isHighlighted)
+        if (slotBackground != null && !isHighlighted && !isSelected)
             slotBackground.color = hoverColor;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (slotBackground != null && !isHighlighted)
+        if (slotBackground != null && !isHighlighted && !isSelected)
             slotBackground.color = currentItem != null ? filledSlotColor : emptySlotColor;
     }
 
