@@ -10,6 +10,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private int maxCapacity = 20;
 
     public static PlayerInventory Instance { get; private set; }
+
     void Awake()
     {
         if (Instance == null)
@@ -211,5 +212,15 @@ public class PlayerInventory : MonoBehaviour
         AddItem(upgradedItem);
 
         return true;
+    }
+
+    public int GetFirstEmptySlot()
+    {
+        for (int i = 0; i < maxCapacity; i++)
+        {
+            if (i >= inventoryItems.Count || inventoryItems[i] == null)
+                return i;
+        }
+        return -1;
     }
 }

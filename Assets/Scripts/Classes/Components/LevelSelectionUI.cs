@@ -105,14 +105,9 @@ public class LevelSelectionUI : MonoBehaviour
 
         LevelData[] levels = LevelManager.Instance.GetAllLevels();
 
-        // Clear existing buttons
         ClearLevelButtons();
-
-        // Create button for each level
         for (int i = 0; i < levels.Length; i++)
-        {
             CreateLevelButton(levels[i], i);
-        }
     }
 
     void ClearLevelButtons()

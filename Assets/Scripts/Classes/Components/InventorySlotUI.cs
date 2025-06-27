@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 using System;
 
-public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler, IDropHandler
+public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [Header("UI Components")]
     [SerializeField] private Image itemIcon;
@@ -36,9 +36,6 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     private Action<Item, int, ItemType?> onSlotClicked;
     private bool isHighlighted = false;
     private bool isSelected = false;
-    private static InventorySlotUI draggedSlot;
-    private CanvasGroup canvasGroup;
-    private Vector2 originalPosition;
 
     void Awake()
     {
@@ -50,10 +47,6 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
 
         if (selectionBorder != null)
             selectionBorder.gameObject.SetActive(false);
-
-        canvasGroup = GetComponent<CanvasGroup>();
-        if (canvasGroup == null)
-            canvasGroup = gameObject.AddComponent<CanvasGroup>();
     }
 
     public void SetupSlot(Item item, int index, ItemType? type, Action<Item, int, ItemType?> clickCallback)
@@ -193,58 +186,6 @@ public class InventorySlotUI : MonoBehaviour, IPointerEnterHandler, IPointerExit
     {
         if (slotBackground != null && !isHighlighted && !isSelected)
             slotBackground.color = currentItem != null ? filledSlotColor : emptySlotColor;
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        if (currentItem == null)
-            return;
-
-        draggedSlot = this;
-        canvasGroup.alpha = 0.6f;
-        canvasGroup.blocksRaycasts = false;
-        originalPosition = transform.position;
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (draggedSlot == this)
-            transform.position = eventData.position;
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if (draggedSlot == this)
-        {
-            canvasGroup.alpha = 1f;
-            canvasGroup.blocksRaycasts = true;
-            transform.position = originalPosition;
-            draggedSlot = null;
-        }
-    }
-
-    public void OnDrop(PointerEventData eventData)
-    {
-        if (draggedSlot == null || draggedSlot == this)
-            return;
-
-        if (CanEquipItem(draggedSlot.currentItem))
-        {
-            InventoryDisplay inventoryDisplay = FindAnyObjectByType<InventoryDisplay>();
-            if (inventoryDisplay != null)
-                inventoryDisplay.SwapSlots(draggedSlot, this);
-        }
-    }
-
-    bool CanEquipItem(Item item)
-    {
-        if (item == null)
-            return true;
-
-        if (slotType == null)
-            return true;
-
-        return item.itemType == slotType;
     }
 
     public Item GetItem()
