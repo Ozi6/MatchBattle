@@ -13,6 +13,8 @@ public class LevelSelectionUI : MonoBehaviour
     [SerializeField] private Button backButton;
     [SerializeField] private Text progressText;
     [SerializeField] private Text titleText;
+    [SerializeField] private GameObject levelSelectionPanel;
+    [SerializeField] private GameObject mainMenuPanel;
 
     [Header("Visual Effects")]
     [SerializeField] private ParticleSystem unlockParticles;
@@ -32,7 +34,6 @@ public class LevelSelectionUI : MonoBehaviour
 
     [Header("Scene Management")]
     [SerializeField] private string combatSceneName = "CombatScene";
-    [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     private List<LevelButtonData> levelButtons = new List<LevelButtonData>();
     private int selectedLevelIndex = -1;
@@ -59,15 +60,34 @@ public class LevelSelectionUI : MonoBehaviour
 
     void Start()
     {
+        if (levelSelectionPanel != null)
+            levelSelectionPanel.SetActive(false);
+
         InitializeUI();
         CreateLevelButtons();
-        StartCoroutine(AnimateButtonsIn());
 
         if (backButton != null)
             backButton.onClick.AddListener(GoBackWithAnimation);
 
         if (LevelManager.Instance != null)
             LevelManager.Instance.OnLevelCompleted += OnLevelCompleted;
+    }
+
+    public void ShowLevelSelection()
+    {
+        if (levelSelectionPanel != null)
+        {
+            levelSelectionPanel.SetActive(true);
+            StartCoroutine(AnimateButtonsIn());
+        }
+    }
+
+    public void HideLevelSelection()
+    {
+        if (isAnimating)
+            return;
+
+        StartCoroutine(AnimateButtonsOut());
     }
 
     void InitializeUI()
@@ -370,7 +390,12 @@ public class LevelSelectionUI : MonoBehaviour
 
         yield return new WaitForSeconds(buttonAnimationDuration * 0.5f);
 
-        SceneManager.LoadScene(mainMenuSceneName);
+        if (levelSelectionPanel != null)
+            levelSelectionPanel.SetActive(false);
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(true);
+
+        isAnimating = false;
     }
 
     void OnLevelCompleted(int levelIndex)
@@ -383,13 +408,11 @@ public class LevelSelectionUI : MonoBehaviour
             buttonData.isCompleted = true;
             ConfigureButtonState(buttonData);
             UpdateButtonProgressText(buttonData);
-
             if (unlockParticles != null)
             {
                 unlockParticles.transform.position = buttonData.buttonObject.transform.position;
                 unlockParticles.Play();
             }
-
             if (levelUnlockSound != null)
                 levelUnlockSound.Play();
         }
@@ -408,9 +431,7 @@ public class LevelSelectionUI : MonoBehaviour
             ConfigureButton(buttonData);
 
             if (!wasUnlocked && buttonData.isUnlocked)
-            {
                 StartCoroutine(AnimateNewlyUnlocked(buttonData));
-            }
         }
     }
 
@@ -443,16 +464,14 @@ public class LevelSelectionUI : MonoBehaviour
 
     public void ScrollToLevel(int levelIndex)
     {
-        if (levelIndex >= 0 && levelIndex < levelButtons.Count && scrollRect != null)
+
+        if (levelIndex >= 0 && levelIndex<levelButtons.Count && scrollRect != null)
         {
             var buttonData = levelButtons[levelIndex];
             var buttonRect = buttonData.buttonObject.GetComponent<RectTransform>();
-
             Canvas.ForceUpdateCanvases();
-
             Vector2 targetPosition = (Vector2)scrollRect.transform.InverseTransformPoint(buttonRect.position);
             targetPosition.x = 0;
-
             scrollRect.content.anchoredPosition = targetPosition;
         }
     }
