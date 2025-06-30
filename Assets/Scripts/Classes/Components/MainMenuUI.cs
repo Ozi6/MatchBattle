@@ -58,7 +58,10 @@ public class MainMenuUI : MonoBehaviour
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(false);
         if (levelSelectionUI != null)
+        {
+            levelSelectionUI.gameObject.SetActive(true);
             levelSelectionUI.ShowLevelSelection();
+        }
     }
 
     private int FindLatestIncompleteLevel()
