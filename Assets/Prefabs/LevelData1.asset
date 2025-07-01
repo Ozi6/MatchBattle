@@ -17,7 +17,7 @@ MonoBehaviour:
   levelIcon: {fileID: 0}
   levelNumber: 0
   requiredPreviousLevel: -1
-  isUnlocked: 1
+  isUnlocked: 0
   totalWaves: 3
   waves:
   - waveNumber: 1

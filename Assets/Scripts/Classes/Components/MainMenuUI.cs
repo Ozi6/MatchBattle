@@ -7,8 +7,12 @@ public class MainMenuUI : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private Button playButton;
     [SerializeField] private Button levelSelectButton;
+    [SerializeField] private Button shopButton;
+    [SerializeField] private Button inventoryButton;
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private LevelSelectionUI levelSelectionUI;
+    [SerializeField] private GameObject shopPanel;
+    [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private string combatSceneName = "CombatScene";
 
     [Header("Audio")]
@@ -16,21 +20,43 @@ public class MainMenuUI : MonoBehaviour
 
     void Start()
     {
+        InitializeUI();
+        SetupButtonListeners();
+    }
+
+    private void InitializeUI()
+    {
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(true);
+
         if (levelSelectionUI != null)
             levelSelectionUI.HideLevelSelection();
 
+        if (shopPanel != null)
+            shopPanel.SetActive(false);
+
+        if (inventoryPanel != null)
+            inventoryPanel.SetActive(false);
+    }
+
+    private void SetupButtonListeners()
+    {
         if (playButton != null)
             playButton.onClick.AddListener(OnPlayButtonClicked);
+
         if (levelSelectButton != null)
             levelSelectButton.onClick.AddListener(OnLevelSelectButtonClicked);
+
+        if (shopButton != null)
+            shopButton.onClick.AddListener(OnShopButtonClicked);
+
+        if (inventoryButton != null)
+            inventoryButton.onClick.AddListener(OnInventoryButtonClicked);
     }
 
     void OnPlayButtonClicked()
     {
-        if (buttonClickSound != null)
-            buttonClickSound.Play();
+        PlayButtonSound();
 
         if (LevelManager.Instance == null)
         {
@@ -53,10 +79,11 @@ public class MainMenuUI : MonoBehaviour
 
     void OnLevelSelectButtonClicked()
     {
-        if (buttonClickSound != null)
-            buttonClickSound.Play();
+        PlayButtonSound();
+
         if (mainMenuPanel != null)
             mainMenuPanel.SetActive(false);
+
         if (levelSelectionUI != null)
         {
             levelSelectionUI.gameObject.SetActive(true);
@@ -64,15 +91,60 @@ public class MainMenuUI : MonoBehaviour
         }
     }
 
+    void OnShopButtonClicked()
+    {
+        PlayButtonSound();
+
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(false);
+
+        if (shopPanel != null)
+            shopPanel.SetActive(true);
+    }
+
+    void OnInventoryButtonClicked()
+    {
+        PlayButtonSound();
+
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(false);
+
+        if (inventoryPanel != null)
+            inventoryPanel.SetActive(true);
+    }
+
+    public void ShowMainMenu()
+    {
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(true);
+
+        if (levelSelectionUI != null)
+            levelSelectionUI.HideLevelSelection();
+
+        if (shopPanel != null)
+            shopPanel.SetActive(false);
+
+        if (inventoryPanel != null)
+            inventoryPanel.SetActive(false);
+    }
+
+    private void PlayButtonSound()
+    {
+        if (buttonClickSound != null)
+            buttonClickSound.Play();
+    }
+
     private int FindLatestIncompleteLevel()
     {
         LevelData[] levels = LevelManager.Instance.GetAllLevels();
         int latestIndex = -1;
+
         for (int i = 0; i < levels.Length; i++)
         {
             if (LevelManager.Instance.IsLevelUnlocked(i) && !LevelManager.Instance.IsLevelCompleted(i))
                 latestIndex = i;
         }
+
         if (latestIndex == -1)
         {
             for (int i = 0; i < levels.Length; i++)
@@ -84,6 +156,7 @@ public class MainMenuUI : MonoBehaviour
                 }
             }
         }
+
         return latestIndex;
     }
 }
