@@ -2125,7 +2125,7 @@ MonoBehaviour:
   showAnimationDuration: 0.5
   inventoryOpenSound: {fileID: 0}
   inventoryCloseSound: {fileID: 0}
-  playerInventory: {fileID: 1358685884}
+  playerInventory: {fileID: 0}
 --- !u!1 &911227719
 GameObject:
   m_ObjectHideFlags: 0
@@ -2965,7 +2965,6 @@ GameObject:
   - component: {fileID: 1358685880}
   - component: {fileID: 1358685883}
   - component: {fileID: 1358685881}
-  - component: {fileID: 1358685884}
   m_Layer: 5
   m_Name: Player
   m_TagString: Player
@@ -3023,19 +3022,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1358685879}
   m_CullTransparentMesh: 1
---- !u!114 &1358685884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1358685879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a7e0a2e83b878f4b80d9f4e3a5bfa61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxCapacity: 20
 --- !u!1 &1391269154
 GameObject:
   m_ObjectHideFlags: 0

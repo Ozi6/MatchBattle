@@ -35,7 +35,7 @@ public class RewardScreen : MonoBehaviour
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        playerInventory = FindAnyObjectByType<PlayerInventory>();
+        playerInventory = PlayerInventory.Instance;
 
         if (continueButton != null)
             continueButton.onClick.AddListener(ConfirmSelection);
