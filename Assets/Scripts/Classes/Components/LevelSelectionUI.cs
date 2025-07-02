@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 
 public class LevelSelectionUI : MonoBehaviour
 {
@@ -11,8 +12,8 @@ public class LevelSelectionUI : MonoBehaviour
     [SerializeField] private GameObject levelButtonPrefab;
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private Button backButton;
-    [SerializeField] private Text progressText;
-    [SerializeField] private Text titleText;
+    [SerializeField] private TMP_Text progressText;
+    [SerializeField] private TMP_Text titleText;
     [SerializeField] private GameObject levelSelectionPanel;
     [SerializeField] private GameObject mainMenuPanel;
 
