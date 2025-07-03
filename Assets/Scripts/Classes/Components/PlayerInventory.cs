@@ -8,6 +8,7 @@ public class PlayerInventory : MonoBehaviour
     private Item charm1;
     private Item charm2;
     [SerializeField] private int maxCapacity = 20;
+    [SerializeField] private float currency = 1000f;
 
     public static PlayerInventory Instance { get; private set; }
 
@@ -222,5 +223,25 @@ public class PlayerInventory : MonoBehaviour
                 return i;
         }
         return -1;
+    }
+
+    public float GetCurrency()
+    {
+        return currency;
+    }
+
+    public bool SpendCurrency(float amount)
+    {
+        if (currency >= amount)
+        {
+            currency -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    public void AddCurrency(float amount)
+    {
+        currency += amount;
     }
 }
