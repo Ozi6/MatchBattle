@@ -19,8 +19,11 @@ public class ShopUI : MonoBehaviour
 
     void Start()
     {
-        refreshButton.gameObject.SetActive(showRefreshButton && ShopManager.Instance.RefreshesDaily());
-        refreshButton.onClick.AddListener(OnRefreshButtonClicked);
+        if(refreshButton != null)
+        {
+            refreshButton.gameObject.SetActive(showRefreshButton && ShopManager.Instance.RefreshesDaily());
+            refreshButton.onClick.AddListener(OnRefreshButtonClicked);
+        }
         closeButton.onClick.AddListener(OnCloseButtonClicked);
         UpdateCurrencyDisplay();
         PopulateShop();
