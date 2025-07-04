@@ -11,6 +11,7 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private Button refreshButton;
     [SerializeField] private Button closeButton;
     [SerializeField] private TextMeshProUGUI currencyText;
+    [SerializeField] private GameObject mainMenuPanel;
 
     [Header("Settings")]
     [SerializeField] private bool showRefreshButton = true;
@@ -58,6 +59,7 @@ public class ShopUI : MonoBehaviour
     void OnCloseButtonClicked()
     {
         gameObject.SetActive(false);
+        mainMenuPanel.SetActive(true);
     }
 
     public void OnItemPurchased()

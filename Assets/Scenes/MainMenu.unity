@@ -1989,8 +1989,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 0, y: 102}
+  m_SizeDelta: {x: 310, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1084803189
 MonoBehaviour:
@@ -2013,7 +2013,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 5, y: 5}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &1111156664
@@ -3992,6 +3992,7 @@ MonoBehaviour:
   refreshButton: {fileID: 0}
   closeButton: {fileID: 292330206}
   currencyText: {fileID: 951055704}
+  mainMenuPanel: {fileID: 1553565797}
   showRefreshButton: 0
 --- !u!1 &2111530547
 GameObject:
