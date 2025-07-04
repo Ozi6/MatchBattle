@@ -3320,6 +3320,7 @@ MonoBehaviour:
   equipButton: {fileID: 0}
   unequipButton: {fileID: 0}
   buttonClickSound: {fileID: 0}
+  mainMenuUI: {fileID: 1553565802}
 --- !u!1001 &1500838000
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -30,20 +30,20 @@ public class MenuInventory : MonoBehaviour
 
     private PlayerInventory playerInventory;
     private InventorySlotUI selectedSlot;
-    private MainMenuUI mainMenuUI;
+    [SerializeField] private MainMenuUI mainMenuUI;
     private List<InventorySlotUI> inventorySlots = new List<InventorySlotUI>();
 
     void Awake()
     {
-        playerInventory = PlayerInventory.Instance;
-        mainMenuUI = FindObjectOfType<MainMenuUI>();
         InitializeInventorySlots();
         SetupButtonListeners();
+        playerInventory = PlayerInventory.Instance;
     }
 
     void OnEnable()
     {
         UpdateInventoryDisplay();
+        playerInventory = PlayerInventory.Instance;
         if (itemDetailsPanel != null)
             itemDetailsPanel.SetActive(false);
         if (inventoryScrollRect != null)
@@ -191,7 +191,7 @@ public class MenuInventory : MonoBehaviour
 
     private void UpdateInventoryDisplay()
     {
-        List<Item> items = playerInventory.GetAllItems();
+        List<Item> items = PlayerInventory.Instance.GetAllItems();
         for (int i = 0; i < inventorySlots.Count; i++)
         {
             Item item = i < items.Count ? items[i] : null;
