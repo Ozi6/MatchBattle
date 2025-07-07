@@ -24,6 +24,8 @@ public class MenuInventory : MonoBehaviour
     [SerializeField] private Image itemIconImage;
     [SerializeField] private Button equipButton;
     [SerializeField] private Button unequipButton;
+    [SerializeField] private Button closeButton;
+    [SerializeField] private Image backgroundOverlay;
 
     [Header("Audio")]
     [SerializeField] private AudioSource buttonClickSound;
@@ -46,6 +48,8 @@ public class MenuInventory : MonoBehaviour
         playerInventory = PlayerInventory.Instance;
         if (itemDetailsPanel != null)
             itemDetailsPanel.SetActive(false);
+        if (backgroundOverlay != null)
+            backgroundOverlay.gameObject.SetActive(false);
         if (inventoryScrollRect != null)
             inventoryScrollRect.verticalNormalizedPosition = 1f;
     }
@@ -83,6 +87,9 @@ public class MenuInventory : MonoBehaviour
         if (unequipButton != null)
             unequipButton.onClick.AddListener(OnUnequipButtonClicked);
 
+        if (closeButton != null)
+            closeButton.onClick.AddListener(OnCloseButtonClicked);
+
         for (int i = 0; i < inventorySlots.Count; i++)
         {
             int index = i;
@@ -113,6 +120,20 @@ public class MenuInventory : MonoBehaviour
         PlayButtonSound();
         if (mainMenuUI != null)
             mainMenuUI.ShowMainMenu();
+    }
+
+    private void OnCloseButtonClicked()
+    {
+        PlayButtonSound();
+        if (itemDetailsPanel != null)
+            itemDetailsPanel.SetActive(false);
+        if (backgroundOverlay != null)
+            backgroundOverlay.gameObject.SetActive(false);
+        if (selectedSlot != null)
+        {
+            selectedSlot.SetSelected(false);
+            selectedSlot = null;
+        }
     }
 
     private void OnSlotClicked(Item item, int slotIndex, ItemType? slotType)
@@ -158,11 +179,13 @@ public class MenuInventory : MonoBehaviour
             ItemType slotType = item.itemType;
             int charmSlot = slotType == ItemType.Charm ? (selectedSlot == charmSlot1 ? 1 : 2) : 0;
 
-            if (playerInventory.EquipItem(item, slotType, charmSlot))
+            if (PlayerInventory.Instance.EquipItem(item, slotType, charmSlot))
             {
                 UpdateInventoryDisplay();
                 if (itemDetailsPanel != null)
                     itemDetailsPanel.SetActive(false);
+                if (backgroundOverlay != null)
+                    backgroundOverlay.gameObject.SetActive(false);
                 selectedSlot.SetSelected(false);
                 selectedSlot = null;
             }
@@ -183,6 +206,8 @@ public class MenuInventory : MonoBehaviour
                 UpdateInventoryDisplay();
                 if (itemDetailsPanel != null)
                     itemDetailsPanel.SetActive(false);
+                if (backgroundOverlay != null)
+                    backgroundOverlay.gameObject.SetActive(false);
                 selectedSlot.SetSelected(false);
                 selectedSlot = null;
             }
@@ -204,6 +229,7 @@ public class MenuInventory : MonoBehaviour
 
     private void UpdateEquippedSlots()
     {
+        playerInventory = PlayerInventory.Instance;
         if (weaponSlot != null)
             weaponSlot.SetupSlot(playerInventory.GetEquippedItem(ItemType.OffhandWeapon), 0, ItemType.OffhandWeapon, OnSlotClicked);
 
@@ -234,6 +260,9 @@ public class MenuInventory : MonoBehaviour
         if (itemDetailsPanel != null)
         {
             itemDetailsPanel.SetActive(item != null);
+            if (backgroundOverlay != null)
+                backgroundOverlay.gameObject.SetActive(item != null);
+
             if (item != null)
             {
                 if (itemNameText != null)
