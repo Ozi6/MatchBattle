@@ -2169,7 +2169,7 @@ MonoBehaviour:
     comboScaling: 0
     maxComboBonus: 0
     projectilePrefab: {fileID: 6577921205914836696, guid: 21724eb45d25aae498bba38c697bb10d, type: 3}
-    projectileSpeed: 2
+    projectileSpeed: 5
     debuffType: 5
     debuffDuration: 0
     debuffIntensity: 0
@@ -2197,7 +2197,7 @@ MonoBehaviour:
     comboScaling: 0
     maxComboBonus: 0
     projectilePrefab: {fileID: 6577921205914836696, guid: 95f914919e79d9c45a4261305f9530a4, type: 3}
-    projectileSpeed: 2
+    projectileSpeed: 5
     debuffType: 5
     debuffDuration: 0
     debuffIntensity: 0
@@ -2253,7 +2253,7 @@ MonoBehaviour:
     comboScaling: 10
     maxComboBonus: 8
     projectilePrefab: {fileID: 6577921205914836696, guid: 8f7bb8fdc4c4c1c4ab132735e48140c4, type: 3}
-    projectileSpeed: 2
+    projectileSpeed: 5
     debuffType: 0
     debuffDuration: 5
     debuffIntensity: 1
