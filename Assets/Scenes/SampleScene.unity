@@ -2179,7 +2179,7 @@ MonoBehaviour:
     baseKnockbackForce: 5
     knockbackDuration: 0.3
     projectileType: 0
-    baseProjectileCount: 1
+    baseProjectileCount: 3
     projectileCountPerCombo: 1
     usesArcTrajectory: 0
     arcHeight: 2
@@ -2207,7 +2207,7 @@ MonoBehaviour:
     baseKnockbackForce: 5
     knockbackDuration: 0.3
     projectileType: 0
-    baseProjectileCount: 1
+    baseProjectileCount: 3
     projectileCountPerCombo: 1
     usesArcTrajectory: 0
     arcHeight: 2
@@ -2263,7 +2263,7 @@ MonoBehaviour:
     baseKnockbackForce: 5
     knockbackDuration: 0.3
     projectileType: 1
-    baseProjectileCount: 3
+    baseProjectileCount: 5
     projectileCountPerCombo: 1
     usesArcTrajectory: 0
     arcHeight: 2

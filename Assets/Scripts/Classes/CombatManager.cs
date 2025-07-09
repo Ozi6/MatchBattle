@@ -32,7 +32,7 @@ public class CombatAction
 
     [Header("Specialized Projectile Behavior")]
     public ProjectileType projectileType = ProjectileType.Direct;
-    public int baseProjectileCount = 1;
+    public int baseProjectileCount = 3;
     public int projectileCountPerCombo = 1;
     public bool usesArcTrajectory = false;
     public float arcHeight = 2f;
@@ -366,10 +366,6 @@ public class CombatManager : MonoBehaviour
 
         Vector3 spawnPosition = playerTransform.position + Vector3.up * 0.5f;
 
-        float totalSpreadAngle = Mathf.Min(60f, projectileCount * 10f);
-        float angleStep = projectileCount > 1 ? totalSpreadAngle / (projectileCount - 1) : 0f;
-        float startAngle = -totalSpreadAngle / 2f;
-
         for (int i = 0; i < projectileCount; i++)
         {
             Enemy targetEnemy = GetNextTarget(i % activeEnemies.Count);
@@ -377,8 +373,7 @@ public class CombatManager : MonoBehaviour
             {
                 Vector2 baseDirection = (targetEnemy.transform.position - spawnPosition).normalized;
 
-                float currentAngle = startAngle + (i * angleStep);
-                Vector2 direction = RotateVector2(baseDirection, currentAngle);
+                Vector2 direction = baseDirection;
 
                 projectileQueue.Enqueue((action, projectileData.Clone(), targetEnemy, spawnPosition, direction, action.usesArcTrajectory));
             }
@@ -418,15 +413,14 @@ public class CombatManager : MonoBehaviour
         if (activeEnemies.Count == 0)
             return;
 
-        int projectileCount = action.baseProjectileCount + Mathf.Max(0, comboSize - 3) * action.projectileCountPerCombo;
+        int extraCombos = Mathf.Max(0, comboSize - 3);
+        int projectileCount = action.baseProjectileCount + (extraCombos * action.projectileCountPerCombo);
 
         float[] knockbackMultipliers = new float[Mathf.Max(projectileCount, 3)];
-        knockbackMultipliers[0] = 1f;
-        if (projectileCount > 1)
-            knockbackMultipliers[1] = 0.5f;
-        if (projectileCount > 2)
-            knockbackMultipliers[2] = 0.25f;
-        for (int i = 3; i < projectileCount; i++)
+        float[] initialValues = { 1f, 0.5f, 0.25f };
+        for (int i = 0; i < initialValues.Length && i < projectileCount; i++)
+            knockbackMultipliers[i] = initialValues[i];
+        for (int i = initialValues.Length; i < projectileCount; i++)
             knockbackMultipliers[i] = 0f;
 
         Vector3 spawnPosition = playerTransform.position + Vector3.up * 0.5f;
@@ -442,16 +436,11 @@ public class CombatManager : MonoBehaviour
 
                 Vector2 direction = (targetEnemy.transform.position - spawnPosition).normalized;
 
-                if (projectileCount > 1)
-                {
-                    float spreadAngle = (i - (projectileCount - 1) / 2f) * 15f;
-                    direction = RotateVector2(direction, spreadAngle);
-                }
-
                 projectileQueue.Enqueue((action, modifiedData, targetEnemy, spawnPosition, direction, action.usesArcTrajectory));
             }
         }
     }
+
 
     void ProcessProjectileQueue()
     {
