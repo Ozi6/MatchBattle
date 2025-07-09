@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using DamageNumbersPro;
 
 public class Enemy : MonoBehaviour
 {
@@ -20,6 +21,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Image healthFill;
     [SerializeField] private Transform debuffIconContainer;
     [SerializeField] private GameObject debuffIconPrefab;
+    [SerializeField] private DamageNumber damageNumberPrefab;
 
     [Header("Movement")]
     [SerializeField] private Transform targetPlayer;
@@ -38,6 +40,7 @@ public class Enemy : MonoBehaviour
     private Slider healthBarInstance;
     private bool isKnockbacked = false;
     private float knockbackTimer = 0f;
+    private RectTransform uiCanvasRect;
 
     private Dictionary<DebuffType, float> debuffTimers = new Dictionary<DebuffType, float>();
 
@@ -162,7 +165,14 @@ public class Enemy : MonoBehaviour
             uiCanvas.transform.localScale = new Vector3(0.02f, 0.02f, 1f);
         }
 
-        healthBarInstance = Instantiate(healthBarPrefab, uiCanvas.transform);
+        uiCanvasRect = uiCanvas.GetComponent<RectTransform>();
+        if (uiCanvasRect == null)
+        {
+            Debug.LogError("Canvas does not have a RectTransform component!", this);
+            return;
+        }
+
+        healthBarInstance = Instantiate(healthBarPrefab, uiCanvasRect);
         healthBarInstance.gameObject.SetActive(true);
 
         healthBarInstance.name = $"{gameObject.name}_HealthBar";
@@ -278,6 +288,21 @@ public class Enemy : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
+        if (damageNumberPrefab != null && uiCanvasRect != null)
+        {
+            Vector2 anchoredPosition = new Vector2(0, 50);
+            DamageNumber damageNumber = damageNumberPrefab.SpawnGUI(uiCanvasRect, anchoredPosition, damage);
+            damageNumber.SetFollowedTarget(transform);
+            damageNumber.SetColor(GetDamageColor(debuffType));
+        }
+        else
+        {
+            if (damageNumberPrefab == null)
+                Debug.LogWarning("DamageNumber prefab is not assigned!", this);
+            if (uiCanvasRect == null)
+                Debug.LogWarning("UI Canvas RectTransform not found for spawning damage number!", this);
+        }
+
         if (debuffDuration > 0)
             ApplyDebuff(new Debuff(debuffType, debuffDuration, debuffIntensity));
 
@@ -342,7 +367,7 @@ public class Enemy : MonoBehaviour
 
                 if (debuffTimers[debuff.type] >= debuff.tickInterval)
                 {
-                    TakeDamage(debuff.intensity);
+                    TakeDamage(debuff.intensity, debuff.type);
                     debuffTimers[debuff.type] = 0f;
                 }
             }
@@ -451,6 +476,11 @@ public class Enemy : MonoBehaviour
             case DebuffType.Freeze: return Color.cyan;
             default: return Color.white;
         }
+    }
+
+    Color GetDamageColor(DebuffType debuffType)
+    {
+        return GetDebuffColor(debuffType);
     }
 
     void UpdateHealthBar()
