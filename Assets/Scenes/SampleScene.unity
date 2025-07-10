@@ -2287,9 +2287,9 @@ MonoBehaviour:
     debuffIntensity: 1
     isPiercing: 0
     hasAreaEffect: 1
-    areaRadius: 5
-    baseKnockbackForce: 5
-    knockbackDuration: 0.3
+    areaRadius: 2
+    baseKnockbackForce: 0
+    knockbackDuration: 0
     projectileType: 2
     baseProjectileCount: 1
     projectileCountPerCombo: 1
