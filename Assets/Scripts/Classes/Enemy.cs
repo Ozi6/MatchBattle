@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float attackCooldown = 2f;
 
     [Header("Visual Components")]
-    [SerializeField] private Slider healthBar;
+    [SerializeField] private Slider healthBar; // Direct reference to the health bar under this enemy
     [SerializeField] private Image healthFill;
     [SerializeField] private Transform debuffIconContainer;
     [SerializeField] private GameObject debuffIconPrefab;
@@ -39,13 +39,14 @@ public class Enemy : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private bool isKnockbacked = false;
     private float knockbackTimer = 0f;
-    private Canvas uiCanvas;
 
     private Dictionary<DebuffType, float> debuffTimers = new Dictionary<DebuffType, float>();
 
     public Action<Enemy> OnEnemyDeath;
     public Action<Enemy, float> OnEnemyTakeDamage;
     public Action<Enemy, float> OnEnemyAttackPlayer;
+
+    private float[] enemyBaseData = new float[2];
 
     void Awake()
     {
@@ -55,6 +56,8 @@ public class Enemy : MonoBehaviour
 
         currentHealth = maxHealth;
         currentMovementSpeed = baseMovementSpeed;
+        enemyBaseData[0] = currentHealth;
+        enemyBaseData[1] = attackDamage;
 
         if (targetPlayer == null)
         {
@@ -81,7 +84,9 @@ public class Enemy : MonoBehaviour
                 Debug.LogWarning($"No 'Death' animation found in Animator for {gameObject.name}. Ensure the death animation is set up in the Animator Controller.");
         }
         else
+        {
             Debug.LogWarning($"Animator or AnimatorController missing on {gameObject.name}. Death animation will not play.");
+        }
     }
 
     private void FindAndSetPlayerTarget()
@@ -132,7 +137,12 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         if (healthBar != null && !healthBar.gameObject.activeInHierarchy)
+        {
             healthBar.gameObject.SetActive(true);
+            currentHealth = maxHealth = healthBar.value = healthBar.maxValue = enemyBaseData[0];
+            attackDamage = enemyBaseData[1];
+            UpdateHealthBar();
+        }
 
         if (isDead)
             return;
@@ -147,13 +157,16 @@ public class Enemy : MonoBehaviour
     {
         if (healthBar == null)
         {
-            Debug.LogWarning("HealthBar is not assigned! Please assign the existing health bar from the enemy prefab.", this);
-            return;
+            healthBar = GetComponentInChildren<Slider>();
+            if (healthBar == null)
+            {
+                Debug.LogWarning("No health bar found as child of this enemy! Please assign it in the inspector.", this);
+                return;
+            }
         }
 
-        uiCanvas = healthBar.GetComponentInParent<Canvas>();
-        if (uiCanvas == null)
-            Debug.LogWarning("No Canvas found for the health bar! Make sure the health bar is properly set up with a Canvas.", this);
+        if (healthBar != null && !healthBar.gameObject.activeInHierarchy)
+            healthBar.gameObject.SetActive(true);
 
         healthBar.maxValue = maxHealth;
         healthBar.value = currentHealth;
@@ -164,8 +177,9 @@ public class Enemy : MonoBehaviour
             Transform fillTransform = healthBar.transform.Find("Fill Area/Fill");
             if (fillTransform != null)
                 healthFill = fillTransform.GetComponent<Image>();
-            else
-                Debug.LogWarning("HealthFill Image not found! Make sure the health bar has a Fill Area/Fill structure.", this);
+
+            if (healthFill == null)
+                Debug.LogWarning("HealthFill Image not found in health bar! Ensure Fill Area/Fill exists.", this);
         }
     }
 
@@ -259,24 +273,12 @@ public class Enemy : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
-        // Spawn damage number using the existing canvas
-        if (damageNumberPrefab != null && uiCanvas != null)
+        if (damageNumberPrefab != null)
         {
-            RectTransform canvasRect = uiCanvas.GetComponent<RectTransform>();
-            if (canvasRect != null)
-            {
-                Vector2 anchoredPosition = new Vector2(0, 50);
-                DamageNumber damageNumber = damageNumberPrefab.SpawnGUI(canvasRect, anchoredPosition, damage);
-                damageNumber.SetFollowedTarget(transform);
-                damageNumber.SetColor(GetDamageColor(debuffType));
-            }
-        }
-        else
-        {
-            if (damageNumberPrefab == null)
-                Debug.LogWarning("DamageNumber prefab is not assigned!", this);
-            if (uiCanvas == null)
-                Debug.LogWarning("UI Canvas not found for spawning damage number!", this);
+            Vector3 damagePosition = transform.position + new Vector3(0f, 1f, 0f);
+            DamageNumber damageNumber = damageNumberPrefab.Spawn(damagePosition, damage);
+            damageNumber.SetFollowedTarget(transform);
+            damageNumber.SetColor(GetDamageColor(debuffType));
         }
 
         if (debuffDuration > 0)
@@ -464,7 +466,7 @@ public class Enemy : MonoBehaviour
         if (healthBar != null)
         {
             healthBar.value = currentHealth;
-            healthBar.gameObject.SetActive(currentHealth < maxHealth && currentHealth > 0);
+            healthBar.gameObject.SetActive(currentHealth <= maxHealth && currentHealth > 0);
 
             if (healthFill != null)
             {
