@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float currentHealth;
     [SerializeField] private float baseArmor = 5f;
     [SerializeField] private float baseDamageMultiplier = 1f;
+    [SerializeField] private float baseCritChance = 0.01f;
 
     [Header("UI Components")]
     [SerializeField] private Slider healthBarUI;
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
     public Action<Player, float> OnPlayerHeal;
     public Action<Player, float> OnPlayerArmorChanged;
     public Action<Player, float> OnPlayerDamageMultiplierChanged;
+    public Action<Player, float> OnPlayerCritChanceChanged;
 
     void Awake()
     {
@@ -51,17 +53,13 @@ public class Player : MonoBehaviour
         UpdateHealthUI();
 
         if (combineManager != null)
-        {
             combineManager.OnCombatActionTriggered += HandleCombatAction;
-        }
     }
 
     void OnDestroy()
     {
         if (combineManager != null)
-        {
             combineManager.OnCombatActionTriggered -= HandleCombatAction;
-        }
     }
 
     void HandleCombatAction(BlockType blockType, int comboSize, List<PuzzleBlock> matchedBlocks)
@@ -129,6 +127,7 @@ public class Player : MonoBehaviour
     {
         bool armorChanged = false;
         bool damageChanged = false;
+        bool critChanceChanged = false;
 
         for (int i = activeBuffs.Count - 1; i >= 0; i--)
         {
@@ -151,6 +150,8 @@ public class Player : MonoBehaviour
                     armorChanged = true;
                 if (buff.type == PlayerBuffType.DamageBoost)
                     damageChanged = true;
+                if (buff.type == PlayerBuffType.CritChanceBoost)
+                    critChanceChanged = true;
 
                 activeBuffs.RemoveAt(i);
             }
@@ -160,6 +161,8 @@ public class Player : MonoBehaviour
             OnPlayerArmorChanged?.Invoke(this, GetCurrentArmor());
         if (damageChanged)
             OnPlayerDamageMultiplierChanged?.Invoke(this, GetDamageMultiplier());
+        if (critChanceChanged)
+            OnPlayerCritChanceChanged?.Invoke(this, GetCritChance());
     }
 
     void UpdateInvulnerability()
@@ -251,6 +254,8 @@ public class Player : MonoBehaviour
             OnPlayerArmorChanged?.Invoke(this, GetCurrentArmor());
         else if (buffType == PlayerBuffType.DamageBoost)
             OnPlayerDamageMultiplierChanged?.Invoke(this, GetDamageMultiplier());
+        else if (buffType == PlayerBuffType.CritChanceBoost)
+            OnPlayerCritChanceChanged?.Invoke(this, GetCritChance());
 
         Debug.Log($"Player received buff: {buffType} for {duration}s with intensity {intensity}");
     }
@@ -288,9 +293,32 @@ public class Player : MonoBehaviour
         return totalMultiplier;
     }
 
+    public float GetCritChance()
+    {
+        float totalCritChance = baseCritChance;
+        foreach (PlayerBuff buff in activeBuffs)
+        {
+            if (buff.type == PlayerBuffType.CritChanceBoost)
+                totalCritChance += buff.intensity;
+        }
+        return Mathf.Clamp(totalCritChance, 0f, 1f);
+    }
+
+    public float GetBaseCritChance()
+    {
+        return baseCritChance;
+    }
+
+    public void SetBaseCritChance(float newCritChance)
+    {
+        baseCritChance = Mathf.Clamp(newCritChance, 0f, 1f);
+        OnPlayerCritChanceChanged?.Invoke(this, GetCritChance());
+    }
+
     public float CalculateFinalDamage(float baseDamage)
     {
-        return baseDamage * GetDamageMultiplier();
+        float critMultiplier = UnityEngine.Random.value < GetCritChance() ? 2f : 1f;
+        return baseDamage * GetDamageMultiplier() * critMultiplier;
     }
 
     public float GetCurrentHealth() => currentHealth;
@@ -349,7 +377,8 @@ public enum PlayerBuffType
 {
     DamageBoost,
     ArmorBoost,
-    Regeneration
+    Regeneration,
+    CritChanceBoost
 }
 
 public class InventorySlot

@@ -12,6 +12,7 @@ public class PerkNode : MonoBehaviour
     public Image connectionLine;
 
     [Header("Perk Data")]
+    public Perk perk;
     public int requiredLevel;
     public string perkTitle;
     public string description;
@@ -40,13 +41,13 @@ public class PerkNode : MonoBehaviour
 
     void UpdateVisuals()
     {
-        nodeIcon.sprite = isUnlocked ? unlockedIcon : lockedIcon;
+        nodeIcon.sprite = isUnlocked ? (perk?.icon ?? unlockedIcon) : lockedIcon;
         nodeIcon.color = isUnlocked ? unlockedColor : lockedColor;
 
-        perkName.text = perkTitle;
+        perkName.text = perk?.perkName ?? perkTitle;
         perkName.color = isUnlocked ? unlockedColor : lockedColor;
 
-        perkDescription.text = isUnlocked ? description : "Reach level " + requiredLevel;
+        perkDescription.text = isUnlocked ? (perk?.description ?? description) : "Reach level " + requiredLevel;
         perkDescription.color = isUnlocked ? unlockedColor : lockedColor;
 
         if (connectionLine != null)

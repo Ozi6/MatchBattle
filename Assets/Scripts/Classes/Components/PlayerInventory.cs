@@ -7,6 +7,7 @@ public class PlayerInventory : MonoBehaviour
     private Dictionary<ItemType, Item> equippedItems = new Dictionary<ItemType, Item>();
     private Item charm1;
     private Item charm2;
+    private List<Perk> ownedPerks = new List<Perk>();
     [SerializeField] private int maxCapacity = 20;
     [SerializeField] private float currency = 1000f;
 
@@ -30,6 +31,25 @@ public class PlayerInventory : MonoBehaviour
 
         inventoryItems.Add(item);
         return true;
+    }
+
+    public bool AddPerk(Perk perk)
+    {
+        if (perk == null)
+            return false;
+
+        if (!ownedPerks.Contains(perk))
+        {
+            ownedPerks.Add(perk);
+            perk.ApplyPerk(FindObjectOfType<Player>());
+            return true;
+        }
+        return false;
+    }
+
+    public List<Perk> GetAllPerks()
+    {
+        return new List<Perk>(ownedPerks);
     }
 
     public List<Item> GetAllItems()

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System.Linq;
+using System.Collections;
 
 public class PerkManager : MonoBehaviour
 {
@@ -84,7 +85,7 @@ public class PerkManager : MonoBehaviour
         ScrollToPerk(latestUnlocked);
     }
 
-    private System.Collections.IEnumerator SmoothScrollToPerk(PerkNode targetPerk)
+    private IEnumerator SmoothScrollToPerk(PerkNode targetPerk)
     {
         isAutoScrolling = true;
 
@@ -116,7 +117,12 @@ public class PerkManager : MonoBehaviour
 
     public void OnPerkSelected(PerkNode selectedPerk)
     {
-        Debug.Log($"Perk selected: {selectedPerk.perkTitle}");
+        if (selectedPerk.perk != null)
+        {
+            bool added = PlayerInventory.Instance.AddPerk(selectedPerk.perk);
+            if (added)
+                Debug.Log($"Perk applied: {selectedPerk.perk.perkName}");
+        }
     }
 
     public void LevelCompleted()

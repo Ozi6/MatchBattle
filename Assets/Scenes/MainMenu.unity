@@ -2070,6 +2070,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1849992703844863532, guid: 52d78a9b96925423087aeb0f0dc81af7, type: 3}
   m_PrefabInstance: {fileID: 503738672}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &503738674 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1849992703844863535, guid: 52d78a9b96925423087aeb0f0dc81af7, type: 3}
+  m_PrefabInstance: {fileID: 503738672}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &599733193
 GameObject:
   m_ObjectHideFlags: 0
@@ -20855,6 +20866,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1403288298}
   m_CullTransparentMesh: 0
+--- !u!1 &1458554767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1458554769}
+  - component: {fileID: 1458554768}
+  m_Layer: 0
+  m_Name: PerkManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1458554768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458554767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eee599aeae1245f40a0bf58b9a8fd854, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  scrollRect: {fileID: 2090472947}
+  scrollSpeed: 1000
+  autoScrollDuration: 1
+  perkNodes: []
+  currentLevel: 1
+--- !u!4 &1458554769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1458554767}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 77.590935, y: 277.49295, z: -6.860103}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1466424373
 GameObject:
   m_ObjectHideFlags: 0
@@ -22180,7 +22240,6 @@ GameObject:
   - component: {fileID: 1653849664}
   - component: {fileID: 1653849668}
   - component: {fileID: 1653849666}
-  - component: {fileID: 1653849665}
   m_Layer: 5
   m_Name: PerksUI
   m_TagString: Untagged
@@ -22209,28 +22268,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1653849665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1653849663}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3cdef8367e879ea48a805762461dd032, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playButton: {fileID: 0}
-  levelSelectButton: {fileID: 0}
-  shopButton: {fileID: 0}
-  inventoryButton: {fileID: 0}
-  mainMenuPanel: {fileID: 1653849663}
-  levelSelectionUI: {fileID: 771278122}
-  shopPanel: {fileID: 2029006960}
-  inventoryPanel: {fileID: 1499964648}
-  combatSceneName: SampleScene
-  buttonClickSound: {fileID: 0}
 --- !u!114 &1653849666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23387,9 +23424,11 @@ MonoBehaviour:
   shopButton: {fileID: 390083106}
   inventoryButton: {fileID: 1588321241}
   mainMenuButton: {fileID: 1752470147}
+  perkButton: {fileID: 503738674}
   mainMenuPanel: {fileID: 1553565797}
   shopPanel: {fileID: 2029006960}
   inventoryPanel: {fileID: 1499964648}
+  perksPanel: {fileID: 1653849663}
   selectedSprite: {fileID: 0}
   unselectedSprite: {fileID: 0}
   buttonClickSound: {fileID: 0}
@@ -29651,3 +29690,4 @@ SceneRoots:
   - {fileID: 724859177}
   - {fileID: 1859419366}
   - {fileID: 1996392487}
+  - {fileID: 1458554769}
