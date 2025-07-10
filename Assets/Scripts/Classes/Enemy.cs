@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float attackCooldown = 2f;
 
     [Header("Visual Components")]
-    [SerializeField] private Slider healthBarPrefab;
+    [SerializeField] private Slider healthBar;
     [SerializeField] private Image healthFill;
     [SerializeField] private Transform debuffIconContainer;
     [SerializeField] private GameObject debuffIconPrefab;
@@ -37,10 +37,9 @@ public class Enemy : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private SpriteRenderer spriteRenderer;
-    private Slider healthBarInstance;
     private bool isKnockbacked = false;
     private float knockbackTimer = 0f;
-    private RectTransform uiCanvasRect;
+    private Canvas uiCanvas;
 
     private Dictionary<DebuffType, float> debuffTimers = new Dictionary<DebuffType, float>();
 
@@ -82,9 +81,7 @@ public class Enemy : MonoBehaviour
                 Debug.LogWarning($"No 'Death' animation found in Animator for {gameObject.name}. Ensure the death animation is set up in the Animator Controller.");
         }
         else
-        {
             Debug.LogWarning($"Animator or AnimatorController missing on {gameObject.name}. Death animation will not play.");
-        }
     }
 
     private void FindAndSetPlayerTarget()
@@ -134,8 +131,8 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (!healthBarInstance.IsActive())
-            healthBarInstance.gameObject.SetActive(true);
+        if (healthBar != null && !healthBar.gameObject.activeInHierarchy)
+            healthBar.gameObject.SetActive(true);
 
         if (isDead)
             return;
@@ -144,57 +141,31 @@ public class Enemy : MonoBehaviour
         HandleKnockback();
         HandleMovement();
         HandleAttack();
-        UpdateHealthBarPosition();
     }
 
     void InitializeHealthBar()
     {
-        if (healthBarPrefab == null)
+        if (healthBar == null)
         {
-            Debug.LogWarning("HealthBar prefab is not assigned!", this);
+            Debug.LogWarning("HealthBar is not assigned! Please assign the existing health bar from the enemy prefab.", this);
             return;
         }
 
-        Canvas uiCanvas = FindAnyObjectByType<Canvas>();
-        if (uiCanvas == null || uiCanvas.renderMode != RenderMode.WorldSpace)
-        {
-            GameObject canvasObj = new GameObject("EnemyUICanvas");
-            uiCanvas = canvasObj.AddComponent<Canvas>();
-            uiCanvas.renderMode = RenderMode.WorldSpace;
-            uiCanvas.worldCamera = Camera.main;
-            uiCanvas.transform.localScale = new Vector3(0.02f, 0.02f, 1f);
-        }
+        uiCanvas = healthBar.GetComponentInParent<Canvas>();
+        if (uiCanvas == null)
+            Debug.LogWarning("No Canvas found for the health bar! Make sure the health bar is properly set up with a Canvas.", this);
 
-        uiCanvasRect = uiCanvas.GetComponent<RectTransform>();
-        if (uiCanvasRect == null)
-        {
-            Debug.LogError("Canvas does not have a RectTransform component!", this);
-            return;
-        }
+        healthBar.maxValue = maxHealth;
+        healthBar.value = currentHealth;
+        healthBar.interactable = false;
 
-        healthBarInstance = Instantiate(healthBarPrefab, uiCanvasRect);
-        healthBarInstance.gameObject.SetActive(true);
-
-        healthBarInstance.name = $"{gameObject.name}_HealthBar";
-
-        healthBarInstance.maxValue = maxHealth;
-        healthBarInstance.value = currentHealth;
-        healthBarInstance.interactable = false;
-
-        Transform fillTransform = healthBarInstance.transform.Find("Fill Area/Fill");
-        if (fillTransform != null)
-            healthFill = fillTransform.GetComponent<Image>();
         if (healthFill == null)
-            Debug.LogWarning("HealthFill Image not found in health bar prefab! Ensure Fill Area/Fill exists.", this);
-    }
-
-    void UpdateHealthBarPosition()
-    {
-        if (healthBarInstance != null)
         {
-            Vector3 worldPosition = transform.position + new Vector3(0f, 1f, 0f);
-            healthBarInstance.transform.position = worldPosition;
-            healthBarInstance.transform.rotation = Quaternion.identity;
+            Transform fillTransform = healthBar.transform.Find("Fill Area/Fill");
+            if (fillTransform != null)
+                healthFill = fillTransform.GetComponent<Image>();
+            else
+                Debug.LogWarning("HealthFill Image not found! Make sure the health bar has a Fill Area/Fill structure.", this);
         }
     }
 
@@ -288,19 +259,24 @@ public class Enemy : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Max(0, currentHealth);
 
-        if (damageNumberPrefab != null && uiCanvasRect != null)
+        // Spawn damage number using the existing canvas
+        if (damageNumberPrefab != null && uiCanvas != null)
         {
-            Vector2 anchoredPosition = new Vector2(0, 50);
-            DamageNumber damageNumber = damageNumberPrefab.SpawnGUI(uiCanvasRect, anchoredPosition, damage);
-            damageNumber.SetFollowedTarget(transform);
-            damageNumber.SetColor(GetDamageColor(debuffType));
+            RectTransform canvasRect = uiCanvas.GetComponent<RectTransform>();
+            if (canvasRect != null)
+            {
+                Vector2 anchoredPosition = new Vector2(0, 50);
+                DamageNumber damageNumber = damageNumberPrefab.SpawnGUI(canvasRect, anchoredPosition, damage);
+                damageNumber.SetFollowedTarget(transform);
+                damageNumber.SetColor(GetDamageColor(debuffType));
+            }
         }
         else
         {
             if (damageNumberPrefab == null)
                 Debug.LogWarning("DamageNumber prefab is not assigned!", this);
-            if (uiCanvasRect == null)
-                Debug.LogWarning("UI Canvas RectTransform not found for spawning damage number!", this);
+            if (uiCanvas == null)
+                Debug.LogWarning("UI Canvas not found for spawning damage number!", this);
         }
 
         if (debuffDuration > 0)
@@ -485,10 +461,10 @@ public class Enemy : MonoBehaviour
 
     void UpdateHealthBar()
     {
-        if (healthBarInstance != null)
+        if (healthBar != null)
         {
-            healthBarInstance.value = currentHealth;
-            healthBarInstance.gameObject.SetActive(currentHealth < maxHealth && currentHealth > 0);
+            healthBar.value = currentHealth;
+            healthBar.gameObject.SetActive(currentHealth < maxHealth && currentHealth > 0);
 
             if (healthFill != null)
             {
@@ -544,9 +520,6 @@ public class Enemy : MonoBehaviour
                 Destroy(icon);
         }
         debuffIcons.Clear();
-
-        if (healthBarInstance != null)
-            Destroy(healthBarInstance.gameObject);
 
         Debug.Log($"{gameObject.name} died!");
 
