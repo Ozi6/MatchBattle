@@ -15,8 +15,8 @@ public class CombineManager : MonoBehaviour
     public Camera uiCamera;
     public CombatManager combatManager;
     public LineRenderer selectionLineRenderer;
-    public ParticleSystem selectionParticleSystem;
-    public Material selectedBlockMaterial; // Shader material for selected blocks
+    public GameObject[] matchParticleSystemPrefabs;
+    public Material selectedBlockMaterial;
 
     private Dictionary<BlockType, BlockData> blockDataDict;
     private List<PuzzleBlock> currentSelection = new List<PuzzleBlock>();
@@ -37,7 +37,6 @@ public class CombineManager : MonoBehaviour
         if (combatManager == null)
             combatManager = FindAnyObjectByType<CombatManager>();
 
-        // Initialize LineRenderer
         if (selectionLineRenderer != null)
         {
             selectionLineRenderer.positionCount = 0;
@@ -46,17 +45,6 @@ public class CombineManager : MonoBehaviour
             selectionLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
             selectionLineRenderer.startColor = Color.yellow;
             selectionLineRenderer.endColor = Color.yellow;
-        }
-
-        // Initialize ParticleSystem
-        if (selectionParticleSystem != null)
-        {
-            var emission = selectionParticleSystem.emission;
-            emission.enabled = false;
-            var main = selectionParticleSystem.main;
-            main.maxParticles = puzzleGrid.gridWidth * puzzleGrid.gridHeight;
-            main.startSize = 0.3f;
-            main.startColor = Color.white;
         }
     }
 
@@ -149,6 +137,7 @@ public class CombineManager : MonoBehaviour
         block.Highlight(true);
         block.SetSelected(true, selectedBlockMaterial);
         mouseWorldPosition = uiCamera.ScreenToWorldPoint(Input.mousePosition);
+
         UpdateSelectionEffect();
         Debug.Log($"Started selection with block at ({block.gridX}, {block.gridY}) of type {block.blockType}");
     }
@@ -211,14 +200,8 @@ public class CombineManager : MonoBehaviour
             ClearSelection();
         }
 
-        // Clear selection effects
         if (selectionLineRenderer != null)
             selectionLineRenderer.positionCount = 0;
-        if (selectionParticleSystem != null)
-        {
-            var emission = selectionParticleSystem.emission;
-            emission.enabled = false;
-        }
     }
 
     private void UpdateSelectionEffect()
@@ -226,36 +209,16 @@ public class CombineManager : MonoBehaviour
         if (!isTouchingGrid || currentSelection.Count == 0)
             return;
 
-        // Update LineRenderer
         if (selectionLineRenderer != null)
         {
             selectionLineRenderer.positionCount = currentSelection.Count + 1;
             for (int i = 0; i < currentSelection.Count; i++)
             {
                 Vector3 blockPos = currentSelection[i].transform.position;
-                blockPos.z = -1; // Ensure line is in front of blocks
+                blockPos.z = -1;
                 selectionLineRenderer.SetPosition(i, blockPos);
             }
             selectionLineRenderer.SetPosition(currentSelection.Count, new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, -1));
-        }
-
-        // Update ParticleSystem
-        if (selectionParticleSystem != null)
-        {
-            var emission = selectionParticleSystem.emission;
-            emission.enabled = true;
-            var main = selectionParticleSystem.main;
-            main.maxParticles = currentSelection.Count;
-
-            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[currentSelection.Count];
-            for (int i = 0; i < currentSelection.Count; i++)
-            {
-                particles[i].position = currentSelection[i].transform.position;
-                particles[i].startSize = 0.3f;
-                particles[i].startColor = Color.white;
-                particles[i].remainingLifetime = 1f;
-            }
-            selectionParticleSystem.SetParticles(particles, currentSelection.Count);
         }
     }
 
@@ -265,6 +228,29 @@ public class CombineManager : MonoBehaviour
 
         BlockType comboType = matchedBlocks[0].blockType;
         int comboSize = matchedBlocks.Count;
+
+        if (matchParticleSystemPrefabs != null)
+        {
+            foreach (PuzzleBlock block in matchedBlocks)
+            {
+                GameObject particlePrefab = matchParticleSystemPrefabs[UnityEngine.Random.Range(0, matchParticleSystemPrefabs.Length)];
+                if (particlePrefab != null)
+                {
+                    GameObject effectInstance = Instantiate(particlePrefab, block.transform.position, Quaternion.identity);
+                    ParticleSystem ps = effectInstance.GetComponent<ParticleSystem>();
+                    if (ps != null)
+                    {
+                        ps.Play();
+                        float duration = ps.main.duration;
+                        Destroy(effectInstance, duration);
+                    }
+                    else
+                    {
+                        Destroy(effectInstance, 1f);
+                    }
+                }
+            }
+        }
 
         foreach (PuzzleBlock block in matchedBlocks)
         {
@@ -398,7 +384,7 @@ public class CombineManager : MonoBehaviour
 
     void CheckForAutoMatches()
     {
-        // Implementation for auto-matches if needed
+
     }
 
     public void OnBlockSelected(PuzzleBlock selectedBlock)
@@ -429,14 +415,8 @@ public class CombineManager : MonoBehaviour
         }
         currentSelection.Clear();
 
-        // Clear selection effects
         if (selectionLineRenderer != null)
             selectionLineRenderer.positionCount = 0;
-        if (selectionParticleSystem != null)
-        {
-            var emission = selectionParticleSystem.emission;
-            emission.enabled = false;
-        }
     }
 
     public BlockData GetBlockData(BlockType type)

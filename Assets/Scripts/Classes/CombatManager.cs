@@ -445,7 +445,6 @@ public class CombatManager : MonoBehaviour
         }
     }
 
-
     void ProcessProjectileQueue()
     {
         if (projectileQueue.Count == 0)

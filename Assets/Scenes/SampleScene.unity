@@ -3799,7 +3799,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1895979679}
   - component: {fileID: 1895979680}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: PuzzleHalf
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4191,7 +4191,11 @@ MonoBehaviour:
   uiCamera: {fileID: 519420031}
   combatManager: {fileID: 911227720}
   selectionLineRenderer: {fileID: 2108605957}
-  selectionParticleSystem: {fileID: 0}
+  matchParticleSystemPrefabs:
+  - {fileID: 121188, guid: 27bec7bc47f580b41b60cd2d2cac5908, type: 3}
+  - {fileID: 137758, guid: a67ce15f50785584d97708026f874d99, type: 3}
+  - {fileID: 113576, guid: 471088445f741e64c82f447ba7849c30, type: 3}
+  - {fileID: 106676, guid: f8232d266ed6c8043a5353ca283993ea, type: 3}
   selectedBlockMaterial: {fileID: 2100000, guid: 4501ae0e3bf479e45bca507c72be1030, type: 2}
 --- !u!4 &2108605956
 Transform:
