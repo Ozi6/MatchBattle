@@ -240,7 +240,7 @@ public class MenuInventory : MonoBehaviour
     private void UpdateCurrencyDisplay()
     {
         if (currencyText != null)
-            currencyText.text = $"Currency: {playerInventory.GetCurrency():F2}";
+            currencyText.text = $"{playerInventory.GetCurrency():F0}";
     }
 
     private void UpdateItemDetails(Item item)

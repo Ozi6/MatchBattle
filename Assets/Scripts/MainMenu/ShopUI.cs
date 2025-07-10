@@ -44,7 +44,7 @@ public class ShopUI : MonoBehaviour
 
     void UpdateCurrencyDisplay()
     {
-        currencyText.text = $"Currency: {PlayerInventory.Instance.GetCurrency():F0}";
+        currencyText.text = $"{PlayerInventory.Instance.GetCurrency():F0}";
     }
 
     void OnRefreshButtonClicked()
