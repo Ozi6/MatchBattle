@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Transform debuffIconContainer;
     [SerializeField] private GameObject debuffIconPrefab;
     [SerializeField] private DamageNumber damageNumberPrefab;
+    [SerializeField] private Material whiteFlashMaterial;
 
     [Header("Movement")]
     [SerializeField] private Transform targetPlayer;
@@ -478,13 +479,19 @@ public class Enemy : MonoBehaviour
 
     IEnumerator DamageFlash()
     {
-        if (spriteRenderer != null)
+        SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+
+        Material[] originalMaterials = new Material[spriteRenderers.Length];
+        for (int i = 0; i < spriteRenderers.Length; i++)
         {
-            Color originalColor = spriteRenderer.color;
-            spriteRenderer.color = Color.red;
-            yield return new WaitForSeconds(0.1f);
-            spriteRenderer.color = originalColor;
+            originalMaterials[i] = spriteRenderers[i].material;
+            spriteRenderers[i].material = whiteFlashMaterial;
         }
+
+        yield return new WaitForSeconds(0.1f);
+
+        for (int i = 0; i < spriteRenderers.Length; i++)
+            spriteRenderers[i].material = originalMaterials[i];
     }
 
     IEnumerator Die()

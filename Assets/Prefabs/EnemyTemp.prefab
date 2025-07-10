@@ -73,6 +73,7 @@ MonoBehaviour:
   debuffIconContainer: {fileID: 0}
   debuffIconPrefab: {fileID: 0}
   damageNumberPrefab: {fileID: 7137851434091353512, guid: c4f44fc3b0f01104c9d0584340281e26, type: 3}
+  whiteFlashMaterial: {fileID: 2100000, guid: 4a5e9cc05fac95a4b8fc2591624f50c1, type: 2}
   targetPlayer: {fileID: 0}
   canMove: 1
   playerScript: {fileID: 0}
