@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 using System.Collections;
-using System;
 
 public class CombineManager : MonoBehaviour
 {
@@ -15,16 +14,20 @@ public class CombineManager : MonoBehaviour
     public PuzzleGrid puzzleGrid;
     public Camera uiCamera;
     public CombatManager combatManager;
+    public LineRenderer selectionLineRenderer;
+    public ParticleSystem selectionParticleSystem;
+    public Material selectedBlockMaterial; // Shader material for selected blocks
 
     private Dictionary<BlockType, BlockData> blockDataDict;
     private List<PuzzleBlock> currentSelection = new List<PuzzleBlock>();
     private List<PuzzleBlock> matchedBlocks = new List<PuzzleBlock>();
     private bool isProcessingMatches = false;
     private bool isTouchingGrid = false;
+    private Vector2 mouseWorldPosition;
 
-    public Action<List<PuzzleBlock>> OnBlocksMatched;
-    public Action<BlockType, int> OnComboExecuted;
-    public Action<BlockType, int, List<PuzzleBlock>> OnCombatActionTriggered;
+    public System.Action<List<PuzzleBlock>> OnBlocksMatched;
+    public System.Action<BlockType, int> OnComboExecuted;
+    public System.Action<BlockType, int, List<PuzzleBlock>> OnCombatActionTriggered;
 
     void Start()
     {
@@ -33,11 +36,33 @@ public class CombineManager : MonoBehaviour
 
         if (combatManager == null)
             combatManager = FindAnyObjectByType<CombatManager>();
+
+        // Initialize LineRenderer
+        if (selectionLineRenderer != null)
+        {
+            selectionLineRenderer.positionCount = 0;
+            selectionLineRenderer.startWidth = 0.1f;
+            selectionLineRenderer.endWidth = 0.1f;
+            selectionLineRenderer.material = new Material(Shader.Find("Sprites/Default"));
+            selectionLineRenderer.startColor = Color.yellow;
+            selectionLineRenderer.endColor = Color.yellow;
+        }
+
+        // Initialize ParticleSystem
+        if (selectionParticleSystem != null)
+        {
+            var emission = selectionParticleSystem.emission;
+            emission.enabled = false;
+            var main = selectionParticleSystem.main;
+            main.maxParticles = puzzleGrid.gridWidth * puzzleGrid.gridHeight;
+            main.startSize = 0.3f;
+            main.startColor = Color.white;
+        }
     }
 
     void Update()
     {
-
+        UpdateSelectionEffect();
     }
 
     void InitializeBlockData()
@@ -62,116 +87,6 @@ public class CombineManager : MonoBehaviour
             }
         }
     }
-
-    /*
-    private void HandleTouchInput()
-    {
-        if (isProcessingMatches)
-            return;
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartTouch(Input.mousePosition);
-        }
-        else if (Input.GetMouseButton(0) && isTouchingGrid)
-        {
-            ContinueTouch(Input.mousePosition);
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            EndTouch(Input.mousePosition);
-        }
-
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.GetTouch(0);
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    StartTouch(touch.position);
-                    break;
-                case TouchPhase.Moved:
-                case TouchPhase.Stationary:
-                    if (isTouchingGrid)
-                        ContinueTouch(touch.position);
-                    break;
-                case TouchPhase.Ended:
-                case TouchPhase.Canceled:
-                    EndTouch(touch.position);
-                    break;
-            }
-        }
-    }
-
-    private void StartTouch(Vector2 screenPosition)
-    {
-        PuzzleBlock block = GetBlockAtScreenPosition(screenPosition);
-        if (block != null && !block.isMatched && !block.isAnimating)
-        {
-            isTouchingGrid = true;
-            currentSelection.Clear();
-            currentSelection.Add(block);
-            block.Highlight(true);
-            Debug.Log($"Started selection with block at ({block.gridX}, {block.gridY}) of type {block.blockType}");
-        }
-    }
-
-    private void ContinueTouch(Vector2 screenPosition)
-    {
-        if (currentSelection.Count == 0)
-            return;
-
-        PuzzleBlock block = GetBlockAtScreenPosition(screenPosition);
-        if (block != null && !block.isMatched && !block.isAnimating)
-        {
-            if (currentSelection.Contains(block))
-            {
-                int blockIndex = currentSelection.IndexOf(block);
-                if (blockIndex < currentSelection.Count - 1)
-                {
-                    for (int i = currentSelection.Count - 1; i > blockIndex; i--)
-                    {
-                        currentSelection[i].Highlight(false);
-                        currentSelection.RemoveAt(i);
-                    }
-                    Debug.Log($"Backtracked to block at ({block.gridX}, {block.gridY})");
-                }
-                return;
-            }
-
-            BlockType selectionType = currentSelection[0].blockType;
-            if (block.blockType == selectionType)
-            {
-                PuzzleBlock lastBlock = currentSelection[currentSelection.Count - 1];
-                if (IsAdjacent(lastBlock, block))
-                {
-                    currentSelection.Add(block);
-                    block.Highlight(true);
-                    Debug.Log($"Added block at ({block.gridX}, {block.gridY}) to selection. Total: {currentSelection.Count}");
-                }
-            }
-        }
-    }
-
-    private void EndTouch(Vector2 screenPosition)
-    {
-        if (!isTouchingGrid)
-            return;
-
-        isTouchingGrid = false;
-
-        if (currentSelection.Count >= minimumMatchSize)
-        {
-            Debug.Log($"Valid match found! {currentSelection.Count} blocks of type {currentSelection[0].blockType}");
-            ProcessMatch(new List<PuzzleBlock>(currentSelection));
-        }
-        else
-        {
-            Debug.Log($"Not enough blocks for match. Need {minimumMatchSize}, got {currentSelection.Count}");
-            ClearSelection();
-        }
-    }
-    */
 
     private PuzzleBlock GetBlockAtScreenPosition(Vector2 screenPosition)
     {
@@ -232,12 +147,19 @@ public class CombineManager : MonoBehaviour
         currentSelection.Clear();
         currentSelection.Add(block);
         block.Highlight(true);
+        block.SetSelected(true, selectedBlockMaterial);
+        mouseWorldPosition = uiCamera.ScreenToWorldPoint(Input.mousePosition);
+        UpdateSelectionEffect();
+        Debug.Log($"Started selection with block at ({block.gridX}, {block.gridY}) of type {block.blockType}");
     }
 
     public void OnBlockTouchContinue(PuzzleBlock block)
     {
         if (!isTouchingGrid || currentSelection.Count == 0 || block.isMatched || block.isAnimating)
             return;
+
+        mouseWorldPosition = uiCamera.ScreenToWorldPoint(Input.mousePosition);
+        UpdateSelectionEffect();
 
         if (currentSelection.Contains(block))
         {
@@ -247,10 +169,12 @@ public class CombineManager : MonoBehaviour
                 for (int i = currentSelection.Count - 1; i > blockIndex; i--)
                 {
                     currentSelection[i].Highlight(false);
+                    currentSelection[i].SetSelected(false, null);
                     currentSelection.RemoveAt(i);
                 }
                 Debug.Log($"Backtracked to block at ({block.gridX}, {block.gridY})");
             }
+            UpdateSelectionEffect();
             return;
         }
 
@@ -262,6 +186,8 @@ public class CombineManager : MonoBehaviour
             {
                 currentSelection.Add(block);
                 block.Highlight(true);
+                block.SetSelected(true, selectedBlockMaterial);
+                UpdateSelectionEffect();
                 Debug.Log($"Added block at ({block.gridX}, {block.gridY}) to selection. Total: {currentSelection.Count}");
             }
         }
@@ -284,6 +210,53 @@ public class CombineManager : MonoBehaviour
             Debug.Log($"Not enough blocks for match. Need {minimumMatchSize}, got {currentSelection.Count}");
             ClearSelection();
         }
+
+        // Clear selection effects
+        if (selectionLineRenderer != null)
+            selectionLineRenderer.positionCount = 0;
+        if (selectionParticleSystem != null)
+        {
+            var emission = selectionParticleSystem.emission;
+            emission.enabled = false;
+        }
+    }
+
+    private void UpdateSelectionEffect()
+    {
+        if (!isTouchingGrid || currentSelection.Count == 0)
+            return;
+
+        // Update LineRenderer
+        if (selectionLineRenderer != null)
+        {
+            selectionLineRenderer.positionCount = currentSelection.Count + 1;
+            for (int i = 0; i < currentSelection.Count; i++)
+            {
+                Vector3 blockPos = currentSelection[i].transform.position;
+                blockPos.z = -1; // Ensure line is in front of blocks
+                selectionLineRenderer.SetPosition(i, blockPos);
+            }
+            selectionLineRenderer.SetPosition(currentSelection.Count, new Vector3(mouseWorldPosition.x, mouseWorldPosition.y, -1));
+        }
+
+        // Update ParticleSystem
+        if (selectionParticleSystem != null)
+        {
+            var emission = selectionParticleSystem.emission;
+            emission.enabled = true;
+            var main = selectionParticleSystem.main;
+            main.maxParticles = currentSelection.Count;
+
+            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[currentSelection.Count];
+            for (int i = 0; i < currentSelection.Count; i++)
+            {
+                particles[i].position = currentSelection[i].transform.position;
+                particles[i].startSize = 0.3f;
+                particles[i].startColor = Color.white;
+                particles[i].remainingLifetime = 1f;
+            }
+            selectionParticleSystem.SetParticles(particles, currentSelection.Count);
+        }
     }
 
     void ProcessMatch(List<PuzzleBlock> matchedBlocks)
@@ -297,11 +270,11 @@ public class CombineManager : MonoBehaviour
         {
             block.isMatched = true;
             block.PlayMatchEffect();
+            block.SetSelected(false, null);
         }
-            
+
         OnBlocksMatched?.Invoke(matchedBlocks);
         OnComboExecuted?.Invoke(comboType, comboSize);
-
         OnCombatActionTriggered?.Invoke(comboType, comboSize, matchedBlocks);
 
         StartCoroutine(DestroyMatchedBlocks(matchedBlocks));
@@ -425,7 +398,7 @@ public class CombineManager : MonoBehaviour
 
     void CheckForAutoMatches()
     {
-
+        // Implementation for auto-matches if needed
     }
 
     public void OnBlockSelected(PuzzleBlock selectedBlock)
@@ -447,9 +420,23 @@ public class CombineManager : MonoBehaviour
     void ClearSelection()
     {
         foreach (PuzzleBlock block in currentSelection)
+        {
             if (block != null)
+            {
                 block.Highlight(false);
+                block.SetSelected(false, null);
+            }
+        }
         currentSelection.Clear();
+
+        // Clear selection effects
+        if (selectionLineRenderer != null)
+            selectionLineRenderer.positionCount = 0;
+        if (selectionParticleSystem != null)
+        {
+            var emission = selectionParticleSystem.emission;
+            emission.enabled = false;
+        }
     }
 
     public BlockData GetBlockData(BlockType type)
