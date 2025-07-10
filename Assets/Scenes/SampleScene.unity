@@ -965,12 +965,12 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 651868778}
   - {fileID: 990190752}
   - {fileID: 1895979679}
   - {fileID: 303720957}
   - {fileID: 826707376}
   - {fileID: 1932954755}
-  - {fileID: 651868778}
   - {fileID: 790938189}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1863,7 +1863,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: -4162122909835288923, guid: a5c2c368a8e695146a81dbeab6bc9033, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2176,8 +2176,8 @@ MonoBehaviour:
     isPiercing: 0
     hasAreaEffect: 0
     areaRadius: 0
-    baseKnockbackForce: 5
-    knockbackDuration: 0.3
+    baseKnockbackForce: 0
+    knockbackDuration: 0
     projectileType: 0
     baseProjectileCount: 3
     projectileCountPerCombo: 1
@@ -2190,7 +2190,9 @@ MonoBehaviour:
     homingStrength: 2
     homingRange: 3
     inFlightEffects: []
-    onContactEffects: []
+    onContactEffects:
+    - {fileID: 1142193931700624, guid: 9d1846a1c8bff7142ab3959923c7d9c2, type: 3}
+    - {fileID: 168136, guid: 47c6eee70f9391f46a710b0592491a63, type: 3}
   - blockType: 5
     baseDamage: 15
     baseDefense: 0
@@ -2220,7 +2222,9 @@ MonoBehaviour:
     homingStrength: 2
     homingRange: 3
     inFlightEffects: []
-    onContactEffects: []
+    onContactEffects:
+    - {fileID: 1142193931700624, guid: 9d1846a1c8bff7142ab3959923c7d9c2, type: 3}
+    - {fileID: 168136, guid: 47c6eee70f9391f46a710b0592491a63, type: 3}
   - blockType: 2
     baseDamage: 20
     baseDefense: 20
@@ -2266,8 +2270,8 @@ MonoBehaviour:
     isPiercing: 0
     hasAreaEffect: 0
     areaRadius: 0
-    baseKnockbackForce: 5
-    knockbackDuration: 0.3
+    baseKnockbackForce: 0
+    knockbackDuration: 0
     projectileType: 1
     baseProjectileCount: 5
     projectileCountPerCombo: 1
@@ -2280,7 +2284,8 @@ MonoBehaviour:
     homingStrength: 2
     homingRange: 3
     inFlightEffects: []
-    onContactEffects: []
+    onContactEffects:
+    - {fileID: 1142193931700624, guid: 9d1846a1c8bff7142ab3959923c7d9c2, type: 3}
   - blockType: 6
     baseDamage: 5
     baseDefense: 0
