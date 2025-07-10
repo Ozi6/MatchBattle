@@ -2189,6 +2189,8 @@ MonoBehaviour:
     isHoming: 1
     homingStrength: 2
     homingRange: 3
+    inFlightEffects: []
+    onContactEffects: []
   - blockType: 5
     baseDamage: 15
     baseDefense: 0
@@ -2217,6 +2219,8 @@ MonoBehaviour:
     isHoming: 1
     homingStrength: 2
     homingRange: 3
+    inFlightEffects: []
+    onContactEffects: []
   - blockType: 2
     baseDamage: 20
     baseDefense: 20
@@ -2245,6 +2249,8 @@ MonoBehaviour:
     isHoming: 1
     homingStrength: 2
     homingRange: 3
+    inFlightEffects: []
+    onContactEffects: []
   - blockType: 3
     baseDamage: 5
     baseDefense: 0
@@ -2273,6 +2279,8 @@ MonoBehaviour:
     isHoming: 1
     homingStrength: 2
     homingRange: 3
+    inFlightEffects: []
+    onContactEffects: []
   - blockType: 6
     baseDamage: 5
     baseDefense: 0
@@ -2301,6 +2309,12 @@ MonoBehaviour:
     isHoming: 0
     homingStrength: 2
     homingRange: 3
+    inFlightEffects: []
+    onContactEffects:
+    - {fileID: 153256, guid: fe394d041df1a0547990f49cf653249f, type: 3}
+    - {fileID: 187952, guid: c05e92eaee7a00844867e5edc8e0dde1, type: 3}
+    - {fileID: 165672, guid: 146d2ff25be0f824fa285b16b2915ff3, type: 3}
+    - {fileID: 1724243991040466, guid: f3377962368b1df43ae045f46ddaf9cd, type: 3}
   currentWave: 1
   totalWaves: 5
   waveClearDelay: 2

@@ -63,7 +63,7 @@ public class ProjectileManager : MonoBehaviour
         }
     }
 
-    public GameObject SpawnProjectile(Vector3 spawnPosition, Vector2 direction, ProjectileData data, GameObject prefab = null, Enemy target = null)
+    public GameObject SpawnProjectile(Vector3 spawnPosition, Vector2 direction, ProjectileData data, GameObject prefab = null, Enemy target = null, GameObject[] inFlightEffects = null, GameObject[] onContactEffects = null)
     {
         GameObject projectileObj;
 
@@ -88,10 +88,16 @@ public class ProjectileManager : MonoBehaviour
         Projectile projectile = projectileObj.GetComponent<Projectile>();
         if (projectile != null)
         {
-            projectile.Initialize(direction, data, target);
+            projectile.Initialize(direction, data, target, inFlightEffects, onContactEffects);
 
             if (usePooling && prefab == null)
                 projectile.OnProjectileDestroyed += ReturnToPool;
+        }
+        else
+        {
+            Debug.LogWarning("Projectile component not found on instantiated prefab!");
+            Destroy(projectileObj);
+            return null;
         }
 
         return projectileObj;

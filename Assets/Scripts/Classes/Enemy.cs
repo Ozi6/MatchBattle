@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float attackCooldown = 2f;
 
     [Header("Visual Components")]
-    [SerializeField] private Slider healthBar; // Direct reference to the health bar under this enemy
+    [SerializeField] private Slider healthBar;
     [SerializeField] private Image healthFill;
     [SerializeField] private Transform debuffIconContainer;
     [SerializeField] private GameObject debuffIconPrefab;

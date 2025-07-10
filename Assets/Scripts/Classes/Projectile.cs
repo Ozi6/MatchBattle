@@ -23,6 +23,8 @@ public class Projectile : MonoBehaviour
     private float currentLifetime;
     private int pierceCount = 0;
     private bool hasHitTarget = false;
+    private GameObject[] inFlightEffectInstances;
+    private GameObject[] onContactEffectPrefabs;
 
     public Action<Projectile> OnProjectileDestroyed;
     public Action<Projectile, Enemy> OnProjectileHitEnemy;
@@ -38,7 +40,7 @@ public class Projectile : MonoBehaviour
             rb.gravityScale = 0f;
     }
 
-    public void Initialize(Vector2 dir, ProjectileData projectileData, Enemy target = null)
+    public void Initialize(Vector2 dir, ProjectileData projectileData, Enemy target = null, GameObject[] inFlightEffects = null, GameObject[] onContactEffects = null)
     {
         data = projectileData.Clone();
         direction = dir.normalized;
@@ -47,6 +49,19 @@ public class Projectile : MonoBehaviour
         currentLifetime = data.lifetime;
         pierceCount = 0;
         hasHitTarget = false;
+        onContactEffectPrefabs = onContactEffects;
+
+        if (inFlightEffects != null && inFlightEffects.Length > 0)
+        {
+            inFlightEffectInstances = new GameObject[inFlightEffects.Length];
+            for (int i = 0; i < inFlightEffects.Length; i++)
+            {
+                if (inFlightEffects[i] != null)
+                {
+                    inFlightEffectInstances[i] = Instantiate(inFlightEffects[i], transform.position, Quaternion.identity, transform);
+                }
+            }
+        }
 
         if (data.hasKnockback)
             knockbackComponent = new KnockbackComponent(data.knockbackForce, data.knockbackDuration);
@@ -102,6 +117,7 @@ public class Projectile : MonoBehaviour
             explosionTimer -= Time.deltaTime;
             if (explosionTimer <= 0f)
             {
+                TriggerOnContactEffects(transform.position);
                 explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
                 hasExploded = true;
                 DestroyProjectile();
@@ -115,7 +131,10 @@ public class Projectile : MonoBehaviour
             if (arcTrajectoryComponent.IsArcComplete())
             {
                 if (data.explodesOnContact)
+                {
+                    TriggerOnContactEffects(transform.position);
                     explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
+                }
                 else
                     CheckForEnemiesAtPosition(transform.position);
             }
@@ -158,7 +177,7 @@ public class Projectile : MonoBehaviour
             return;
 
         hasHitTarget = true;
-        enemy.TakeDamage(data.damage);
+        enemy.TakeDamage(data.damage, data.debuffType, data.debuffDuration, data.debuffIntensity);
         debuffComponent?.ApplyDebuff(enemy);
 
         if (knockbackComponent != null)
@@ -170,6 +189,7 @@ public class Projectile : MonoBehaviour
         }
 
         OnProjectileHitEnemy?.Invoke(this, enemy);
+        TriggerOnContactEffects(transform.position);
         Debug.Log($"Projectile hit {enemy.name} for {data.damage} damage");
 
         if (data.piercing && pierceCount < data.maxPierceCount)
@@ -177,12 +197,18 @@ public class Projectile : MonoBehaviour
             pierceCount++;
             Debug.Log($"Projectile pierced enemy! Pierce count: {pierceCount}/{data.maxPierceCount}");
             if (data.hasAreaEffect)
+            {
                 explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
+                TriggerOnContactEffects(transform.position);
+            }
         }
         else
         {
             if (data.hasAreaEffect)
+            {
                 explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
+                TriggerOnContactEffects(transform.position);
+            }
             else
                 DestroyProjectile();
         }
@@ -207,15 +233,50 @@ public class Projectile : MonoBehaviour
         }
 
         if (hitEnemy || data.hasAreaEffect)
+        {
+            TriggerOnContactEffects(position);
             explosionComponent?.Explode(position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);
+        }
         else
             DestroyProjectile();
+    }
+
+    public void TriggerOnContactEffects(Vector3 position)
+    {
+        if (onContactEffectPrefabs != null && onContactEffectPrefabs.Length > 0)
+        {
+            foreach (GameObject effectPrefab in onContactEffectPrefabs)
+            {
+                if (effectPrefab != null)
+                {
+                    GameObject effectInstance = Instantiate(effectPrefab, position, Quaternion.identity);
+                    ParticleSystem ps = effectInstance.GetComponent<ParticleSystem>();
+                    if (ps != null)
+                    {
+                        float duration = ps.main.duration;
+                        Destroy(effectInstance, duration);
+                    }
+                    else
+                        Destroy(effectInstance, 1f);
+                }
+            }
+        }
     }
 
     public void DestroyProjectile()
     {
         if (trailRenderer != null)
             trailRenderer.enabled = false;
+
+        if (inFlightEffectInstances != null)
+        {
+            foreach (GameObject effect in inFlightEffectInstances)
+            {
+                if (effect != null)
+                    Destroy(effect);
+            }
+            inFlightEffectInstances = null;
+        }
 
         OnProjectileDestroyed?.Invoke(this);
         gameObject.SetActive(false);

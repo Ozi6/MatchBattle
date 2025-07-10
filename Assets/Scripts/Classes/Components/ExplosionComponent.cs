@@ -3,22 +3,20 @@ using UnityEngine;
 public class ExplosionComponent : MonoBehaviour, IExplosive
 {
     private float radius;
-    private GameObject explosionEffectPrefab;
     private readonly string enemyTag = "Enemy";
     private Projectile projectile;
 
     public ExplosionComponent Initialize(float radius, GameObject explosionEffectPrefab, Projectile projectile)
     {
         this.radius = radius;
-        this.explosionEffectPrefab = explosionEffectPrefab;
         this.projectile = projectile;
         return this;
     }
 
     public void Explode(Vector3 position, float damage, float radius, IDebuffable debuffable, IKnockback knockback)
     {
-        if (explosionEffectPrefab != null)
-            Instantiate(explosionEffectPrefab, position, Quaternion.identity);
+        if (projectile != null)
+            projectile.TriggerOnContactEffects(position);
 
         Collider2D[] colliders = Physics2D.OverlapCircleAll(position, this.radius);
         foreach (Collider2D col in colliders)

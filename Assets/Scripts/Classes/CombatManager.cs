@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-[System.Serializable]
+[Serializable]
 public class CombatAction
 {
     public BlockType blockType;
@@ -42,6 +42,10 @@ public class CombatAction
     public bool isHoming = false;
     public float homingStrength = 2f;
     public float homingRange = 3f;
+
+    [Header("Visual Effects")]
+    public GameObject[] inFlightEffects;
+    public GameObject[] onContactEffects;
 }
 
 public enum ProjectileType
@@ -457,7 +461,8 @@ public class CombatManager : MonoBehaviour
                 {
                     GameObject projectileObj = ProjectileManager.Instance.SpawnProjectile(
                         spawnPosition, direction, projectileData,
-                        action.projectilePrefab, targetEnemy
+                        action.projectilePrefab, targetEnemy,
+                        action.inFlightEffects, action.onContactEffects
                     );
 
                     if (isArcProjectile && projectileObj != null)
