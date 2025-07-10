@@ -2841,7 +2841,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1849992703844863533, guid: 52d78a9b96925423087aeb0f0dc81af7, type: 3}
       propertyPath: m_Name
-      value: Lock
+      value: Lock 1
       objectReference: {fileID: 0}
     - target: {fileID: 1849992703844863534, guid: 52d78a9b96925423087aeb0f0dc81af7, type: 3}
       propertyPath: m_Sprite
