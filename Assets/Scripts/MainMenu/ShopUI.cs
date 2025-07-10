@@ -9,9 +9,7 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private Transform itemGrid;
     [SerializeField] private GameObject shopItemPrefab;
     [SerializeField] private Button refreshButton;
-    [SerializeField] private Button closeButton;
     [SerializeField] private TextMeshProUGUI currencyText;
-    [SerializeField] private GameObject mainMenuPanel;
 
     [Header("Settings")]
     [SerializeField] private bool showRefreshButton = true;
@@ -20,12 +18,11 @@ public class ShopUI : MonoBehaviour
 
     void Start()
     {
-        if(refreshButton != null)
+        if (refreshButton != null)
         {
             refreshButton.gameObject.SetActive(showRefreshButton && ShopManager.Instance.RefreshesDaily());
             refreshButton.onClick.AddListener(OnRefreshButtonClicked);
         }
-        closeButton.onClick.AddListener(OnCloseButtonClicked);
         UpdateCurrencyDisplay();
         PopulateShop();
     }
@@ -54,12 +51,6 @@ public class ShopUI : MonoBehaviour
     {
         ShopManager.Instance.RefreshShop();
         PopulateShop();
-    }
-
-    void OnCloseButtonClicked()
-    {
-        gameObject.SetActive(false);
-        mainMenuPanel.SetActive(true);
     }
 
     public void OnItemPurchased()

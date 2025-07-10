@@ -7,7 +7,6 @@ public class MenuInventory : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private GameObject inventoryPanel;
-    [SerializeField] private Button backButton;
     [SerializeField] private TMP_Text currencyText;
     [SerializeField] private ScrollRect inventoryScrollRect;
     [SerializeField] private GridLayoutGroup inventoryGrid;
@@ -32,7 +31,6 @@ public class MenuInventory : MonoBehaviour
 
     private PlayerInventory playerInventory;
     private InventorySlotUI selectedSlot;
-    [SerializeField] private MainMenuUI mainMenuUI;
     private List<InventorySlotUI> inventorySlots = new List<InventorySlotUI>();
 
     void Awake()
@@ -78,9 +76,6 @@ public class MenuInventory : MonoBehaviour
 
     private void SetupButtonListeners()
     {
-        if (backButton != null)
-            backButton.onClick.AddListener(OnBackButtonClicked);
-
         if (equipButton != null)
             equipButton.onClick.AddListener(OnEquipButtonClicked);
 
@@ -113,13 +108,6 @@ public class MenuInventory : MonoBehaviour
 
         if (charmSlot2 != null)
             charmSlot2.SetupSlot(null, 2, ItemType.Charm, OnSlotClicked);
-    }
-
-    private void OnBackButtonClicked()
-    {
-        PlayButtonSound();
-        if (mainMenuUI != null)
-            mainMenuUI.ShowMainMenu();
     }
 
     private void OnCloseButtonClicked()
