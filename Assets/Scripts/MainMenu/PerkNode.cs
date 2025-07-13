@@ -31,12 +31,14 @@ public class PerkNode : MonoBehaviour
     {
         perkButton.onClick.AddListener(OnPerkClicked);
         UpdateVisuals();
+        UpdateConnectionLine();
     }
 
     public void SetUnlocked(bool unlocked)
     {
         isUnlocked = unlocked;
         UpdateVisuals();
+        UpdateConnectionLine();
     }
 
     void UpdateVisuals()
@@ -47,12 +49,29 @@ public class PerkNode : MonoBehaviour
         perkName.text = perk?.perkName ?? perkTitle;
         perkName.color = isUnlocked ? unlockedColor : lockedColor;
 
-        perkDescription.text = isUnlocked ? (perk?.description ?? description) : "Reach level " + requiredLevel;
+        perkDescription.text = isUnlocked ? (perk?.description ?? description) : $"Reach level {requiredLevel}";
         perkDescription.color = isUnlocked ? unlockedColor : lockedColor;
 
         if (connectionLine != null)
             connectionLine.color = isUnlocked ? connectionUnlockedColor : connectionLockedColor;
         perkButton.interactable = isUnlocked;
+    }
+
+    void UpdateConnectionLine()
+    {
+        if (connectionLine == null)
+            return;
+
+        RectTransform rect = connectionLine.GetComponent<RectTransform>();
+        RectTransform nodeRect = GetComponent<RectTransform>();
+
+        rect.anchorMin = new Vector2(0.5f, 0f);
+        rect.anchorMax = new Vector2(0.5f, 0f);
+        rect.pivot = new Vector2(0.5f, 1f);
+        rect.anchoredPosition = new Vector2(0, -nodeRect.rect.height / 2);
+
+        float spacing = nodeRect.parent.GetComponent<VerticalLayoutGroup>().spacing;
+        rect.sizeDelta = new Vector2(rect.sizeDelta.x, spacing);
     }
 
     void OnPerkClicked()

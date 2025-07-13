@@ -4,6 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Collections;
 
+[System.Serializable]
+public struct PerkNodeData
+{
+    public Perk perk;
+    public int requiredLevel;
+    public string perkTitle;
+    public string description;
+    public Sprite unlockedIcon;
+    public Sprite lockedIcon;
+}
+
 public class PerkManager : MonoBehaviour
 {
     public static PerkManager Instance { get; private set; }
@@ -14,7 +25,8 @@ public class PerkManager : MonoBehaviour
     public float autoScrollDuration = 1f;
 
     [Header("Perk Nodes")]
-    public List<PerkNode> perkNodes = new List<PerkNode>();
+    public List<PerkNodeData> perkNodeData = new List<PerkNodeData>();
+    private List<PerkNode> instantiatedPerkNodes = new List<PerkNode>();
 
     [Header("Game Data")]
     public int currentLevel = 1;
@@ -38,9 +50,15 @@ public class PerkManager : MonoBehaviour
         ScrollToLatestUnlocked();
     }
 
+    public void RegisterPerkNode(PerkNode node)
+    {
+        if (!instantiatedPerkNodes.Contains(node))
+            instantiatedPerkNodes.Add(node);
+    }
+
     public void UpdatePerksBasedOnLevel()
     {
-        foreach (PerkNode perk in perkNodes)
+        foreach (PerkNode perk in instantiatedPerkNodes)
         {
             bool shouldUnlock = currentLevel >= perk.requiredLevel;
             perk.SetUnlocked(shouldUnlock);
@@ -54,7 +72,7 @@ public class PerkManager : MonoBehaviour
 
         List<PerkNode> newlyUnlocked = new List<PerkNode>();
 
-        foreach (PerkNode perk in perkNodes)
+        foreach (PerkNode perk in instantiatedPerkNodes)
         {
             if (perk.requiredLevel > oldLevel && perk.requiredLevel <= newLevel)
             {
@@ -68,7 +86,7 @@ public class PerkManager : MonoBehaviour
 
     public void ScrollToPerk(PerkNode targetPerk)
     {
-        if (isAutoScrolling)
+        if (isAutoScrolling || targetPerk == null)
             return;
 
         StartCoroutine(SmoothScrollToPerk(targetPerk));
@@ -76,12 +94,7 @@ public class PerkManager : MonoBehaviour
 
     public void ScrollToLatestUnlocked()
     {
-        PerkNode latestUnlocked = null;
-
-        foreach (PerkNode perk in perkNodes)
-            if (perk.IsUnlocked())
-                latestUnlocked = perk;
-
+        PerkNode latestUnlocked = instantiatedPerkNodes.LastOrDefault(perk => perk.IsUnlocked());
         ScrollToPerk(latestUnlocked);
     }
 

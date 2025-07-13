@@ -85,6 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3318611729158790148}
   - component: {fileID: 3765847486542024284}
+  - component: {fileID: 2335372269941948324}
   m_Layer: 5
   m_Name: PerkButton
   m_TagString: Untagged
@@ -158,6 +159,33 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2335372269941948324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3124942316458819349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b8bd7799d0e47e4fbee01f775ef96f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nodeIcon: {fileID: 6663582958816873810}
+  perkName: {fileID: 0}
+  perkDescription: {fileID: 0}
+  perkButton: {fileID: 3765847486542024284}
+  connectionLine: {fileID: 0}
+  perk: {fileID: 0}
+  requiredLevel: 0
+  perkTitle: Perk 1
+  description: First Perk
+  unlockedIcon: {fileID: 0}
+  lockedIcon: {fileID: 0}
+  unlockedColor: {r: 1, g: 1, b: 1, a: 1}
+  lockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  connectionUnlockedColor: {r: 0, g: 1, b: 0, a: 1}
+  connectionLockedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
 --- !u!1 &7661868510159283364
 GameObject:
   m_ObjectHideFlags: 0

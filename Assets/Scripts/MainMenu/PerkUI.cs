@@ -53,8 +53,9 @@ public class PerkUI : MonoBehaviour
         foreach (Transform child in perkNodeContainer)
             Destroy(child.gameObject);
 
-        foreach (PerkNode nodeData in perkManager.perkNodes)
+        for (int i = 0; i < perkManager.perkNodeData.Count; i++)
         {
+            PerkNodeData nodeData = perkManager.perkNodeData[i];
             GameObject nodeObj = Instantiate(perkNodePrefab, perkNodeContainer);
             PerkNode node = nodeObj.GetComponent<PerkNode>();
             if (node != null)
@@ -66,6 +67,11 @@ public class PerkUI : MonoBehaviour
                 node.unlockedIcon = nodeData.unlockedIcon;
                 node.lockedIcon = nodeData.lockedIcon;
                 node.SetUnlocked(perkManager.currentLevel >= node.requiredLevel);
+
+                if (node.connectionLine != null && i == perkManager.perkNodeData.Count - 1)
+                    node.connectionLine.gameObject.SetActive(false);
+
+                perkManager.RegisterPerkNode(node);
             }
         }
 
