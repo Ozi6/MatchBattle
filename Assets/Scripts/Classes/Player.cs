@@ -45,6 +45,7 @@ public class Player : MonoBehaviour
 
         combineManager = FindAnyObjectByType<CombineManager>();
         combatManager = FindAnyObjectByType<CombatManager>();
+        ApplyAllPerks();
     }
 
     void Start()
@@ -351,6 +352,17 @@ public class Player : MonoBehaviour
     public void FullHeal()
     {
         Heal(maxHealth);
+    }
+
+    private void ApplyAllPerks()
+    {
+        if (PlayerInventory.Instance != null)
+        {
+            List<Perk> perks = PlayerInventory.Instance.GetAllPerks();
+            foreach (Perk perk in perks)
+                if (perk != null)
+                    perk.ApplyPerk(this);
+        }
     }
 }
 

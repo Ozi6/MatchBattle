@@ -46,15 +46,32 @@ public class PerkNode : MonoBehaviour
         nodeIcon.sprite = isUnlocked ? (perk?.icon ?? unlockedIcon) : lockedIcon;
         nodeIcon.color = isUnlocked ? unlockedColor : lockedColor;
 
-        perkName.text = perk?.perkName ?? perkTitle;
-        perkName.color = isUnlocked ? unlockedColor : lockedColor;
+        if (perkName != null)
+        {
+            if (perk != null && !string.IsNullOrEmpty(perk.perkName))
+                perkName.text = perk.perkName;
+            else
+                perkName.text = perkTitle;
+        }
 
-        perkDescription.text = isUnlocked ? (perk?.description ?? description) : $"Reach level {requiredLevel}";
-        perkDescription.color = isUnlocked ? unlockedColor : lockedColor;
+        if (perkName != null)
+            perkName.color = isUnlocked ? unlockedColor : lockedColor;
+
+        if (perkDescription != null)
+        {
+            if (isUnlocked)
+                perkDescription.text = !string.IsNullOrEmpty(perk?.description) ? perk.description : description;
+            else
+                perkDescription.text = $"Reach level {requiredLevel}";
+
+            perkDescription.color = isUnlocked ? unlockedColor : lockedColor;
+        }
 
         if (connectionLine != null)
             connectionLine.color = isUnlocked ? connectionUnlockedColor : connectionLockedColor;
-        perkButton.interactable = isUnlocked;
+
+        if (perkButton != null)
+            perkButton.interactable = isUnlocked;
     }
 
     void UpdateConnectionLine()

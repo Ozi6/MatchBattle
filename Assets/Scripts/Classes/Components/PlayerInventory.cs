@@ -41,7 +41,6 @@ public class PlayerInventory : MonoBehaviour
         if (!ownedPerks.Contains(perk))
         {
             ownedPerks.Add(perk);
-            perk.ApplyPerk(FindObjectOfType<Player>());
             return true;
         }
         return false;

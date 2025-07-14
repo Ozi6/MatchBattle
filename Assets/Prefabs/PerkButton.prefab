@@ -102,7 +102,7 @@ RectTransform:
   m_GameObject: {fileID: 3124942316458819349}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.75, y: 0.75, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 74010587154308654}
@@ -175,7 +175,7 @@ MonoBehaviour:
   perkName: {fileID: 0}
   perkDescription: {fileID: 0}
   perkButton: {fileID: 3765847486542024284}
-  connectionLine: {fileID: 0}
+  connectionLine: {fileID: 2195008715047477589, guid: 7262ad934f1e28d45a2d1edfebb23e36, type: 3}
   perk: {fileID: 0}
   requiredLevel: 0
   perkTitle: Perk 1

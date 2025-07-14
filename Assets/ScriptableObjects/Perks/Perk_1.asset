@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3d89dd4d0ad53f14ebf6c160c542a42d, type: 3}
-  m_Name: Perk_0
+  m_Name: Perk_1
   m_EditorClassIdentifier: 
   perkID: 0
-  perkName: Health Boost
-  description: Boost your health by an amount.
-  icon: {fileID: 21300000, guid: 21cb8c775421e4096915fe18192a6f63, type: 3}
-  perkType: 0
-  value: 5
+  perkName: Damage Boost
+  description: Boost your damage by an amount.
+  icon: {fileID: 21300000, guid: 5c0f356e8fdb749c292f0a699fde4480, type: 3}
+  perkType: 1
+  value: 10
   requiredLevel: 0
