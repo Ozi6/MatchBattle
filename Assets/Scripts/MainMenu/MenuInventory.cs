@@ -204,6 +204,8 @@ public class MenuInventory : MonoBehaviour
 
     private void UpdateInventoryDisplay()
     {
+        if (PlayerInventory.Instance == null)
+            return;
         List<Item> items = PlayerInventory.Instance.GetAllItems();
         for (int i = 0; i < inventorySlots.Count; i++)
         {
