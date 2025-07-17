@@ -76,56 +76,6 @@ public class CombineManager : MonoBehaviour
         }
     }
 
-    private PuzzleBlock GetBlockAtScreenPosition(Vector2 screenPosition)
-    {
-        PointerEventData pointerData = new PointerEventData(EventSystem.current)
-        {
-            position = screenPosition
-        };
-
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, results);
-
-        foreach (var result in results)
-        {
-            PuzzleBlock block = result.gameObject.GetComponent<PuzzleBlock>();
-            if (block != null)
-                return block;
-        }
-
-        return GetBlockAtScreenPositionUI(screenPosition);
-    }
-
-    private PuzzleBlock GetBlockAtScreenPositionUI(Vector2 screenPosition)
-    {
-        RectTransform gridRect = puzzleGrid.GetComponent<RectTransform>();
-        Vector2 localPoint;
-
-        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            gridRect, screenPosition, uiCamera, out localPoint))
-        {
-            float cellSize = puzzleGrid.cellSize;
-            float spacing = puzzleGrid.spacing;
-
-            float totalWidth = (puzzleGrid.gridWidth - 1) * (cellSize + spacing);
-            float totalHeight = (puzzleGrid.gridHeight - 1) * (cellSize + spacing);
-
-            float adjustedX = localPoint.x + totalWidth / 2f;
-            float adjustedY = -localPoint.y + totalHeight / 2f;
-
-            int gridX = Mathf.RoundToInt(adjustedX / (cellSize + spacing));
-            int gridY = Mathf.RoundToInt(adjustedY / (cellSize + spacing));
-
-            if (gridX >= 0 && gridX < puzzleGrid.gridWidth &&
-                gridY >= 0 && gridY < puzzleGrid.gridHeight)
-            {
-                return puzzleGrid.GetBlock(gridX, gridY);
-            }
-        }
-
-        return null;
-    }
-
     public void OnBlockTouchStart(PuzzleBlock block)
     {
         if (isProcessingMatches || block.isMatched || block.isAnimating)
@@ -287,8 +237,6 @@ public class CombineManager : MonoBehaviour
         RefillEmptySpaces();
         yield return new WaitForSeconds(0.3f);
 
-        CheckForAutoMatches();
-
         isProcessingMatches = false;
         ClearSelection();
     }
@@ -356,7 +304,15 @@ public class CombineManager : MonoBehaviour
     {
         for (int x = 0; x < puzzleGrid.gridWidth; x++)
         {
-            for (int y = 0; y < puzzleGrid.gridHeight; y++)
+            int emptyCount = 0;
+            for (int y = puzzleGrid.gridHeight - 1; y >= 0; y--)
+            {
+                if (puzzleGrid.GetBlock(x, y) == null)
+                    emptyCount++;
+            }
+
+            int currentEmptyIndex = 0;
+            for (int y = puzzleGrid.gridHeight - 1; y >= 0; y--)
             {
                 if (puzzleGrid.GetBlock(x, y) == null)
                 {
@@ -371,20 +327,81 @@ public class CombineManager : MonoBehaviour
                     RectTransform rect = blockObj.GetComponent<RectTransform>();
                     float cellSize = puzzleGrid.cellSize;
                     float spacing = puzzleGrid.spacing;
-                    Vector2 pos = new Vector2(
+
+                    Vector2 finalPos = new Vector2(
                         (x * (cellSize + spacing)) - (((puzzleGrid.gridWidth - 1) * (cellSize + spacing)) / 2f),
                         -(y * (cellSize + spacing)) + (((puzzleGrid.gridHeight - 1) * (cellSize + spacing)) / 2f)
                     );
-                    rect.anchoredPosition = pos;
+
+                    Vector2 startPos = new Vector2(
+                        finalPos.x,
+                        finalPos.y + (cellSize + spacing) * (emptyCount - currentEmptyIndex + 1)
+                    );
+
+                    rect.anchoredPosition = startPos;
                     rect.sizeDelta = new Vector2(cellSize, cellSize);
+
+                    StartCoroutine(AnimateBlockRefill(newBlock, startPos, finalPos, currentEmptyIndex * 0.1f));
+
+                    currentEmptyIndex++;
                 }
             }
         }
     }
 
-    void CheckForAutoMatches()
+    IEnumerator AnimateBlockRefill(PuzzleBlock block, Vector2 startPos, Vector2 finalPos, float delay)
     {
+        if (block == null)
+            yield break;
 
+        block.isAnimating = true;
+        RectTransform rect = block.GetComponent<RectTransform>();
+
+        yield return new WaitForSeconds(delay);
+
+        rect.anchoredPosition = startPos;
+
+        float duration = 0.4f;
+        float elapsed = 0f;
+
+        while (elapsed < duration && block != null)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+
+            float easedT = EaseOutBounce(t);
+
+            if (rect != null)
+                rect.anchoredPosition = Vector2.Lerp(startPos, finalPos, easedT);
+            yield return null;
+        }
+
+        if (rect != null)
+            rect.anchoredPosition = finalPos;
+
+        if (block != null)
+            block.isAnimating = false;
+    }
+
+    private float EaseOutBounce(float t)
+    {
+        if (t < 1f / 2.75f)
+            return 7.5625f * t * t;
+        else if (t < 2f / 2.75f)
+        {
+            t -= 1.5f / 2.75f;
+            return 7.5625f * t * t + 0.75f;
+        }
+        else if (t < 2.5f / 2.75f)
+        {
+            t -= 2.25f / 2.75f;
+            return 7.5625f * t * t + 0.9375f;
+        }
+        else
+        {
+            t -= 2.625f / 2.75f;
+            return 7.5625f * t * t + 0.984375f;
+        }
     }
 
     public void OnBlockSelected(PuzzleBlock selectedBlock)
