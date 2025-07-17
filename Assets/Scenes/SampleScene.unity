@@ -3031,6 +3031,7 @@ MonoBehaviour:
   healthBarUI: {fileID: 1675079338}
   healthFillUI: {fileID: 0}
   healthText: {fileID: 0}
+  playerObj: {fileID: 1922904539}
   invulnerabilityDuration: 0.15
   isInvulnerable: 1
 --- !u!222 &1358685883
@@ -3958,6 +3959,11 @@ PrefabInstance:
 --- !u!224 &1922904538 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4818164670327732563, guid: b2a81b5387408824bbb782ddb7edc278, type: 3}
+  m_PrefabInstance: {fileID: 1922904537}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1922904539 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4770648466864683859, guid: b2a81b5387408824bbb782ddb7edc278, type: 3}
   m_PrefabInstance: {fileID: 1922904537}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1941043750

@@ -62,6 +62,18 @@ public class CombineManager : MonoBehaviour
 
     void GenerateInitialGrid()
     {
+        List<BlockType> characterBlockTypes = PlayerInventory.Instance.GetSelectedCharacterBlockTypes();
+
+        if (characterBlockTypes == null || characterBlockTypes.Count == 0)
+        {
+            characterBlockTypes = new List<BlockType>();
+            foreach (BlockType type in System.Enum.GetValues(typeof(BlockType)))
+            {
+                if (type != BlockType.Empty)
+                    characterBlockTypes.Add(type);
+            }
+        }
+
         for (int x = 0; x < puzzleGrid.gridWidth; x++)
         {
             for (int y = 0; y < puzzleGrid.gridHeight; y++)
@@ -69,7 +81,7 @@ public class CombineManager : MonoBehaviour
                 PuzzleBlock block = puzzleGrid.GetBlock(x, y);
                 if (block != null)
                 {
-                    BlockType randomType = (BlockType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(BlockType)).Length - 1);
+                    BlockType randomType = characterBlockTypes[Random.Range(0, characterBlockTypes.Count)];
                     block.SetBlockType(randomType);
                 }
             }
@@ -302,14 +314,22 @@ public class CombineManager : MonoBehaviour
 
     void RefillEmptySpaces()
     {
+        List<BlockType> characterBlockTypes = PlayerInventory.Instance.GetSelectedCharacterBlockTypes();
+
+        if (characterBlockTypes == null || characterBlockTypes.Count == 0)
+        {
+            characterBlockTypes = new List<BlockType>();
+            foreach (BlockType type in System.Enum.GetValues(typeof(BlockType)))
+                if (type != BlockType.Empty)
+                    characterBlockTypes.Add(type);
+        }
+
         for (int x = 0; x < puzzleGrid.gridWidth; x++)
         {
             int emptyCount = 0;
             for (int y = puzzleGrid.gridHeight - 1; y >= 0; y--)
-            {
                 if (puzzleGrid.GetBlock(x, y) == null)
                     emptyCount++;
-            }
 
             int currentEmptyIndex = 0;
             for (int y = puzzleGrid.gridHeight - 1; y >= 0; y--)
@@ -319,7 +339,7 @@ public class CombineManager : MonoBehaviour
                     GameObject blockObj = Instantiate(puzzleGrid.blockPrefab, puzzleGrid.transform);
                     PuzzleBlock newBlock = blockObj.GetComponent<PuzzleBlock>();
 
-                    BlockType randomType = (BlockType)UnityEngine.Random.Range(0, System.Enum.GetValues(typeof(BlockType)).Length - 1);
+                    BlockType randomType = characterBlockTypes[Random.Range(0, characterBlockTypes.Count)];
                     newBlock.SetBlockType(randomType);
                     newBlock.SetGridPosition(x, y);
                     puzzleGrid.SetBlock(x, y, newBlock);

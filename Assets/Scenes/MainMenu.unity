@@ -1025,11 +1025,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!1 &96554214 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4770648466864683859, guid: b2a81b5387408824bbb782ddb7edc278, type: 3}
-  m_PrefabInstance: {fileID: 493646612}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &128028197
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30452,11 +30447,6 @@ MonoBehaviour:
   inventoryPanel: {fileID: 1499964648}
   combatSceneName: SampleScene
   buttonClickSound: {fileID: 0}
---- !u!1 &1557710103 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3286037618124636975, guid: 81c21812567db1f4e837da944aad8ee1, type: 3}
-  m_PrefabInstance: {fileID: 15401112}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1588321239
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -31813,11 +31803,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -112.2}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1811792833 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5455550220287064230, guid: 0d9f235513b174641b333a8ee81ca61f, type: 3}
-  m_PrefabInstance: {fileID: 409394849}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1822292553
 GameObject:
   m_ObjectHideFlags: 0
@@ -32224,21 +32209,21 @@ MonoBehaviour:
     isLocked: 0
     purchaseCost: 0
     blockTypes: 0000000001000000020000000300000005000000
-    prefab: {fileID: 96554214}
+    prefab: {fileID: 4770648466864683859, guid: b2a81b5387408824bbb782ddb7edc278, type: 3}
   - characterName: Archer
     characterID: 1
     characterRenderTexture: {fileID: 8400000, guid: 73e666fd72b05244eb62eb8a1eaa5e88, type: 2}
     isLocked: 0
     purchaseCost: 0
     blockTypes: 0100000005000000020000000300000006000000
-    prefab: {fileID: 1811792833}
+    prefab: {fileID: 5455550220287064230, guid: 0d9f235513b174641b333a8ee81ca61f, type: 3}
   - characterName: Traumatized Guy
     characterID: 2
     characterRenderTexture: {fileID: 8400000, guid: 5b0d17612fa9cb447a85a1c7978f622f, type: 2}
     isLocked: 0
     purchaseCost: 0
     blockTypes: 0400000002000000010000000500000006000000
-    prefab: {fileID: 1557710103}
+    prefab: {fileID: 3286037618124636975, guid: 81c21812567db1f4e837da944aad8ee1, type: 3}
 --- !u!1 &1895109753
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Slider healthBarUI;
     [SerializeField] private Image healthFillUI;
     [SerializeField] private Text healthText;
+    [SerializeField] private GameObject playerObj;
 
     [Header("Invulnerability")]
     [SerializeField] private float invulnerabilityDuration = 1f;
@@ -39,6 +40,28 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
+        if (playerObj != null && PlayerInventory.Instance != null)
+        {
+            GameObject selectedCharacterPrefab = PlayerInventory.Instance.GetSelectedCharacterPrefab();
+            if (selectedCharacterPrefab != null)
+            {
+                Vector3 localPosition = Vector3.zero;
+                Quaternion localRotation = Quaternion.identity;
+                Vector3 localScale = Vector3.one;
+                if (playerObj.transform.childCount > 0)
+                {
+                    Transform oldModelTransform = playerObj.transform.GetChild(0);
+                    localPosition = oldModelTransform.localPosition;
+                    localRotation = oldModelTransform.localRotation;
+                    localScale = oldModelTransform.localScale;
+                    Destroy(oldModelTransform.gameObject);
+                }
+                GameObject newModel = Instantiate(selectedCharacterPrefab, playerObj.transform);
+                newModel.transform.localPosition = localPosition;
+                newModel.transform.localRotation = localRotation;
+                newModel.transform.localScale = localScale;
+            }
+        }
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         currentHealth = maxHealth;
@@ -169,9 +192,7 @@ public class Player : MonoBehaviour
     void UpdateInvulnerability()
     {
         if (isInvulnerable && Time.time - lastDamageTime >= invulnerabilityDuration)
-        {
             isInvulnerable = false;
-        }
     }
 
     public void TakeDamage(float damage)
