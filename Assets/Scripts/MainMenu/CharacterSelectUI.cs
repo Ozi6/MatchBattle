@@ -11,11 +11,12 @@ public class CharacterSelectUI : MonoBehaviour
     [SerializeField] private Button characterButtonPrefab;
     [SerializeField] private RawImage selectedCharacterDisplay;
     [SerializeField] private TextMeshProUGUI selectedCharacterName;
-    [SerializeField] private Image[] blockTypeImages;
+    [SerializeField] private Transform blockTypeContainer;
+    [SerializeField] private GameObject blockImagePrefab;
     [SerializeField] private GameObject purchasePopup;
     [SerializeField] private TextMeshProUGUI purchaseCharacterName;
     [SerializeField] private TextMeshProUGUI purchaseCostText;
-    [SerializeField] private Image[] purchaseBlockTypeImages;
+    [SerializeField] private Transform purchaseBlockTypeContainer;
     [SerializeField] private RawImage purchaseCharacterImage;
     [SerializeField] private Button purchaseConfirmButton;
     [SerializeField] private Button purchaseCancelButton;
@@ -105,7 +106,7 @@ public class CharacterSelectUI : MonoBehaviour
             characterToPurchase = character;
             purchaseCharacterName.text = character.characterName;
             purchaseCostText.text = $"Cost: {character.purchaseCost} Coins";
-            UpdateBlockTypeImages(purchaseBlockTypeImages, character.blockTypes);
+            CreateBlockTypeImages(purchaseBlockTypeContainer, character.blockTypes);
             if (purchaseCharacterImage != null)
                 purchaseCharacterImage.texture = character.characterRenderTexture;
             purchasePopup.SetActive(true);
@@ -141,24 +142,30 @@ public class CharacterSelectUI : MonoBehaviour
         {
             selectedCharacterDisplay.texture = selectedCharacter.characterRenderTexture;
             selectedCharacterName.text = selectedCharacter.characterName;
-            UpdateBlockTypeImages(blockTypeImages, selectedCharacter.blockTypes);
+            CreateBlockTypeImages(blockTypeContainer, selectedCharacter.blockTypes);
         }
     }
 
-    private void UpdateBlockTypeImages(Image[] images, List<BlockType> blockTypes)
+    private void CreateBlockTypeImages(Transform container, List<BlockType> blockTypes)
     {
-        for (int i = 0; i < images.Length && i < blockTypes.Count; i++)
+        foreach (Transform child in container)
+            Destroy(child.gameObject);
+
+        foreach (BlockType blockType in blockTypes)
         {
-            BlockData blockData = blockDataDict.ContainsKey(blockTypes[i]) ? blockDataDict[blockTypes[i]] : null;
-            if (blockData != null)
+            GameObject blockImageObj = Instantiate(blockImagePrefab, container);
+            Image blockImage = blockImageObj.GetComponent<Image>();
+
+            if (blockDataDict.ContainsKey(blockType))
             {
-                images[i].sprite = blockData.sprite;
-                images[i].color = blockData.color;
+                BlockData blockData = blockDataDict[blockType];
+                blockImage.sprite = blockData.sprite;
+                blockImage.color = blockData.color;
             }
             else
             {
-                images[i].sprite = null;
-                images[i].color = Color.white;
+                blockImage.sprite = null;
+                blockImage.color = Color.white;
             }
         }
     }

@@ -1025,6 +1025,68 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!1 &117894910
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 117894911}
+  - component: {fileID: 117894912}
+  m_Layer: 5
+  m_Name: Vertical
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &117894911
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117894910}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1542999121}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &117894912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 117894910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_Spacing: 0
+  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1001 &128028197
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28258,16 +28320,101 @@ MonoBehaviour:
   characterButtonPrefab: {fileID: 8869693844127777652, guid: 43c1a9e99afd7a844b0171d0d3194192, type: 3}
   selectedCharacterDisplay: {fileID: 863708014}
   selectedCharacterName: {fileID: 792456404}
-  blockTypeImages: []
+  blockTypeContainer: {fileID: 117894911}
+  blockImagePrefab: {fileID: 69843202839703330, guid: 59ddaf1f31658b64cbd61cb5374f3dae, type: 3}
   purchasePopup: {fileID: 679293980}
   purchaseCharacterName: {fileID: 679293978}
   purchaseCostText: {fileID: 0}
-  purchaseBlockTypeImages: []
+  purchaseBlockTypeContainer: {fileID: 0}
   purchaseCharacterImage: {fileID: 0}
   purchaseConfirmButton: {fileID: 0}
   purchaseCancelButton: {fileID: 0}
   currencyText: {fileID: 973487059}
-  blockDataArray: []
+  blockDataArray:
+  - type: 0
+    sprite: {fileID: 21300000, guid: 5c0f356e8fdb749c292f0a699fde4480, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 0
+    isPiercing: 0
+    hasAreaEffect: 0
+    areaRadius: 0
+  - type: 1
+    sprite: {fileID: 21300000, guid: 835bb0042ed8d4333baab9882016e7b9, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 0
+    isPiercing: 0
+    hasAreaEffect: 0
+    areaRadius: 0
+  - type: 2
+    sprite: {fileID: 21300000, guid: 642386f77d8a94c13b5341e5d9a01a03, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 0
+    isPiercing: 0
+    hasAreaEffect: 0
+    areaRadius: 0
+  - type: 6
+    sprite: {fileID: 21300000, guid: d60f24b57ce98450e8a7624f85975706, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 0
+    isPiercing: 0
+    hasAreaEffect: 0
+    areaRadius: 0
+  - type: 3
+    sprite: {fileID: -2143824723853457385, guid: 01425182f42714a49a962c8b2aab2a37, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 0
+    isPiercing: 0
+    hasAreaEffect: 0
+    areaRadius: 0
+  - type: 5
+    sprite: {fileID: 21300000, guid: 22f7e3cc2a7fa45dabc8d265a23f0426, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 0
+    isPiercing: 0
+    hasAreaEffect: 0
+    areaRadius: 0
+  - type: 4
+    sprite: {fileID: 21300000, guid: 32c8e4f22b265451ebee9724285649cd, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 1}
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 0}
+    projectileSpeed: 0
+    isPiercing: 0
+    hasAreaEffect: 0
+    areaRadius: 0
   buttonClickSound: {fileID: 0}
 --- !u!1 &1329241421
 GameObject:
@@ -30344,6 +30491,42 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533070404}
   m_CullTransparentMesh: 1
+--- !u!1 &1542999120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1542999121}
+  m_Layer: 5
+  m_Name: UnitBlocks
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1542999121
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542999120}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 117894911}
+  m_Father: {fileID: 2129477413}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1553565797
 GameObject:
   m_ObjectHideFlags: 0
@@ -38824,6 +39007,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 863708013}
+  - {fileID: 1542999121}
   m_Father: {fileID: 1323830522}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
