@@ -344,6 +344,8 @@ public class Player : MonoBehaviour
     }
 
     public float GetCurrentHealth() => currentHealth;
+
+    public void SetCurrentHealth(float health) => currentHealth = health;
     public float GetMaxHealth() => maxHealth;
     public float GetHealthPercentage() => currentHealth / maxHealth;
     public bool IsDead() => isDead;

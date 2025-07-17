@@ -90,8 +90,6 @@ public class CombatManager : MonoBehaviour
     [Header("Combat Settings")]
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform enemySpawnPoint;
-    [SerializeField] private float playerHealth = 100f;
-    [SerializeField] private float maxPlayerHealth = 100f;
     [SerializeField] private float playerDefense = 0f;
 
     [Header("Combat Actions")]
@@ -238,7 +236,7 @@ public class CombatManager : MonoBehaviour
     void RetryLevel()
     {
         gameOverUI.SetActive(false);
-        playerHealth = maxPlayerHealth;
+        player.FullHeal();
         playerDefense = 0f;
         activeEnemies.Clear();
         enemiesSpawned = 0;
@@ -267,8 +265,8 @@ public class CombatManager : MonoBehaviour
         totalWaves = levelData.totalWaves;
         waveDataArray = levelData.waves;
 
-        maxPlayerHealth *= levelData.playerHealthModifier;
-        playerHealth = maxPlayerHealth;
+        player.SetMaxHealth(player.GetMaxHealth() * levelData.playerHealthModifier);
+        player.SetCurrentHealth(player.GetMaxHealth());
         playerDefense *= levelData.playerDefenseModifier;
 
         InitializeUI();
@@ -298,8 +296,8 @@ public class CombatManager : MonoBehaviour
     {
         if (playerHealthBar != null)
         {
-            playerHealthBar.maxValue = maxPlayerHealth;
-            playerHealthBar.value = playerHealth;
+            playerHealthBar.maxValue = player.GetMaxHealth();
+            playerHealthBar.value = player.GetCurrentHealth();
         }
     }
 
@@ -589,9 +587,7 @@ public class CombatManager : MonoBehaviour
             float damageMultiplier = currentWaveData.enemyDamageMultiplier * (1f + (currentWave - 1) * 0.2f);
 
             enemy.SetMaxHealth(enemy.GetMaxHealth() * healthMultiplier);
-            enemy.SetAttackDamage(enemy.GetAttackDamage() *
-
- damageMultiplier);
+            enemy.SetAttackDamage(enemy.GetAttackDamage() * damageMultiplier);
 
             enemy.OnEnemyDeath += OnEnemyKilled;
             enemy.OnEnemyAttackPlayer += OnEnemyAttackPlayer;
@@ -619,13 +615,14 @@ public class CombatManager : MonoBehaviour
 
     void TakePlayerDamage(float damage)
     {
-        float actualDamage = Mathf.Max(0, damage - playerDefense);
-        playerHealth -= actualDamage;
-        playerHealth = Mathf.Max(0, playerHealth);
+        if (player == null)
+            return;
 
+        float actualDamage = Mathf.Max(0, damage - playerDefense);
+        player.TakeDamage(actualDamage);
         playerDefense = Mathf.Max(0, playerDefense - damage * 0.5f);
 
-        if (playerHealth <= 0)
+        if (player.IsDead())
         {
             OnPlayerDeath?.Invoke();
             GameOver();
@@ -822,8 +819,8 @@ public class CombatManager : MonoBehaviour
 
     void UpdateUI()
     {
-        if (playerHealthBar != null)
-            playerHealthBar.value = playerHealth;
+        if (playerHealthBar != null && player != null)
+            playerHealthBar.value = player.GetCurrentHealth();
 
         if (waveText != null)
             waveText.text = $"Wave {currentWave}/{totalWaves}";
@@ -858,8 +855,8 @@ public class CombatManager : MonoBehaviour
             combineManager.RegenerateGridWithDeck(playerDeck);
     }
 
-    public float GetPlayerHealth() => playerHealth;
-    public float GetMaxPlayerHealth() => maxPlayerHealth;
+    public float GetPlayerHealth() => player.GetCurrentHealth();
+    public float GetMaxPlayerHealth() => player.GetMaxHealth();
     public float GetPlayerDefense() => playerDefense;
     public int GetCurrentWave() => currentWave;
     public bool IsInCombat() => isInCombat;
