@@ -30107,6 +30107,7 @@ MonoBehaviour:
   unequipButton: {fileID: 1332971188}
   closeButton: {fileID: 28577948}
   backgroundOverlay: {fileID: 749949514}
+  selectedCharacterDisplay: {fileID: 1135853387}
   buttonClickSound: {fileID: 0}
 --- !u!1001 &1500838000
 PrefabInstance:

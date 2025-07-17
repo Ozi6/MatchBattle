@@ -25,6 +25,7 @@ public class MenuInventory : MonoBehaviour
     [SerializeField] private Button unequipButton;
     [SerializeField] private Button closeButton;
     [SerializeField] private Image backgroundOverlay;
+    [SerializeField] private RawImage selectedCharacterDisplay;
 
     [Header("Audio")]
     [SerializeField] private AudioSource buttonClickSound;
@@ -50,6 +51,9 @@ public class MenuInventory : MonoBehaviour
             backgroundOverlay.gameObject.SetActive(false);
         if (inventoryScrollRect != null)
             inventoryScrollRect.verticalNormalizedPosition = 1f;
+        Character selectedCharacter = playerInventory?.GetSelectedCharacter();
+        if (selectedCharacter != null && selectedCharacterDisplay != null && selectedCharacterDisplay.texture != selectedCharacter.characterRenderTexture)
+            selectedCharacterDisplay.texture = selectedCharacter.characterRenderTexture;
     }
 
     private void InitializeInventorySlots()
