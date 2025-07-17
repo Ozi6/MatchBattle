@@ -9,10 +9,12 @@ public class FooterUI : MonoBehaviour
     [SerializeField] private Button inventoryButton;
     [SerializeField] private Button mainMenuButton;
     [SerializeField] private Button perkButton;
+    [SerializeField] private Button characterSelectButton;
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private GameObject shopPanel;
     [SerializeField] private GameObject inventoryPanel;
     [SerializeField] private GameObject perksPanel;
+    [SerializeField] private GameObject characterSelectPanel;
 
     [Header("Sprites")]
     [SerializeField] private Sprite selectedSprite;
@@ -43,7 +45,7 @@ public class FooterUI : MonoBehaviour
 
     private void InitializeButtonStates()
     {
-        Button[] buttons = new Button[] { shopButton, inventoryButton, mainMenuButton, perkButton };
+        Button[] buttons = new Button[] { shopButton, inventoryButton, mainMenuButton, perkButton, characterSelectButton };
         originalSizes = new Vector2[buttons.Length];
         originalPositions = new Vector3[buttons.Length];
 
@@ -76,6 +78,9 @@ public class FooterUI : MonoBehaviour
         if (perksPanel != null)
             perksPanel.SetActive(false);
 
+        if (characterSelectPanel != null)
+            characterSelectPanel.SetActive(false);
+
         if (mainMenuButton != null)
         {
             currentSelectedButton = mainMenuButton;
@@ -106,6 +111,9 @@ public class FooterUI : MonoBehaviour
 
         if (perkButton != null)
             perkButton.onClick.AddListener(() => OnPerkButtonClicked());
+
+        if (characterSelectButton != null)
+            characterSelectButton.onClick.AddListener(() => OnCharacterSelectButtonClicked());
     }
 
     void OnShopButtonClicked()
@@ -124,6 +132,9 @@ public class FooterUI : MonoBehaviour
 
         if (perksPanel != null)
             perksPanel.SetActive(false);
+
+        if (characterSelectPanel != null)
+            characterSelectPanel.SetActive(false);
     }
 
     void OnInventoryButtonClicked()
@@ -142,6 +153,9 @@ public class FooterUI : MonoBehaviour
 
         if (perksPanel != null)
             perksPanel.SetActive(false);
+
+        if (characterSelectPanel != null)
+            characterSelectPanel.SetActive(false);
     }
 
     void OnMainMenuButtonClicked()
@@ -160,6 +174,9 @@ public class FooterUI : MonoBehaviour
 
         if (perksPanel != null)
             perksPanel.SetActive(false);
+
+        if (characterSelectPanel != null)
+            characterSelectPanel.SetActive(false);
     }
 
     void OnPerkButtonClicked()
@@ -178,6 +195,30 @@ public class FooterUI : MonoBehaviour
 
         if (perksPanel != null)
             perksPanel.SetActive(true);
+
+        if (characterSelectPanel != null)
+            characterSelectPanel.SetActive(false);
+    }
+
+    void OnCharacterSelectButtonClicked()
+    {
+        PlayButtonSound();
+        HandleButtonSelection(characterSelectButton);
+
+        if (mainMenuPanel != null)
+            mainMenuPanel.SetActive(false);
+
+        if (shopPanel != null)
+            shopPanel.SetActive(false);
+
+        if (inventoryPanel != null)
+            inventoryPanel.SetActive(false);
+
+        if (perksPanel != null)
+            perksPanel.SetActive(false);
+
+        if (characterSelectPanel != null)
+            characterSelectPanel.SetActive(true);
     }
 
     private void HandleButtonSelection(Button selectedButton)
@@ -243,6 +284,8 @@ public class FooterUI : MonoBehaviour
             return 2;
         if (button == perkButton)
             return 3;
+        if (button == characterSelectButton)
+            return 4;
         return -1;
     }
 
