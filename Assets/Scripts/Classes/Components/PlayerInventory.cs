@@ -1,6 +1,18 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+[System.Serializable]
+public class Character
+{
+    public string characterName;
+    public int characterID;
+    public RenderTexture characterRenderTexture;
+    public bool isLocked;
+    public float purchaseCost;
+    public List<BlockType> blockTypes;
+    public GameObject prefab;
+}
+
 public class PlayerInventory : MonoBehaviour
 {
     private List<Item> inventoryItems = new List<Item>();
@@ -10,6 +22,8 @@ public class PlayerInventory : MonoBehaviour
     private List<Perk> ownedPerks = new List<Perk>();
     [SerializeField] private int maxCapacity = 20;
     [SerializeField] private float currency = 1000f;
+    [SerializeField] private Character[] availableCharacters;
+    private Character selectedCharacter;
 
     public static PlayerInventory Instance { get; private set; }
 
@@ -19,9 +33,15 @@ public class PlayerInventory : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            InitializeCharacters();
         }
         else
             Destroy(gameObject);
+    }
+
+    private void InitializeCharacters()
+    {
+        selectedCharacter = availableCharacters[0];
     }
 
     public bool AddItem(Item item)
@@ -262,5 +282,54 @@ public class PlayerInventory : MonoBehaviour
     public void AddCurrency(float amount)
     {
         currency += amount;
+    }
+
+    public Character[] GetAvailableCharacters()
+    {
+        return availableCharacters;
+    }
+
+    public Character GetSelectedCharacter()
+    {
+        return selectedCharacter;
+    }
+
+    public void SelectCharacter(int characterID)
+    {
+        foreach (Character character in availableCharacters)
+        {
+            if (character.characterID == characterID && !character.isLocked)
+            {
+                selectedCharacter = character;
+                return;
+            }
+        }
+    }
+
+    public bool UnlockCharacter(int characterID)
+    {
+        foreach (Character character in availableCharacters)
+        {
+            if (character.characterID == characterID && character.isLocked)
+            {
+                if (SpendCurrency(character.purchaseCost))
+                {
+                    character.isLocked = false;
+                    return true;
+                }
+                return false;
+            }
+        }
+        return false;
+    }
+
+    public List<BlockType> GetSelectedCharacterBlockTypes()
+    {
+        return selectedCharacter != null ? selectedCharacter.blockTypes : new List<BlockType>();
+    }
+
+    public GameObject GetSelectedCharacterPrefab()
+    {
+        return selectedCharacter != null ? selectedCharacter.prefab : null;
     }
 }
