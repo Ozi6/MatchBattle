@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class CombatAction
@@ -113,6 +114,8 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private Text enemyCountText;
     [SerializeField] private GameObject gameOverUI;
     [SerializeField] private GameObject victoryUI;
+    [SerializeField] private Button mainMenuButton;
+    [SerializeField] private Button retryButton;
 
     [Header("Player Deck")]
     [SerializeField] private List<BlockType> playerDeck = new List<BlockType>();
@@ -127,7 +130,6 @@ public class CombatManager : MonoBehaviour
     [SerializeField] private RewardGenerator rewardGenerator;
     [Header("Reward Trigger")]
     [SerializeField] private RewardTrigger rewardTrigger;
-
 
     public GameObject puzzleHalf;
     public GameObject rewardScreenHalf;
@@ -172,6 +174,7 @@ public class CombatManager : MonoBehaviour
         InitializeCombatActions();
         InitializeUI();
         InitializeBlockUpgrades();
+        InitializeGameOverUI();
     }
 
     void Start()
@@ -205,13 +208,49 @@ public class CombatManager : MonoBehaviour
         if (playerDeck.Count == 0)
         {
             playerDeck.AddRange(new BlockType[] {
-            BlockType.Sword, BlockType.Shield, BlockType.Potion,
-            BlockType.Bow, BlockType.Magic, BlockType.Axe
-        });
+                BlockType.Sword, BlockType.Shield, BlockType.Potion,
+                BlockType.Bow, BlockType.Magic, BlockType.Axe
+            });
         }
 
         if (currentLevelData != null)
             StartWave(currentWave);
+    }
+
+    void InitializeGameOverUI()
+    {
+        if (gameOverUI != null)
+        {
+            if (mainMenuButton != null)
+                mainMenuButton.onClick.AddListener(ReturnToMainMenu);
+            if (retryButton != null)
+                retryButton.onClick.AddListener(RetryLevel);
+            gameOverUI.SetActive(false);
+        }
+    }
+
+    void ReturnToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    void RetryLevel()
+    {
+        gameOverUI.SetActive(false);
+        playerHealth = maxPlayerHealth;
+        playerDefense = 0f;
+        activeEnemies.Clear();
+        enemiesSpawned = 0;
+        enemiesKilled = 0;
+        currentWave = 1;
+        waveCompleted = false;
+        isInCombat = true;
+        if (player != null)
+            player.FullHeal();
+        StartWave(currentWave);
+        PauseInput(false);
+        Time.timeScale = 1f;
     }
 
     public void InitializeWithLevel(LevelData levelData)
@@ -510,12 +549,10 @@ public class CombatManager : MonoBehaviour
 
     void HandleComboExecuted(BlockType blockType, int comboSize)
     {
-
     }
 
     void HandleBlocksMatched(List<PuzzleBlock> matchedBlocks)
     {
-
     }
 
     void HandleEnemySpawning()
@@ -552,7 +589,9 @@ public class CombatManager : MonoBehaviour
             float damageMultiplier = currentWaveData.enemyDamageMultiplier * (1f + (currentWave - 1) * 0.2f);
 
             enemy.SetMaxHealth(enemy.GetMaxHealth() * healthMultiplier);
-            enemy.SetAttackDamage(enemy.GetAttackDamage() * damageMultiplier);
+            enemy.SetAttackDamage(enemy.GetAttackDamage() *
+
+ damageMultiplier);
 
             enemy.OnEnemyDeath += OnEnemyKilled;
             enemy.OnEnemyAttackPlayer += OnEnemyAttackPlayer;
@@ -695,11 +734,13 @@ public class CombatManager : MonoBehaviour
 
         if (rewardScreenHalf != null)
         {
-            //puzzleHalf.SetActive(true);
             rewardScreenHalf.SetActive(false);
         }
 
-        StartWave(currentWave + 1);
+        if (currentWave < totalWaves)
+            StartWave(currentWave + 1);
+        else
+            CompleteLevel();
     }
 
     void StartWave(int waveNumber)
@@ -737,7 +778,7 @@ public class CombatManager : MonoBehaviour
 
             int nextLevelIndex = levelIndex + 1;
             LevelData nextLevel = LevelManager.Instance.GetLevel(nextLevelIndex);
-            currentWave = 0;
+            currentWave = 1;
             currentWaveData = nextLevel.waves[0];
             enemiesKilled = enemiesSpawned = 0;
 
@@ -772,15 +813,11 @@ public class CombatManager : MonoBehaviour
     void GameOver()
     {
         isInCombat = false;
+        Time.timeScale = 0f;
         Debug.Log("Game Over!");
 
         if (gameOverUI != null)
             gameOverUI.SetActive(true);
-
-        // Handle game over logic
-        // - Show game over screen
-        // - Option to restart wave/level
-        // - Return to main menu
     }
 
     void UpdateUI()
@@ -848,6 +885,14 @@ public class CombatManager : MonoBehaviour
         {
             rewardScreen.OnRewardSelected -= HandleRewardSelected;
             rewardScreen.OnRewardScreenClosed -= HandleRewardScreenClosed;
+        }
+
+        if (gameOverUI != null)
+        {
+            if (mainMenuButton != null)
+                mainMenuButton.onClick.RemoveListener(ReturnToMainMenu);
+            if (retryButton != null)
+                retryButton.onClick.RemoveListener(RetryLevel);
         }
     }
 }
