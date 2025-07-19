@@ -2355,7 +2355,7 @@ MonoBehaviour:
   helmetSlot: {fileID: 1941043751}
   chestGuardSlot: {fileID: 1414123133}
   bootsSlot: {fileID: 487597099}
-  newItemIndicator: {fileID: 0}
+  newItemIndicator: {fileID: 184778, guid: 7d4e99a3eb9e47c4390895c8bec7bae6, type: 3}
   newItemGlowColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   highlightDuration: 2
   showAnimationDuration: 0.5
