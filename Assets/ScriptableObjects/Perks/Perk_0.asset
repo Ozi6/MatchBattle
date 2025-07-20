@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   perkID: 0
   perkName: Health Boost
-  description: Boost your health by an amount.
+  description: Boost your health by 5.
   icon: {fileID: 21300000, guid: 21cb8c775421e4096915fe18192a6f63, type: 3}
   perkType: 0
   value: 5

@@ -86,7 +86,7 @@ public class PerkManager : MonoBehaviour
 
     public void ScrollToPerk(PerkNode targetPerk)
     {
-        if (isAutoScrolling || targetPerk == null)
+        if (isAutoScrolling || targetPerk == null || scrollRect == null)
             return;
 
         StartCoroutine(SmoothScrollToPerk(targetPerk));
@@ -101,15 +101,17 @@ public class PerkManager : MonoBehaviour
     private IEnumerator SmoothScrollToPerk(PerkNode targetPerk)
     {
         isAutoScrolling = true;
+        yield return null;
 
         RectTransform content = scrollRect.content;
         RectTransform viewport = scrollRect.viewport;
         RectTransform targetRect = targetPerk.GetComponent<RectTransform>();
 
-        Vector2 targetPos = (Vector2)scrollRect.transform.InverseTransformPoint(content.position)
-                           - (Vector2)scrollRect.transform.InverseTransformPoint(targetRect.position);
+        float targetY = -targetRect.anchoredPosition.y;
+        float contentHeight = content.rect.height;
+        float viewportHeight = viewport.rect.height;
 
-        float targetNormalizedY = Mathf.Clamp01(targetPos.y / (content.rect.height - viewport.rect.height));
+        float targetNormalizedY = Mathf.Clamp01((targetY - viewportHeight / 2) / (contentHeight - viewportHeight));
 
         float startY = scrollRect.verticalNormalizedPosition;
         float elapsed = 0f;
