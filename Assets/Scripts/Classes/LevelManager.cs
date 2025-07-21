@@ -119,6 +119,7 @@ public class LevelManager : MonoBehaviour
                 allLevels[levelIndex + 1].isUnlocked = true;
 
             OnLevelCompleted?.Invoke(levelIndex);
+            PerkManager.Instance.OnLevelCompleted(levelIndex + 1);
         }
     }
 
@@ -131,7 +132,7 @@ public class LevelManager : MonoBehaviour
         }
     }
 
-    private void LoadProgress()
+    public void LoadProgress()
     {
         UpdateLevelUnlockStatus();
     }

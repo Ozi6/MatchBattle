@@ -150,4 +150,16 @@ public class PerkManager : MonoBehaviour
     {
         LevelCompleted();
     }
+
+    public void SavePerks()
+    {
+        PlayerPrefs.SetInt("CurrentLevel", currentLevel);
+        PlayerPrefs.Save();
+    }
+
+    public void LoadPerks()
+    {
+        currentLevel = PlayerPrefs.GetInt("CurrentLevel", 1);
+        UpdatePerksBasedOnLevel();
+    }
 }

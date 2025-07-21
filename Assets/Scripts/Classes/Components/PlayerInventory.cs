@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [System.Serializable]
 public class Character
@@ -50,6 +51,7 @@ public class PlayerInventory : MonoBehaviour
             return false;
 
         inventoryItems.Add(item);
+        SaveInventory();
         return true;
     }
 
@@ -61,6 +63,7 @@ public class PlayerInventory : MonoBehaviour
         if (!ownedPerks.Contains(perk))
         {
             ownedPerks.Add(perk);
+            SaveInventory();
             return true;
         }
         return false;
@@ -130,6 +133,7 @@ public class PlayerInventory : MonoBehaviour
                 equippedItems[slotType] = item;
             }
 
+            SaveInventory();
             return true;
         }
         return false;
@@ -158,6 +162,7 @@ public class PlayerInventory : MonoBehaviour
             else
                 inventoryItems.Add(equippedItem);
 
+            SaveInventory();
             return true;
         }
         return false;
@@ -274,6 +279,7 @@ public class PlayerInventory : MonoBehaviour
         if (currency >= amount)
         {
             currency -= amount;
+            SaveInventory();
             return true;
         }
         return false;
@@ -282,6 +288,7 @@ public class PlayerInventory : MonoBehaviour
     public void AddCurrency(float amount)
     {
         currency += amount;
+        SaveInventory();
     }
 
     public Character[] GetAvailableCharacters()
@@ -301,6 +308,7 @@ public class PlayerInventory : MonoBehaviour
             if (character.characterID == characterID && !character.isLocked)
             {
                 selectedCharacter = character;
+                SaveInventory();
                 return;
             }
         }
@@ -315,6 +323,7 @@ public class PlayerInventory : MonoBehaviour
                 if (SpendCurrency(character.purchaseCost))
                 {
                     character.isLocked = false;
+                    SaveInventory();
                     return true;
                 }
                 return false;
@@ -331,5 +340,111 @@ public class PlayerInventory : MonoBehaviour
     public GameObject GetSelectedCharacterPrefab()
     {
         return selectedCharacter != null ? selectedCharacter.prefab : null;
+    }
+
+    public void SaveInventory()
+    {
+        PlayerPrefs.SetFloat("PlayerCurrency", currency);
+
+        PlayerPrefs.SetInt("SelectedCharacterID", selectedCharacter?.characterID ?? -1);
+
+        string unlockedCharacters = string.Join(",", availableCharacters
+            .Select(c => c.characterID + ":" + (c.isLocked ? "0" : "1")));
+        PlayerPrefs.SetString("UnlockedCharacters", unlockedCharacters);
+
+        string itemsData = string.Join(",", inventoryItems
+            .Select(item => $"{item.itemID}:{(int)item.rarity}:{(int)item.itemType}"));
+        PlayerPrefs.SetString("InventoryItems", itemsData);
+
+        string equippedData = string.Join(",", equippedItems
+            .Select(kvp => $"{(int)kvp.Key}:{kvp.Value?.itemID ?? -1}"));
+        PlayerPrefs.SetString("EquippedItems", equippedData);
+
+        PlayerPrefs.SetInt("Charm1", charm1?.itemID ?? -1);
+        PlayerPrefs.SetInt("Charm2", charm2?.itemID ?? -1);
+
+        string perksData = string.Join(",", ownedPerks
+            .Select(perk => perk.perkName));
+        PlayerPrefs.SetString("OwnedPerks", perksData);
+
+        PlayerPrefs.Save();
+    }
+
+    public void LoadInventory()
+    {
+        currency = PlayerPrefs.GetFloat("PlayerCurrency", 1000f);
+
+        int selectedCharacterID = PlayerPrefs.GetInt("SelectedCharacterID", -1);
+        selectedCharacter = availableCharacters.FirstOrDefault(c => c.characterID == selectedCharacterID) ?? availableCharacters[0];
+
+        string unlockedCharacters = PlayerPrefs.GetString("UnlockedCharacters", "");
+        if (!string.IsNullOrEmpty(unlockedCharacters))
+        {
+            foreach (string charData in unlockedCharacters.Split(','))
+            {
+                string[] parts = charData.Split(':');
+                if (parts.Length == 2 && int.TryParse(parts[0], out int charID) && int.TryParse(parts[1], out int isUnlocked))
+                {
+                    Character character = availableCharacters.FirstOrDefault(c => c.characterID == charID);
+                    if (character != null)
+                        character.isLocked = isUnlocked == 0;
+                }
+            }
+        }
+
+        inventoryItems.Clear();
+        string itemsData = PlayerPrefs.GetString("InventoryItems", "");
+        if (!string.IsNullOrEmpty(itemsData))
+        {
+            foreach (string itemData in itemsData.Split(','))
+            {
+                string[] parts = itemData.Split(':');
+                if (parts.Length == 3 && int.TryParse(parts[0], out int itemID) &&
+                    int.TryParse(parts[1], out int rarity) && int.TryParse(parts[2], out int itemType))
+                {
+                    Item item = ScriptableObject.CreateInstance<Item>();
+                    item.itemID = itemID;
+                    item.rarity = (ItemRarity)rarity;
+                    item.itemType = (ItemType)itemType;
+                    inventoryItems.Add(item);
+                }
+            }
+        }
+
+        equippedItems.Clear();
+        string equippedData = PlayerPrefs.GetString("EquippedItems", "");
+        if (!string.IsNullOrEmpty(equippedData))
+        {
+            foreach (string equipData in equippedData.Split(','))
+            {
+                string[] parts = equipData.Split(':');
+                if (parts.Length == 2 && int.TryParse(parts[0], out int slotType) && int.TryParse(parts[1], out int itemID))
+                {
+                    if (itemID != -1)
+                    {
+                        Item item = inventoryItems.FirstOrDefault(i => i.itemID == itemID);
+                        if (item != null)
+                            equippedItems[(ItemType)slotType] = item;
+                    }
+                }
+            }
+        }
+
+        int charm1ID = PlayerPrefs.GetInt("Charm1", -1);
+        int charm2ID = PlayerPrefs.GetInt("Charm2", -1);
+        charm1 = charm1ID != -1 ? inventoryItems.FirstOrDefault(i => i.itemID == charm1ID) : null;
+        charm2 = charm2ID != -1 ? inventoryItems.FirstOrDefault(i => i.itemID == charm2ID) : null;
+
+        ownedPerks.Clear();
+        string perksData = PlayerPrefs.GetString("OwnedPerks", "");
+        if (!string.IsNullOrEmpty(perksData))
+        {
+            foreach (string perkName in perksData.Split(','))
+            {
+                Perk perk = PerkManager.Instance.perkNodeData.FirstOrDefault(p => p.perk.perkName == perkName).perk;
+                if (perk != null)
+                    ownedPerks.Add(perk);
+            }
+        }
     }
 }
