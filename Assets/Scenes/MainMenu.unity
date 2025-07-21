@@ -1587,7 +1587,6 @@ GameObject:
   m_Component:
   - component: {fileID: 212951261}
   - component: {fileID: 212951264}
-  - component: {fileID: 212951263}
   - component: {fileID: 212951262}
   m_Layer: 5
   m_Name: UnitCam
@@ -1659,14 +1658,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &212951263
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 212951260}
-  m_Enabled: 1
 --- !u!20 &212951264
 Camera:
   m_ObjectHideFlags: 0
@@ -1728,7 +1719,6 @@ GameObject:
   m_Component:
   - component: {fileID: 216717489}
   - component: {fileID: 216717492}
-  - component: {fileID: 216717491}
   - component: {fileID: 216717490}
   m_Layer: 5
   m_Name: UnitCam
@@ -1800,14 +1790,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &216717491
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 216717488}
-  m_Enabled: 1
 --- !u!20 &216717492
 Camera:
   m_ObjectHideFlags: 0
@@ -10449,7 +10431,6 @@ GameObject:
   m_Component:
   - component: {fileID: 838120117}
   - component: {fileID: 838120120}
-  - component: {fileID: 838120119}
   - component: {fileID: 838120118}
   m_Layer: 5
   m_Name: UnitCam
@@ -10521,14 +10502,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &838120119
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 838120116}
-  m_Enabled: 1
 --- !u!20 &838120120
 Camera:
   m_ObjectHideFlags: 0
@@ -10845,7 +10818,6 @@ GameObject:
   m_Component:
   - component: {fileID: 891167677}
   - component: {fileID: 891167680}
-  - component: {fileID: 891167679}
   - component: {fileID: 891167678}
   m_Layer: 5
   m_Name: UnitCam
@@ -10917,14 +10889,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &891167679
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 891167676}
-  m_Enabled: 1
 --- !u!20 &891167680
 Camera:
   m_ObjectHideFlags: 0
@@ -27894,7 +27858,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1249075563}
   - component: {fileID: 1249075566}
-  - component: {fileID: 1249075565}
   - component: {fileID: 1249075564}
   m_Layer: 5
   m_Name: UnitCam
@@ -27966,14 +27929,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &1249075565
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1249075562}
-  m_Enabled: 1
 --- !u!20 &1249075566
 Camera:
   m_ObjectHideFlags: 0
@@ -31807,7 +31762,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1775518047}
   - component: {fileID: 1775518050}
-  - component: {fileID: 1775518049}
   - component: {fileID: 1775518048}
   m_Layer: 5
   m_Name: UnitCam
@@ -31879,14 +31833,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &1775518049
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1775518046}
-  m_Enabled: 1
 --- !u!20 &1775518050
 Camera:
   m_ObjectHideFlags: 0
