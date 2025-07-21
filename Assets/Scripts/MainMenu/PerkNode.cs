@@ -25,6 +25,10 @@ public class PerkNode : MonoBehaviour
     public Color connectionUnlockedColor = Color.green;
     public Color connectionLockedColor = Color.gray;
 
+    [Header("Confirmation")]
+    [SerializeField] private PerkConfirmationPanel confirmationPanel;
+    [SerializeField] private GameObject confirmationPanelHolder;
+
     private bool isUnlocked = false;
 
     void Start()
@@ -91,14 +95,25 @@ public class PerkNode : MonoBehaviour
         rect.sizeDelta = new Vector2(rect.sizeDelta.x, spacing);
     }
 
-    void OnPerkClicked()
-    {
-        if (isUnlocked)
-            PerkManager.Instance.OnPerkSelected(this);
-    }
-
     public bool IsUnlocked()
     {
         return isUnlocked;
+    }
+
+    void OnPerkClicked()
+    {
+        if (isUnlocked)
+        {
+            if (confirmationPanel != null)
+            {
+                confirmationPanelHolder.SetActive(true);
+                confirmationPanel.ShowConfirmation(perk, (confirmedPerk) =>
+                {
+                    PerkManager.Instance.OnPerkSelected(this);
+                });
+            }
+            else
+                PerkManager.Instance.OnPerkSelected(this);
+        }
     }
 }
