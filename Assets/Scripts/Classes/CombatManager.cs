@@ -646,8 +646,6 @@ public class CombatManager : MonoBehaviour
         isInCombat = false;
         OnWaveCompleted?.Invoke(currentWave);
 
-        Debug.Log($"Wave {currentWave} completed!");
-
         if (currentWave >= totalWaves)
             CompleteLevel();
         else
@@ -730,9 +728,7 @@ public class CombatManager : MonoBehaviour
         Debug.Log($"Selected reward: {reward}");
 
         if (rewardScreenHalf != null)
-        {
             rewardScreenHalf.SetActive(false);
-        }
 
         if (currentWave < totalWaves)
             StartWave(currentWave + 1);
@@ -783,12 +779,6 @@ public class CombatManager : MonoBehaviour
             {
                 LevelManager.Instance.SelectLevel(nextLevelIndex);
                 InitializeWithLevel(nextLevel);
-
-                Debug.Log($"Progressed to next level: {nextLevel.levelName}");
-            }
-            else
-            {
-                Debug.Log("No more levels available or next level is locked");
             }
         }
 

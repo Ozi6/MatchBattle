@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class RewardScreen : MonoBehaviour
 {
@@ -135,30 +136,31 @@ public class RewardScreen : MonoBehaviour
 
         if (playerInventory != null)
         {
-            inventoryDisplay.gameObject.SetActive(true);
             bool added = playerInventory.AddItem(selectedReward);
             if (added)
             {
                 Debug.Log($"Added {selectedReward.name} to inventory!");
                 OnRewardSelected?.Invoke(selectedReward);
-                if (inventoryDisplay != null)
-                    inventoryDisplay.ShowInventory(selectedReward);
-                CloseRewardScreen();
             }
-            else
-            {
-                Debug.LogWarning("Failed to add item to inventory - inventory might be full!");
-                CloseRewardScreen();
-            }
+            GoToMainMenu();
         }
         else
-            CloseRewardScreen();
+            GoToMainMenu();
     }
 
     void SkipReward()
     {
         Debug.Log("Player skipped reward selection");
-        CloseRewardScreen();
+        GoToMainMenu();
+    }
+
+    void GoToMainMenu()
+    {
+        // Reset time scale in case it was paused
+        Time.timeScale = 1f;
+
+        // Load the MainMenu scene
+        SceneManager.LoadScene("MainMenu");
     }
 
     void ShowScreen()
