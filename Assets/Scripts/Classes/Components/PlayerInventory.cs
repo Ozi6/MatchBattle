@@ -35,6 +35,7 @@ public class PlayerInventory : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             InitializeCharacters();
+            LoadInventory();
         }
         else
             Destroy(gameObject);
