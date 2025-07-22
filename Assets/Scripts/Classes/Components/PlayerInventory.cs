@@ -25,6 +25,7 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private float currency = 1000f;
     [SerializeField] private Character[] availableCharacters;
     private Character selectedCharacter;
+    [SerializeField] private ItemDatabase itemDatabase;
 
     public static PlayerInventory Instance { get; private set; }
 
@@ -403,11 +404,25 @@ public class PlayerInventory : MonoBehaviour
                 if (parts.Length == 3 && int.TryParse(parts[0], out int itemID) &&
                     int.TryParse(parts[1], out int rarity) && int.TryParse(parts[2], out int itemType))
                 {
-                    Item item = ScriptableObject.CreateInstance<Item>();
-                    item.itemID = itemID;
-                    item.rarity = (ItemRarity)rarity;
-                    item.itemType = (ItemType)itemType;
-                    inventoryItems.Add(item);
+                    Item item = itemDatabase.GetItemByID(itemID);
+                    if (item != null)
+                    {
+                        Item itemInstance = ScriptableObject.CreateInstance<Item>();
+                        itemInstance.itemID = item.itemID;
+                        itemInstance.itemName = item.itemName;
+                        itemInstance.description = item.description;
+                        itemInstance.icon = item.icon;
+                        itemInstance.rarity = (ItemRarity)rarity;
+                        itemInstance.itemType = (ItemType)itemType;
+                        itemInstance.healthBonus = item.healthBonus;
+                        itemInstance.armorBonus = item.armorBonus;
+                        itemInstance.damageBonus = item.damageBonus;
+                        inventoryItems.Add(itemInstance);
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"Item with ID {itemID} not found in ItemDatabase!");
+                    }
                 }
             }
         }

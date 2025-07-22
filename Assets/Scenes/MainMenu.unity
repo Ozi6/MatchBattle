@@ -29976,6 +29976,7 @@ RectTransform:
   m_Children:
   - {fileID: 1852965096}
   - {fileID: 1602318482}
+  - {fileID: 1849159358}
   - {fileID: 2073675516}
   - {fileID: 1206438320}
   - {fileID: 800829042}
@@ -29986,7 +29987,6 @@ RectTransform:
   - {fileID: 1946910448}
   - {fileID: 749949513}
   - {fileID: 28577945}
-  - {fileID: 1849159358}
   m_Father: {fileID: 2127890291}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -32214,6 +32214,7 @@ MonoBehaviour:
     purchaseCost: 0
     blockTypes: 0400000002000000010000000500000006000000
     prefab: {fileID: 3286037618124636975, guid: 81c21812567db1f4e837da944aad8ee1, type: 3}
+  itemDatabase: {fileID: 11400000, guid: 2ae3f731d0e74f24c8ce1789a86f3fee, type: 2}
 --- !u!1 &1895109753
 GameObject:
   m_ObjectHideFlags: 0
