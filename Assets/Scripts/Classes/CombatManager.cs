@@ -154,6 +154,13 @@ public class CombatManager : MonoBehaviour
     private float lastProjectileLaunchTime = 0f;
     private const float PROJECTILE_LAUNCH_DELAY = 0.1f;
 
+    [Header("Pause Menu")]
+    [SerializeField] private GameObject pauseMenu;
+    [SerializeField] private Button pauseButton;  
+    [SerializeField] private Button continueButton;
+    [SerializeField] private Button leaveButton;
+    private bool isPaused = false;
+
     void Awake()
     {
         combineManager = FindAnyObjectByType<CombineManager>();
@@ -173,6 +180,7 @@ public class CombatManager : MonoBehaviour
         InitializeUI();
         InitializeBlockUpgrades();
         InitializeGameOverUI();
+        InitializePauseMenu();
     }
 
     void Start()
@@ -276,6 +284,9 @@ public class CombatManager : MonoBehaviour
 
     void Update()
     {
+        if (isPaused)
+            return;
+
         if (isInCombat && !waveCompleted)
         {
             UpdateWaveProgress();
@@ -881,5 +892,44 @@ public class CombatManager : MonoBehaviour
             if (retryButton != null)
                 retryButton.onClick.RemoveListener(RetryLevel);
         }
+
+        if(pauseMenu != null)
+        {
+            if(leaveButton != null)
+                leaveButton.onClick.RemoveAllListeners();
+            if(continueButton != null)
+                continueButton.onClick.RemoveAllListeners();
+        }
+    }
+
+    void InitializePauseMenu()
+    {
+        if (pauseMenu != null)
+            pauseMenu.SetActive(false);
+
+        if (pauseButton != null)
+            pauseButton.onClick.AddListener(TogglePause);
+
+        if (continueButton != null)
+            continueButton.onClick.AddListener(ContinueGame);
+
+        if (leaveButton != null)
+            leaveButton.onClick.AddListener(ReturnToMainMenu);
+    }
+
+    void TogglePause()
+    {
+        isPaused = !isPaused;
+        Time.timeScale = isPaused ? 0f : 1f;
+        pauseMenu.SetActive(isPaused);
+        PauseInput(isPaused);
+    }
+
+    void ContinueGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1f;
+        pauseMenu.SetActive(false);
+        PauseInput(false);
     }
 }
