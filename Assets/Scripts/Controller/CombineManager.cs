@@ -68,10 +68,8 @@ public class CombineManager : MonoBehaviour
         {
             characterBlockTypes = new List<BlockType>();
             foreach (BlockType type in System.Enum.GetValues(typeof(BlockType)))
-            {
-                if (type != BlockType.Empty)
+                if (type != BlockType.Empty && type != BlockType.Multiplier2x && type != BlockType.Multiplier3x)
                     characterBlockTypes.Add(type);
-            }
         }
 
         for (int x = 0; x < puzzleGrid.gridWidth; x++)
@@ -81,8 +79,16 @@ public class CombineManager : MonoBehaviour
                 PuzzleBlock block = puzzleGrid.GetBlock(x, y);
                 if (block != null)
                 {
-                    BlockType randomType = characterBlockTypes[Random.Range(0, characterBlockTypes.Count)];
-                    block.SetBlockType(randomType);
+                    float randomValue = Random.value;
+                    BlockType selectedType;
+                    if (randomValue < 0.05f)
+                        selectedType = BlockType.Multiplier2x;
+                    else if (randomValue < 0.1f)
+                        selectedType = BlockType.Multiplier3x;
+                    else
+                        selectedType = characterBlockTypes[Random.Range(0, characterBlockTypes.Count)];
+
+                    block.SetBlockType(selectedType);
                 }
             }
         }
@@ -129,18 +135,18 @@ public class CombineManager : MonoBehaviour
             return;
         }
 
+        PuzzleBlock lastBlock = currentSelection[currentSelection.Count - 1];
+        if (!IsAdjacent(lastBlock, block))
+            return;
+
         BlockType selectionType = currentSelection[0].blockType;
-        if (block.blockType == selectionType)
+        if (block.blockType == BlockType.Multiplier2x || block.blockType == BlockType.Multiplier3x ||
+            (block.blockType == selectionType && selectionType != BlockType.Multiplier2x && selectionType != BlockType.Multiplier3x))
         {
-            PuzzleBlock lastBlock = currentSelection[currentSelection.Count - 1];
-            if (IsAdjacent(lastBlock, block))
-            {
-                currentSelection.Add(block);
-                block.Highlight(true);
-                block.SetSelected(true, selectedBlockMaterial);
-                UpdateSelectionEffect();
-                Debug.Log($"Added block at ({block.gridX}, {block.gridY}) to selection. Total: {currentSelection.Count}");
-            }
+            currentSelection.Add(block);
+            block.Highlight(true);
+            block.SetSelected(true, selectedBlockMaterial);
+            UpdateSelectionEffect();
         }
     }
 
@@ -188,8 +194,26 @@ public class CombineManager : MonoBehaviour
     {
         isProcessingMatches = true;
 
-        BlockType comboType = matchedBlocks[0].blockType;
+        BlockType comboType = BlockType.Empty;
+        foreach (PuzzleBlock block in matchedBlocks)
+        {
+            if (block.blockType != BlockType.Multiplier2x && block.blockType != BlockType.Multiplier3x)
+            {
+                comboType = block.blockType;
+                break;
+            }
+        }
+
+        if (comboType == BlockType.Empty)
+        {
+            Debug.Log("No valid primary block type in chain, clearing selection.");
+            ClearSelection();
+            isProcessingMatches = false;
+            return;
+        }
+
         int comboSize = matchedBlocks.Count;
+        float multiplier = CalculateChainMultiplier(matchedBlocks);
 
         if (matchParticleSystemPrefabs != null)
         {
@@ -223,7 +247,7 @@ public class CombineManager : MonoBehaviour
 
         OnBlocksMatched?.Invoke(matchedBlocks);
         OnComboExecuted?.Invoke(comboType, comboSize);
-        OnCombatActionTriggered?.Invoke(comboType, comboSize, matchedBlocks);
+        OnCombatActionTriggered?.Invoke(comboType, Mathf.RoundToInt(comboSize * multiplier), matchedBlocks);
 
         StartCoroutine(DestroyMatchedBlocks(matchedBlocks));
     }
@@ -320,7 +344,7 @@ public class CombineManager : MonoBehaviour
         {
             characterBlockTypes = new List<BlockType>();
             foreach (BlockType type in System.Enum.GetValues(typeof(BlockType)))
-                if (type != BlockType.Empty)
+                if (type != BlockType.Empty && type != BlockType.Multiplier2x && type != BlockType.Multiplier3x)
                     characterBlockTypes.Add(type);
         }
 
@@ -339,8 +363,16 @@ public class CombineManager : MonoBehaviour
                     GameObject blockObj = Instantiate(puzzleGrid.blockPrefab, puzzleGrid.transform);
                     PuzzleBlock newBlock = blockObj.GetComponent<PuzzleBlock>();
 
-                    BlockType randomType = characterBlockTypes[Random.Range(0, characterBlockTypes.Count)];
-                    newBlock.SetBlockType(randomType);
+                    float randomValue = Random.value;
+                    BlockType selectedType;
+                    if (randomValue < 0.05f)
+                        selectedType = BlockType.Multiplier2x;
+                    else if (randomValue < 0.1f)
+                        selectedType = BlockType.Multiplier3x;
+                    else
+                        selectedType = characterBlockTypes[Random.Range(0, characterBlockTypes.Count)];
+
+                    newBlock.SetBlockType(selectedType);
                     newBlock.SetGridPosition(x, y);
                     puzzleGrid.SetBlock(x, y, newBlock);
 
@@ -507,6 +539,19 @@ public class CombineManager : MonoBehaviour
 
         return gridState;
     }
+
+    private float CalculateChainMultiplier(List<PuzzleBlock> blocks)
+    {
+        float totalMultiplier = 1f;
+        foreach (PuzzleBlock block in blocks)
+        {
+            if (block.blockType == BlockType.Multiplier2x)
+                totalMultiplier *= 2f;
+            else if (block.blockType == BlockType.Multiplier3x)
+                totalMultiplier *= 3f;
+        }
+        return totalMultiplier;
+    }
 }
 
 public enum BlockType
@@ -518,6 +563,8 @@ public enum BlockType
     Magic,
     Axe,
     Dynamite,
+    Multiplier2x,
+    Multiplier3x,
     Empty
 }
 
@@ -527,6 +574,7 @@ public class BlockData
     public BlockType type;
     public Sprite sprite;
     public Color color = Color.white;
+    public float multiplier = 1f;
 
     [Header("Combat Properties")]
     public bool isOffensive = true;

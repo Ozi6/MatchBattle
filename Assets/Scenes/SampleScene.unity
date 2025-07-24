@@ -2791,7 +2791,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 958290756}
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
@@ -5262,6 +5262,7 @@ MonoBehaviour:
   - type: 0
     sprite: {fileID: 21300000, guid: 5c0f356e8fdb749c292f0a699fde4480, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
     isOffensive: 1
     debuffType: 0
     debuffDuration: 0
@@ -5274,6 +5275,7 @@ MonoBehaviour:
   - type: 1
     sprite: {fileID: 21300000, guid: 835bb0042ed8d4333baab9882016e7b9, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
     isOffensive: 1
     debuffType: 0
     debuffDuration: 0
@@ -5286,6 +5288,7 @@ MonoBehaviour:
   - type: 2
     sprite: {fileID: 21300000, guid: 642386f77d8a94c13b5341e5d9a01a03, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
@@ -5298,6 +5301,7 @@ MonoBehaviour:
   - type: 4
     sprite: {fileID: 21300000, guid: 32c8e4f22b265451ebee9724285649cd, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
     isOffensive: 1
     debuffType: 0
     debuffDuration: 0
@@ -5310,6 +5314,7 @@ MonoBehaviour:
   - type: 5
     sprite: {fileID: 21300000, guid: 22f7e3cc2a7fa45dabc8d265a23f0426, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
     isOffensive: 1
     debuffType: 0
     debuffDuration: 0
@@ -5322,6 +5327,7 @@ MonoBehaviour:
   - type: 3
     sprite: {fileID: -2143824723853457385, guid: 01425182f42714a49a962c8b2aab2a37, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
     isOffensive: 1
     debuffType: 0
     debuffDuration: 0
@@ -5334,6 +5340,33 @@ MonoBehaviour:
   - type: 6
     sprite: {fileID: 21300000, guid: d60f24b57ce98450e8a7624f85975706, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
+    isOffensive: 1
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 6577921205914836696, guid: 1ee36153a52e2e64d998754b3eac8880, type: 3}
+    projectileSpeed: 5
+    isPiercing: 0
+    hasAreaEffect: 1
+    areaRadius: 15
+  - type: 7
+    sprite: {fileID: 21300000, guid: 8ff133579bcb14533bcae0e2e37ce9fe, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
+    isOffensive: 0
+    debuffType: 0
+    debuffDuration: 0
+    debuffIntensity: 0
+    projectilePrefab: {fileID: 6577921205914836696, guid: 1ee36153a52e2e64d998754b3eac8880, type: 3}
+    projectileSpeed: 5
+    isPiercing: 0
+    hasAreaEffect: 1
+    areaRadius: 15
+  - type: 6
+    sprite: {fileID: 21300000, guid: d60f24b57ce98450e8a7624f85975706, type: 3}
+    color: {r: 1, g: 1, b: 1, a: 0}
+    multiplier: 1
     isOffensive: 1
     debuffType: 0
     debuffDuration: 0
