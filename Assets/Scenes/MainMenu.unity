@@ -3025,7 +3025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1849992703844863532, guid: 52d78a9b96925423087aeb0f0dc81af7, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -749
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1849992703844863532, guid: 52d78a9b96925423087aeb0f0dc81af7, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -28150,6 +28150,7 @@ MonoBehaviour:
   - type: 0
     sprite: {fileID: 21300000, guid: 5c0f356e8fdb749c292f0a699fde4480, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
@@ -28162,6 +28163,7 @@ MonoBehaviour:
   - type: 1
     sprite: {fileID: 21300000, guid: 835bb0042ed8d4333baab9882016e7b9, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
@@ -28174,6 +28176,7 @@ MonoBehaviour:
   - type: 2
     sprite: {fileID: 21300000, guid: 642386f77d8a94c13b5341e5d9a01a03, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
@@ -28186,6 +28189,7 @@ MonoBehaviour:
   - type: 6
     sprite: {fileID: 21300000, guid: d60f24b57ce98450e8a7624f85975706, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
@@ -28198,6 +28202,7 @@ MonoBehaviour:
   - type: 3
     sprite: {fileID: -2143824723853457385, guid: 01425182f42714a49a962c8b2aab2a37, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
@@ -28210,6 +28215,7 @@ MonoBehaviour:
   - type: 5
     sprite: {fileID: 21300000, guid: 22f7e3cc2a7fa45dabc8d265a23f0426, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
@@ -28222,6 +28228,7 @@ MonoBehaviour:
   - type: 4
     sprite: {fileID: 21300000, guid: 32c8e4f22b265451ebee9724285649cd, type: 3}
     color: {r: 1, g: 1, b: 1, a: 1}
+    multiplier: 1
     isOffensive: 0
     debuffType: 0
     debuffDuration: 0
