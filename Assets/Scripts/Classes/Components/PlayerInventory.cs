@@ -419,10 +419,6 @@ public class PlayerInventory : MonoBehaviour
                         itemInstance.damageBonus = item.damageBonus;
                         inventoryItems.Add(itemInstance);
                     }
-                    else
-                    {
-                        Debug.LogWarning($"Item with ID {itemID} not found in ItemDatabase!");
-                    }
                 }
             }
         }
@@ -453,14 +449,22 @@ public class PlayerInventory : MonoBehaviour
 
         ownedPerks.Clear();
         string perksData = PlayerPrefs.GetString("OwnedPerks", "");
-        if (!string.IsNullOrEmpty(perksData))
+        if (!string.IsNullOrEmpty(perksData) && PerkManager.Instance != null)
         {
             foreach (string perkName in perksData.Split(','))
             {
-                Perk perk = PerkManager.Instance.perkNodeData.FirstOrDefault(p => p.perk.perkName == perkName).perk;
-                if (perk != null)
-                    ownedPerks.Add(perk);
+                if (!string.IsNullOrEmpty(perkName.Trim()))
+                {
+                    var perkNodeData = PerkManager.Instance.perkNodeData.FirstOrDefault(p => p.perk != null && p.perk.perkName == perkName.Trim());
+                    if (perkNodeData.perk != null)
+                        ownedPerks.Add(perkNodeData.perk);
+                }
             }
         }
+    }
+
+    public bool HasPerk(Perk perk)
+    {
+        return ownedPerks.Contains(perk);
     }
 }

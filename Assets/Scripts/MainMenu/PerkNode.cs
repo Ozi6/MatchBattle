@@ -22,6 +22,7 @@ public class PerkNode : MonoBehaviour
     [Header("Visual States")]
     public Color unlockedColor = Color.white;
     public Color lockedColor = Color.gray;
+    public Color ownedColor = Color.yellow;
     public Color connectionUnlockedColor = Color.green;
     public Color connectionLockedColor = Color.gray;
 
@@ -30,10 +31,12 @@ public class PerkNode : MonoBehaviour
     [SerializeField] private GameObject confirmationPanelHolder;
 
     private bool isUnlocked = false;
+    private bool isOwned = false;
 
     void Start()
     {
         perkButton.onClick.AddListener(OnPerkClicked);
+        CheckOwnership();
         UpdateVisuals();
         UpdateConnectionLine();
     }
@@ -41,14 +44,17 @@ public class PerkNode : MonoBehaviour
     public void SetUnlocked(bool unlocked)
     {
         isUnlocked = unlocked;
+        CheckOwnership();
         UpdateVisuals();
         UpdateConnectionLine();
     }
 
     void UpdateVisuals()
     {
+        CheckOwnership();
+
         nodeIcon.sprite = isUnlocked ? (perk?.icon ?? unlockedIcon) : lockedIcon;
-        nodeIcon.color = isUnlocked ? unlockedColor : lockedColor;
+        nodeIcon.color = isOwned ? ownedColor : (isUnlocked ? unlockedColor : lockedColor);
 
         if (perkName != null)
         {
@@ -75,7 +81,7 @@ public class PerkNode : MonoBehaviour
             connectionLine.color = isUnlocked ? connectionUnlockedColor : connectionLockedColor;
 
         if (perkButton != null)
-            perkButton.interactable = isUnlocked;
+            perkButton.interactable = isUnlocked && !isOwned;
     }
 
     void UpdateConnectionLine()
@@ -102,7 +108,7 @@ public class PerkNode : MonoBehaviour
 
     void OnPerkClicked()
     {
-        if (isUnlocked)
+        if (isUnlocked && !isOwned)
         {
             if (confirmationPanel != null)
             {
@@ -115,5 +121,11 @@ public class PerkNode : MonoBehaviour
             else
                 PerkManager.Instance.OnPerkSelected(this);
         }
+    }
+
+    private void CheckOwnership()
+    {
+        if (perk != null && PlayerInventory.Instance != null)
+            isOwned = PlayerInventory.Instance.HasPerk(perk);
     }
 }

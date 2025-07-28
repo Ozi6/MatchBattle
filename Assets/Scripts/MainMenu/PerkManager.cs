@@ -80,6 +80,9 @@ public class PerkManager : MonoBehaviour
                 newlyUnlocked.Add(perk);
             }
         }
+
+        SavePerks();
+
         if (newlyUnlocked.Count > 0)
             ScrollToPerk(newlyUnlocked.Last());
     }
@@ -136,7 +139,10 @@ public class PerkManager : MonoBehaviour
         {
             bool added = PlayerInventory.Instance.AddPerk(selectedPerk.perk);
             if (added)
+            {
                 Debug.Log($"Perk applied: {selectedPerk.perk.perkName}");
+                SavePerks();
+            }
         }
     }
 

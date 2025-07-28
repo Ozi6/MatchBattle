@@ -13,26 +13,41 @@ public class GameManager : MonoBehaviour
             LoadGame();
         }
         else
-        {
             Destroy(gameObject);
-        }
     }
 
     public void SaveGame()
     {
-        PlayerInventory.Instance.SaveInventory();
         PerkManager.Instance.SavePerks();
+        PlayerInventory.Instance.SaveInventory();
     }
 
     public void LoadGame()
     {
-        LevelManager.Instance.LoadProgress();
-        PerkManager.Instance.LoadPerks();
-        PlayerInventory.Instance.LoadInventory();
+        if (PerkManager.Instance != null)
+            PerkManager.Instance.LoadPerks();
+
+        if (LevelManager.Instance != null)
+            LevelManager.Instance.LoadProgress();
+
+        if (PlayerInventory.Instance != null)
+            PlayerInventory.Instance.LoadInventory();
     }
 
     void OnApplicationQuit()
     {
         SaveGame();
+    }
+
+    void OnApplicationPause(bool pauseStatus)
+    {
+        if (pauseStatus)
+            SaveGame();
+    }
+
+    void OnApplicationFocus(bool hasFocus)
+    {
+        if (!hasFocus)
+            SaveGame();
     }
 }
