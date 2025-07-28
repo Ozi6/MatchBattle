@@ -7,7 +7,9 @@ public class ShopUI : MonoBehaviour
 {
     [Header("UI References")]
     [SerializeField] private Transform itemGrid;
+    [SerializeField] private Transform characterGrid;
     [SerializeField] private GameObject shopItemPrefab;
+    [SerializeField] private GameObject shopCharacterPrefab;
     [SerializeField] private Button refreshButton;
     [SerializeField] private TextMeshProUGUI currencyText;
 
@@ -15,6 +17,7 @@ public class ShopUI : MonoBehaviour
     [SerializeField] private bool showRefreshButton = true;
 
     private List<GameObject> spawnedItemSlots = new List<GameObject>();
+    private List<GameObject> spawnedCharacterSlots = new List<GameObject>();
 
     void Start()
     {
@@ -31,14 +34,33 @@ public class ShopUI : MonoBehaviour
     {
         foreach (GameObject slot in spawnedItemSlots)
             Destroy(slot);
+        foreach (GameObject slot in spawnedCharacterSlots)
+            Destroy(slot);
         spawnedItemSlots.Clear();
+        spawnedCharacterSlots.Clear();
+
         List<ShopItem> items = ShopManager.Instance.GetAvailableItems();
         foreach (ShopItem shopItem in items)
         {
-            GameObject slot = Instantiate(shopItemPrefab, itemGrid);
-            spawnedItemSlots.Add(slot);
-            ShopItemUI itemUI = slot.GetComponent<ShopItemUI>();
-            itemUI.Setup(shopItem);
+            if (shopItem.item != null)
+            {
+                GameObject slot = Instantiate(shopItemPrefab, itemGrid);
+                spawnedItemSlots.Add(slot);
+                ShopItemUI itemUI = slot.GetComponent<ShopItemUI>();
+                itemUI.Setup(shopItem);
+            }
+        }
+
+        List<ShopCharacter> characters = ShopManager.Instance.GetAvailableCharacters();
+        foreach (ShopCharacter shopCharacter in characters)
+        {
+            if (!shopCharacter.character.isLocked)
+                continue;
+
+            GameObject slot = Instantiate(shopCharacterPrefab, characterGrid);
+            spawnedCharacterSlots.Add(slot);
+            ShopItemUI characterUI = slot.GetComponent<ShopItemUI>();
+            characterUI.Setup(shopCharacter);
         }
     }
 
