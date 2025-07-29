@@ -59,22 +59,15 @@ public class MainMenuUI : MonoBehaviour
         PlayButtonSound();
 
         if (LevelManager.Instance == null)
-        {
-            Debug.LogError("LevelManager not found!");
             return;
-        }
 
-        int latestIncompleteLevel = FindLatestIncompleteLevel();
-        if (latestIncompleteLevel >= 0)
+        if (LevelManager.Instance.GetCurrentLevel().levelNumber >= 0)
         {
-            LevelManager.Instance.SelectLevel(latestIncompleteLevel);
+            LevelManager.Instance.SelectLevel(LevelManager.Instance.GetCurrentLevel().levelNumber);
             SceneManager.LoadScene(combatSceneName);
         }
         else
-        {
-            Debug.LogWarning("No incomplete or unlocked levels found. Loading combat scene with default level.");
             SceneManager.LoadScene(combatSceneName);
-        }
     }
 
     void OnLevelSelectButtonClicked()

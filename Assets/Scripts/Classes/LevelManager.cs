@@ -40,13 +40,19 @@ public class LevelManager : MonoBehaviour
 
     public LevelData GetCurrentLevel()
     {
+        if (currentLevelIndex >= 0 && currentLevelIndex < allLevels.Length)
+            return allLevels[currentLevelIndex];
+
         LevelData selected = GetSelectedLevel();
         if (selected != null)
             return selected;
 
-        if (currentLevelIndex >= 0 && currentLevelIndex < allLevels.Length)
-            return allLevels[currentLevelIndex];
         return null;
+    }
+
+    public void NextLevel()
+    {
+        currentLevelIndex++;
     }
 
     public LevelData GetSelectedLevel()
@@ -96,11 +102,9 @@ public class LevelManager : MonoBehaviour
         if (levelIndex >= 0 && levelIndex < allLevels.Length && IsLevelUnlocked(levelIndex))
         {
             currentLevelIndex = levelIndex;
-            Debug.Log($"Selected level {levelIndex}: {allLevels[levelIndex].levelName}");
-
             PlayerPrefs.SetInt("SelectedLevelIndex", levelIndex);
+            PlayerPrefs.SetInt("CurrentLevelIndex", levelIndex);
             PlayerPrefs.Save();
-
             OnLevelSelected?.Invoke(allLevels[levelIndex]);
         }
     }
@@ -111,10 +115,15 @@ public class LevelManager : MonoBehaviour
         {
             string key = $"Level_{levelIndex}_Completed";
             PlayerPrefs.SetInt(key, 1);
-            PlayerPrefs.Save();
 
             if (levelIndex + 1 < allLevels.Length)
+            {
                 allLevels[levelIndex + 1].isUnlocked = true;
+                currentLevelIndex = levelIndex + 1;
+                PlayerPrefs.SetInt("CurrentLevelIndex", currentLevelIndex);
+            }
+
+            PlayerPrefs.Save();
 
             OnLevelCompleted?.Invoke(levelIndex);
             PerkManager.Instance.OnLevelCompleted(levelIndex + 1);
@@ -132,6 +141,22 @@ public class LevelManager : MonoBehaviour
 
     public void LoadProgress()
     {
+        currentLevelIndex = PlayerPrefs.GetInt("CurrentLevelIndex", 0);
+
+        if (currentLevelIndex >= allLevels.Length || !IsLevelUnlocked(currentLevelIndex))
+        {
+            for (int i = allLevels.Length - 1; i >= 0; i--)
+            {
+                if (IsLevelUnlocked(i))
+                {
+                    currentLevelIndex = i;
+                    PlayerPrefs.SetInt("CurrentLevelIndex", currentLevelIndex);
+                    PlayerPrefs.Save();
+                    break;
+                }
+            }
+        }
+
         UpdateLevelUnlockStatus();
     }
 

@@ -682,10 +682,8 @@ public class CombatManager : MonoBehaviour
             playerDefense += selectedItem.armorBonus;
 
         if (selectedItem.damageBonus > 0)
-        {
             foreach (var blockType in blockUpgrades.Keys.ToArray())
                 blockUpgrades[blockType] += selectedItem.damageBonus / 100f;
-        }
     }
 
     void HandleRewardScreenClosed()
@@ -778,8 +776,6 @@ public class CombatManager : MonoBehaviour
     void CompleteLevel()
     {
         OnLevelCompleted?.Invoke();
-        Debug.Log("Level completed!");
-
         if (currentLevelData != null && LevelManager.Instance != null)
         {
             int levelIndex = LevelManager.Instance.GetLevelIndex(currentLevelData);
