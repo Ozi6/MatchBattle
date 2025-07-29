@@ -536,8 +536,6 @@ public class Enemy : MonoBehaviour
         }
         debuffIcons.Clear();
 
-        Debug.Log($"{gameObject.name} died!");
-
         Destroy(gameObject);
     }
 
