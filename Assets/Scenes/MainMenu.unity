@@ -4380,7 +4380,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: -953}
+  m_AnchoredPosition: {x: 0.000025243418, y: -953}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &649207504
@@ -21759,8 +21759,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 102}
-  m_SizeDelta: {x: 375, y: 375}
+  m_AnchoredPosition: {x: 0.749, y: 144.75}
+  m_SizeDelta: {x: 376.4979, y: 289.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1084803189
 MonoBehaviour:
@@ -21783,7 +21783,7 @@ MonoBehaviour:
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 25, y: 25}
+  m_Spacing: {x: 38, y: 25}
   m_Constraint: 0
   m_ConstraintCount: 2
 --- !u!1 &1090232108
@@ -29223,6 +29223,66 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1403288298}
   m_CullTransparentMesh: 0
+--- !u!1 &1446896526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1446896527}
+  - component: {fileID: 1446896528}
+  m_Layer: 5
+  m_Name: Grid (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1446896527
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446896526}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1716258092}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0.749, y: -188}
+  m_SizeDelta: {x: 376.4979, y: 289.5}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1446896528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446896526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 0
+  m_StartCorner: 0
+  m_StartAxis: 0
+  m_CellSize: {x: 100, y: 100}
+  m_Spacing: {x: 25, y: 25}
+  m_Constraint: 0
+  m_ConstraintCount: 2
 --- !u!1 &1458554767
 GameObject:
   m_ObjectHideFlags: 0
@@ -31253,6 +31313,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1084803188}
+  - {fileID: 1446896527}
   m_Father: {fileID: 2029006961}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -32531,7 +32592,24 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 75c89ff50f8ea1a42b7addc453863eaa, type: 2}
   - {fileID: 11400000, guid: 406d0139ef71430428ad2a263c2426c9, type: 2}
   - {fileID: 11400000, guid: d5d3d1e91434a1d4294b8e1882908cd4, type: 2}
+  availableCharacters: []
+  characterDatabase:
+  - characterName: Gay Dude
+    characterID: 3
+    characterRenderTexture: {fileID: 8400000, guid: 7f2acb6a42bcf8546b1f8b163c26bc26, type: 2}
+    isLocked: 0
+    purchaseCost: 150
+    blockTypes: 
+    prefab: {fileID: 0}
+  - characterName: Sword Master
+    characterID: 4
+    characterRenderTexture: {fileID: 8400000, guid: 06aacb721a87b0342b660f63f611e641, type: 2}
+    isLocked: 0
+    purchaseCost: 0
+    blockTypes: 
+    prefab: {fileID: 0}
   maxShopItems: 12
+  maxShopCharacters: 3
   refreshDaily: 1
 --- !u!4 &1996392487
 Transform:
@@ -32855,9 +32933,9 @@ RectTransform:
   m_LocalScale: {x: 2.3911664, y: 2.3911664, z: 2.3911664}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 635580824}
   - {fileID: 1716258092}
   - {fileID: 1383778053}
+  - {fileID: 635580824}
   m_Father: {fileID: 2127890291}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -32918,7 +32996,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemGrid: {fileID: 1084803188}
+  characterGrid: {fileID: 1446896527}
   shopItemPrefab: {fileID: 1835234230780421848, guid: 2f40b1e924ef9d64a99cba46defc76c7, type: 3}
+  shopCharacterPrefab: {fileID: 6523750088722001256, guid: 43c1a9e99afd7a844b0171d0d3194192, type: 3}
   refreshButton: {fileID: 0}
   currencyText: {fileID: 920928972}
   showRefreshButton: 0

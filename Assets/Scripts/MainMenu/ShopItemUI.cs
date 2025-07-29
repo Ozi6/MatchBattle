@@ -19,7 +19,7 @@ public class ShopItemUI : MonoBehaviour
         shopCharacter = null;
         itemIcon.sprite = item.item.icon;
         itemNameText.text = item.item.name;
-        priceText.text = $"${item.price:F0}";
+        priceText.text = $"{item.price:F0}";
         stockText.text = $"Stock: {item.stock}";
         buyButton.interactable = item.isAvailable && item.stock > 0 && PlayerInventory.Instance.GetItemCount() < PlayerInventory.Instance.GetMaxCapacity();
         buyButton.onClick.RemoveAllListeners();
@@ -32,7 +32,7 @@ public class ShopItemUI : MonoBehaviour
         shopItem = null;
         itemIcon.sprite = GetCharacterSprite(character.character);
         itemNameText.text = character.character.characterName;
-        priceText.text = $"${character.price:F0}";
+        priceText.text = $"{character.price:F0}";
         stockText.text = character.character.isLocked ? "Locked" : "Unlocked";
         buyButton.interactable = character.character.isLocked && PlayerInventory.Instance.GetCurrency() >= character.price;
         buyButton.onClick.RemoveAllListeners();

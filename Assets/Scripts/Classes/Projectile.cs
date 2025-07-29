@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
     private IDebuffable debuffComponent;
     private IHoming homingComponent;
     private GameObject explosionEffectPrefab;
-    private Vector2 direction;
+    private Vector2 direction = Vector2.right;
     private Vector3 targetPosition;
     private bool isInitialized = false;
     private float explosionTimer = 0f;
@@ -43,7 +43,7 @@ public class Projectile : MonoBehaviour
     public void Initialize(Vector2 dir, ProjectileData projectileData, Enemy target = null, GameObject[] inFlightEffects = null, GameObject[] onContactEffects = null)
     {
         data = projectileData.Clone();
-        direction = dir.normalized;
+        direction = Vector2.right;
         isInitialized = true;
         hasExploded = false;
         currentLifetime = data.lifetime;
@@ -57,9 +57,7 @@ public class Projectile : MonoBehaviour
             for (int i = 0; i < inFlightEffects.Length; i++)
             {
                 if (inFlightEffects[i] != null)
-                {
                     inFlightEffectInstances[i] = Instantiate(inFlightEffects[i], transform.position, Quaternion.identity, transform);
-                }
             }
         }
 
@@ -91,6 +89,7 @@ public class Projectile : MonoBehaviour
             trailRenderer.enabled = true;
             trailRenderer.Clear();
         }
+        transform.rotation = Quaternion.identity;
     }
 
     public void SetTargetPosition(Vector3 target)
@@ -182,20 +181,16 @@ public class Projectile : MonoBehaviour
 
         if (knockbackComponent != null)
         {
-            Vector2 knockbackDirection = arcTrajectoryComponent != null
-                ? (enemy.transform.position - transform.position).normalized
-                : new Vector2(direction.x, 0f).normalized;
+            Vector2 knockbackDirection = direction;
             knockbackComponent.ApplyKnockback(enemy, knockbackDirection, 1f, data.knockbackDuration);
         }
 
         OnProjectileHitEnemy?.Invoke(this, enemy);
         TriggerOnContactEffects(transform.position);
-        Debug.Log($"Projectile hit {enemy.name} for {data.damage} damage");
 
         if (data.piercing && pierceCount < data.maxPierceCount)
         {
             pierceCount++;
-            Debug.Log($"Projectile pierced enemy! Pierce count: {pierceCount}/{data.maxPierceCount}");
             if (data.hasAreaEffect)
             {
                 explosionComponent?.Explode(transform.position, data.damage, data.areaRadius, debuffComponent, knockbackComponent);

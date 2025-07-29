@@ -583,11 +583,12 @@ public class CombatManager : MonoBehaviour
 
         GameObject enemyPrefab = currentWaveData.enemyPrefabs[UnityEngine.Random.Range(0, currentWaveData.enemyPrefabs.Length)];
 
-        Vector3 spawnPos = enemySpawnPoint.position + new Vector3(
-            UnityEngine.Random.Range(-2f, 2f),
-            0f,
-            0f
-        );
+        float xOffset = UnityEngine.Random.Range(-0.25f, 0.25f);
+        bool isUpper = UnityEngine.Random.Range(0, 2) == 0;
+        float yOffset = isUpper ? UnityEngine.Random.Range(0.1f, 0.2f) : UnityEngine.Random.Range(-0.2f, -0.1f);
+        float zPosition = isUpper ? 1f : 0f;
+
+        Vector3 spawnPos = enemySpawnPoint.position + new Vector3(xOffset, yOffset, zPosition);
 
         GameObject enemyObj = Instantiate(enemyPrefab, spawnPos, Quaternion.identity, enemySpawnPoint);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
@@ -602,6 +603,10 @@ public class CombatManager : MonoBehaviour
 
             enemy.OnEnemyDeath += OnEnemyKilled;
             enemy.OnEnemyAttackPlayer += OnEnemyAttackPlayer;
+
+            SpriteRenderer spriteRenderer = enemyObj.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null)
+                spriteRenderer.sortingOrder = isUpper ? 0 : 1;
 
             activeEnemies.Add(enemy);
         }

@@ -48,6 +48,7 @@ public class Enemy : MonoBehaviour
     public Action<Enemy, float> OnEnemyAttackPlayer;
 
     private float[] enemyBaseData = new float[2];
+    private bool isFlashing = false;
 
     void Awake()
     {
@@ -288,7 +289,8 @@ public class Enemy : MonoBehaviour
         UpdateHealthBar();
         OnEnemyTakeDamage?.Invoke(this, damage);
 
-        StartCoroutine(DamageFlash());
+        if(!isFlashing)
+            StartCoroutine(DamageFlash());
 
         if (currentHealth <= 0)
             StartCoroutine(Die());
@@ -479,6 +481,8 @@ public class Enemy : MonoBehaviour
 
     IEnumerator DamageFlash()
     {
+        isFlashing = true;
+
         SpriteRenderer[] spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
 
         Material[] originalMaterials = new Material[spriteRenderers.Length];
@@ -492,6 +496,8 @@ public class Enemy : MonoBehaviour
 
         for (int i = 0; i < spriteRenderers.Length; i++)
             spriteRenderers[i].material = originalMaterials[i];
+
+        isFlashing = false;
     }
 
     IEnumerator Die()
