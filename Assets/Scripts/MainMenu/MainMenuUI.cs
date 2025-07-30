@@ -64,10 +64,10 @@ public class MainMenuUI : MonoBehaviour
         if (LevelManager.Instance.GetCurrentLevel().levelNumber >= 0)
         {
             LevelManager.Instance.SelectLevel(LevelManager.Instance.GetCurrentLevel().levelNumber);
-            SceneManager.LoadScene(combatSceneName);
+            SceneFadeManager.Instance.LoadSceneWithFade(combatSceneName);
         }
         else
-            SceneManager.LoadScene(combatSceneName);
+            SceneFadeManager.Instance.LoadSceneWithFade(combatSceneName);
     }
 
     void OnLevelSelectButtonClicked()

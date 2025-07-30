@@ -156,11 +156,8 @@ public class RewardScreen : MonoBehaviour
 
     void GoToMainMenu()
     {
-        // Reset time scale in case it was paused
         Time.timeScale = 1f;
-
-        // Load the MainMenu scene
-        SceneManager.LoadScene("MainMenu");
+        SceneFadeManager.Instance.LoadSceneWithFade("MainMenu");
     }
 
     void ShowScreen()

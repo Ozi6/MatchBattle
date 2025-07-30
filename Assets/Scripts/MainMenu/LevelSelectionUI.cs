@@ -366,7 +366,7 @@ public class LevelSelectionUI : MonoBehaviour
         if (selectedLevelIndex >= 0)
         {
             LevelManager.Instance.SelectLevel(selectedLevelIndex);
-            SceneManager.LoadScene(combatSceneName);
+            SceneFadeManager.Instance.LoadSceneWithFade(combatSceneName);
         }
     }
 

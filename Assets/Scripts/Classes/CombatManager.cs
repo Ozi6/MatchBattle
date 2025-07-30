@@ -238,7 +238,7 @@ public class CombatManager : MonoBehaviour
     void ReturnToMainMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("MainMenu");
+        SceneFadeManager.Instance.LoadSceneWithFade("MainMenu");
     }
 
     void RetryLevel()
