@@ -28,7 +28,7 @@ public class CharacterSelectUI : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource buttonClickSound;
 
-    private Character[] characters;
+    private List<Character> characters;
     private Character selectedCharacter;
     private Character characterToPurchase;
     private Dictionary<BlockType, BlockData> blockDataDict;

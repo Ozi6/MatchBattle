@@ -23,7 +23,7 @@ public class PlayerInventory : MonoBehaviour
     private List<Perk> ownedPerks = new List<Perk>();
     [SerializeField] private int maxCapacity = 20;
     [SerializeField] private float currency = 1000f;
-    [SerializeField] private Character[] availableCharacters;
+    [SerializeField] private CharacterDatabase characterDatabase;
     private Character selectedCharacter;
     [SerializeField] private ItemDatabase itemDatabase;
 
@@ -44,7 +44,7 @@ public class PlayerInventory : MonoBehaviour
 
     private void InitializeCharacters()
     {
-        selectedCharacter = availableCharacters[0];
+        selectedCharacter = characterDatabase.characters.FirstOrDefault(c => !c.isLocked) ?? characterDatabase.characters[0];
     }
 
     public bool AddItem(Item item)
@@ -293,9 +293,9 @@ public class PlayerInventory : MonoBehaviour
         SaveInventory();
     }
 
-    public Character[] GetAvailableCharacters()
+    public List<Character> GetAvailableCharacters()
     {
-        return availableCharacters;
+        return new List<Character>(characterDatabase.characters);
     }
 
     public Character GetSelectedCharacter()
@@ -305,7 +305,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void SelectCharacter(int characterID)
     {
-        foreach (Character character in availableCharacters)
+        foreach (Character character in characterDatabase.characters)
         {
             if (character.characterID == characterID && !character.isLocked)
             {
@@ -318,7 +318,7 @@ public class PlayerInventory : MonoBehaviour
 
     public bool UnlockCharacter(int characterID)
     {
-        foreach (Character character in availableCharacters)
+        foreach (Character character in characterDatabase.characters)
         {
             if (character.characterID == characterID && character.isLocked)
             {
@@ -350,7 +350,7 @@ public class PlayerInventory : MonoBehaviour
 
         PlayerPrefs.SetInt("SelectedCharacterID", selectedCharacter?.characterID ?? -1);
 
-        string unlockedCharacters = string.Join(",", availableCharacters
+        string unlockedCharacters = string.Join(",", characterDatabase.characters
             .Select(c => c.characterID + ":" + (c.isLocked ? "0" : "1")));
         PlayerPrefs.SetString("UnlockedCharacters", unlockedCharacters);
 
@@ -377,7 +377,7 @@ public class PlayerInventory : MonoBehaviour
         currency = PlayerPrefs.GetFloat("PlayerCurrency", 1000f);
 
         int selectedCharacterID = PlayerPrefs.GetInt("SelectedCharacterID", -1);
-        selectedCharacter = availableCharacters.FirstOrDefault(c => c.characterID == selectedCharacterID) ?? availableCharacters[0];
+        selectedCharacter = characterDatabase.characters.FirstOrDefault(c => c.characterID == selectedCharacterID) ?? characterDatabase.characters[0];
 
         string unlockedCharacters = PlayerPrefs.GetString("UnlockedCharacters", "");
         if (!string.IsNullOrEmpty(unlockedCharacters))
@@ -387,7 +387,7 @@ public class PlayerInventory : MonoBehaviour
                 string[] parts = charData.Split(':');
                 if (parts.Length == 2 && int.TryParse(parts[0], out int charID) && int.TryParse(parts[1], out int isUnlocked))
                 {
-                    Character character = availableCharacters.FirstOrDefault(c => c.characterID == charID);
+                    Character character = characterDatabase.characters.FirstOrDefault(c => c.characterID == charID);
                     if (character != null)
                         character.isLocked = isUnlocked == 0;
                 }

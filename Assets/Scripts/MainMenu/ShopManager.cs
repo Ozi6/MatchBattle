@@ -9,7 +9,7 @@ public class ShopManager : MonoBehaviour
 
     [Header("Shop Characters")]
     [SerializeField] private List<ShopCharacter> availableCharacters = new List<ShopCharacter>();
-    [SerializeField] private List<Character> characterDatabase = new List<Character>();
+    [SerializeField] private CharacterDatabase characterDatabase;
 
     [Header("Shop Settings")]
     [SerializeField] private int maxShopItems = 12;
@@ -47,7 +47,7 @@ public class ShopManager : MonoBehaviour
     void GenerateShopCharacters()
     {
         availableCharacters.Clear();
-        List<Character> lockedCharacters = characterDatabase.FindAll(c => c.isLocked);
+        List<Character> lockedCharacters = characterDatabase.characters.FindAll(c => c.isLocked);
         int charactersToShow = Mathf.Min(maxShopCharacters, lockedCharacters.Count);
 
         for (int i = 0; i < charactersToShow; i++)

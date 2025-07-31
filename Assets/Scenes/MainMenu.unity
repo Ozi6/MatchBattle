@@ -32124,28 +32124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxCapacity: 30
   currency: 1000
-  availableCharacters:
-  - characterName: Default Guy
-    characterID: 0
-    characterRenderTexture: {fileID: 8400000, guid: 964fa08ce6534714ab634cb919531022, type: 2}
-    isLocked: 0
-    purchaseCost: 0
-    blockTypes: 0000000001000000020000000300000005000000
-    prefab: {fileID: 4770648466864683859, guid: b2a81b5387408824bbb782ddb7edc278, type: 3}
-  - characterName: Archer
-    characterID: 1
-    characterRenderTexture: {fileID: 8400000, guid: 73e666fd72b05244eb62eb8a1eaa5e88, type: 2}
-    isLocked: 0
-    purchaseCost: 0
-    blockTypes: 0100000005000000020000000300000006000000
-    prefab: {fileID: 5455550220287064230, guid: 0d9f235513b174641b333a8ee81ca61f, type: 3}
-  - characterName: Traumatized Guy
-    characterID: 2
-    characterRenderTexture: {fileID: 8400000, guid: 5b0d17612fa9cb447a85a1c7978f622f, type: 2}
-    isLocked: 0
-    purchaseCost: 0
-    blockTypes: 0400000002000000010000000500000006000000
-    prefab: {fileID: 3286037618124636975, guid: 81c21812567db1f4e837da944aad8ee1, type: 3}
+  characterDatabase: {fileID: 11400000, guid: 63d312620ece25f4091b53f72fe8b912, type: 2}
   itemDatabase: {fileID: 11400000, guid: 2ae3f731d0e74f24c8ce1789a86f3fee, type: 2}
 --- !u!1 &1895109753
 GameObject:
@@ -32640,21 +32619,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 406d0139ef71430428ad2a263c2426c9, type: 2}
   - {fileID: 11400000, guid: d5d3d1e91434a1d4294b8e1882908cd4, type: 2}
   availableCharacters: []
-  characterDatabase:
-  - characterName: Gay Dude
-    characterID: 3
-    characterRenderTexture: {fileID: 8400000, guid: 7f2acb6a42bcf8546b1f8b163c26bc26, type: 2}
-    isLocked: 1
-    purchaseCost: 150
-    blockTypes: 
-    prefab: {fileID: 0}
-  - characterName: Sword Master
-    characterID: 4
-    characterRenderTexture: {fileID: 8400000, guid: 06aacb721a87b0342b660f63f611e641, type: 2}
-    isLocked: 1
-    purchaseCost: 800
-    blockTypes: 
-    prefab: {fileID: 0}
+  characterDatabase: {fileID: 11400000, guid: 63d312620ece25f4091b53f72fe8b912, type: 2}
   maxShopItems: 12
   maxShopCharacters: 3
   refreshDaily: 1

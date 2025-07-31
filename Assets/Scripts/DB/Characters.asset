@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f99de5274d764498eff42535602dc6, type: 3}
+  m_Name: Characters
+  m_EditorClassIdentifier: 
+  characters:
+  - characterName: Default
+    characterID: 0
+    characterRenderTexture: {fileID: 8400000, guid: 964fa08ce6534714ab634cb919531022, type: 2}
+    isLocked: 0
+    purchaseCost: 0
+    blockTypes: 0000000001000000050000000200000000000000
+    prefab: {fileID: 4770648466864683859, guid: b2a81b5387408824bbb782ddb7edc278, type: 3}
+  - characterName: Archer
+    characterID: 1
+    characterRenderTexture: {fileID: 8400000, guid: 73e666fd72b05244eb62eb8a1eaa5e88, type: 2}
+    isLocked: 1
+    purchaseCost: 100
+    blockTypes: 0500000003000000030000000200000006000000
+    prefab: {fileID: 5455550220287064230, guid: 0d9f235513b174641b333a8ee81ca61f, type: 3}
+  - characterName: Traumatized
+    characterID: 2
+    characterRenderTexture: {fileID: 8400000, guid: 5b0d17612fa9cb447a85a1c7978f622f, type: 2}
+    isLocked: 1
+    purchaseCost: 150
+    blockTypes: 0000000004000000050000000600000001000000
+    prefab: {fileID: 3286037618124636975, guid: 81c21812567db1f4e837da944aad8ee1, type: 3}
+  - characterName: Cocky
+    characterID: 3
+    characterRenderTexture: {fileID: 8400000, guid: 7f2acb6a42bcf8546b1f8b163c26bc26, type: 2}
+    isLocked: 1
+    purchaseCost: 125
+    blockTypes: 0600000005000000030000000400000002000000
+    prefab: {fileID: 8051104226442029364, guid: f57b239c9a78e1341882916ef3f22d5a, type: 3}
+  - characterName: Strongest
+    characterID: 4
+    characterRenderTexture: {fileID: 8400000, guid: 06aacb721a87b0342b660f63f611e641, type: 2}
+    isLocked: 1
+    purchaseCost: 1000
+    blockTypes: 0000000000000000000000000000000000000000
+    prefab: {fileID: 1882980608508130582, guid: 43f4fc97915c0bd46880c6d9cc2a5804, type: 3}
