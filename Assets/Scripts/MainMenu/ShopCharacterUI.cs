@@ -1,15 +1,39 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-[System.Serializable]
-public class ShopCharacter
+public class ShopCharacterUI : MonoBehaviour
 {
-    public Character character;
-    public float price;
-    public bool isAvailable = true;
+    [SerializeField] private RawImage characterPreview;
+    [SerializeField] private TextMeshProUGUI characterNameText;
+    [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private TextMeshProUGUI statusText;
+    [SerializeField] private Button buyButton;
 
-    public ShopCharacter(Character character, float price)
+    private ShopCharacter shopCharacter;
+
+    public void Setup(ShopCharacter character)
     {
-        this.character = character;
-        this.price = price;
+        shopCharacter = character;
+        characterPreview.texture = character.character.characterRenderTexture;
+        characterNameText.text = character.character.characterName;
+        priceText.text = $"${character.price:F0}";
+        statusText.text = character.character.isLocked ? "Locked" : "Unlocked";
+        buyButton.interactable = character.character.isLocked && PlayerInventory.Instance.GetCurrency() >= character.price;
+        buyButton.onClick.RemoveAllListeners();
+        buyButton.onClick.AddListener(OnBuyCharacterClicked);
+    }
+
+    void OnBuyCharacterClicked()
+    {
+        if (shopCharacter == null)
+            return;
+
+        if (PlayerInventory.Instance.GetCurrency() >= shopCharacter.price && PlayerInventory.Instance.UnlockCharacter(shopCharacter.character.characterID))
+        {
+            shopCharacter.character.isLocked = false;
+            ShopManager.Instance.RemoveCharacterFromShop(shopCharacter);
+            FindAnyObjectByType<ShopUI>().OnItemPurchased();
+        }
     }
 }

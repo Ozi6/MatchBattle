@@ -32644,15 +32644,15 @@ MonoBehaviour:
   - characterName: Gay Dude
     characterID: 3
     characterRenderTexture: {fileID: 8400000, guid: 7f2acb6a42bcf8546b1f8b163c26bc26, type: 2}
-    isLocked: 0
+    isLocked: 1
     purchaseCost: 150
     blockTypes: 
     prefab: {fileID: 0}
   - characterName: Sword Master
     characterID: 4
     characterRenderTexture: {fileID: 8400000, guid: 06aacb721a87b0342b660f63f611e641, type: 2}
-    isLocked: 0
-    purchaseCost: 0
+    isLocked: 1
+    purchaseCost: 800
     blockTypes: 
     prefab: {fileID: 0}
   maxShopItems: 12
@@ -33045,7 +33045,7 @@ MonoBehaviour:
   itemGrid: {fileID: 1084803188}
   characterGrid: {fileID: 1446896527}
   shopItemPrefab: {fileID: 1835234230780421848, guid: 2f40b1e924ef9d64a99cba46defc76c7, type: 3}
-  shopCharacterPrefab: {fileID: 6523750088722001256, guid: 43c1a9e99afd7a844b0171d0d3194192, type: 3}
+  shopCharacterPrefab: {fileID: 6523750088722001256, guid: f45c1b6a02e4e5d42908c60205cd530d, type: 3}
   refreshButton: {fileID: 0}
   currencyText: {fileID: 920928972}
   showRefreshButton: 0

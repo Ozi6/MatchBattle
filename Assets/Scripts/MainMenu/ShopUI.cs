@@ -59,7 +59,7 @@ public class ShopUI : MonoBehaviour
 
             GameObject slot = Instantiate(shopCharacterPrefab, characterGrid);
             spawnedCharacterSlots.Add(slot);
-            ShopItemUI characterUI = slot.GetComponent<ShopItemUI>();
+            ShopCharacterUI characterUI = slot.GetComponent<ShopCharacterUI>();
             characterUI.Setup(shopCharacter);
         }
     }
