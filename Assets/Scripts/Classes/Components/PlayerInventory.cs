@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 [System.Serializable]
 public class Character
@@ -29,14 +30,16 @@ public class PlayerInventory : MonoBehaviour
 
     public static PlayerInventory Instance { get; private set; }
 
+    public event Action<int> OnCharacterUnlocked;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            InitializeCharacters();
             LoadInventory();
+            InitializeCharacters();
         }
         else
             Destroy(gameObject);
@@ -45,6 +48,7 @@ public class PlayerInventory : MonoBehaviour
     private void InitializeCharacters()
     {
         selectedCharacter = characterDatabase.characters.FirstOrDefault(c => !c.isLocked) ?? characterDatabase.characters[0];
+        Debug.Log($"Selected character: {selectedCharacter?.characterName} (ID: {selectedCharacter?.characterID}, isLocked: {selectedCharacter?.isLocked})");
     }
 
     public bool AddItem(Item item)
@@ -248,7 +252,7 @@ public class PlayerInventory : MonoBehaviour
         upgradedItem.description = item1.description;
         upgradedItem.icon = item1.icon;
         upgradedItem.rarity = (ItemRarity)((int)item1.rarity + 1);
-        upgradedItem.itemType = item1.itemType;
+        upgradedItem.itemType = (ItemType)item1.itemType;
         upgradedItem.healthBonus = item1.healthBonus;
         upgradedItem.armorBonus = item1.armorBonus;
         upgradedItem.damageBonus = item1.damageBonus;
@@ -326,11 +330,15 @@ public class PlayerInventory : MonoBehaviour
                 {
                     character.isLocked = false;
                     SaveInventory();
+                    OnCharacterUnlocked?.Invoke(characterID);
+                    Debug.Log($"Character {character.characterName} (ID: {characterID}) unlocked");
                     return true;
                 }
+                Debug.Log($"Failed to unlock character {character.characterName} (ID: {characterID}): Insufficient currency");
                 return false;
             }
         }
+        Debug.Log($"Failed to unlock character ID {characterID}: Already unlocked or not found");
         return false;
     }
 
@@ -389,9 +397,16 @@ public class PlayerInventory : MonoBehaviour
                 {
                     Character character = characterDatabase.characters.FirstOrDefault(c => c.characterID == charID);
                     if (character != null)
+                    {
                         character.isLocked = isUnlocked == 0;
+                        Debug.Log($"Loaded character {character.characterName} (ID: {charID}, isLocked: {character.isLocked})");
+                    }
                 }
             }
+        }
+        else
+        {
+            Debug.Log("No UnlockedCharacters data found in PlayerPrefs. Using CharacterDatabase defaults.");
         }
 
         inventoryItems.Clear();

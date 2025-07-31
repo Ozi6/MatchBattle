@@ -38,6 +38,14 @@ public class CharacterSelectUI : MonoBehaviour
         InitializeBlockData();
         InitializeCharacterSelection();
         SetupPurchasePopup();
+        if (PlayerInventory.Instance != null)
+            PlayerInventory.Instance.OnCharacterUnlocked += OnCharacterUnlockedHandler;
+    }
+
+    void OnDestroy()
+    {
+        if (PlayerInventory.Instance != null)
+            PlayerInventory.Instance.OnCharacterUnlocked -= OnCharacterUnlockedHandler;
     }
 
     private void InitializeBlockData()
@@ -179,5 +187,12 @@ public class CharacterSelectUI : MonoBehaviour
     {
         if (buttonClickSound != null)
             buttonClickSound.Play();
+    }
+
+    private void OnCharacterUnlockedHandler(int characterID)
+    {
+        Debug.Log($"CharacterSelectUI: Character ID {characterID} unlocked, refreshing UI");
+        InitializeCharacterSelection();
+        UpdateCurrencyDisplay();
     }
 }
