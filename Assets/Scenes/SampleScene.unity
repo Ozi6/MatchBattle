@@ -2560,6 +2560,36 @@ MonoBehaviour:
     - {fileID: 187952, guid: c05e92eaee7a00844867e5edc8e0dde1, type: 3}
     - {fileID: 165672, guid: 146d2ff25be0f824fa285b16b2915ff3, type: 3}
     - {fileID: 1724243991040466, guid: f3377962368b1df43ae045f46ddaf9cd, type: 3}
+  - blockType: 4
+    baseDamage: 5
+    baseDefense: 0
+    isDefensive: 0
+    actionName: Shoot Ice
+    comboScaling: 10
+    maxComboBonus: 8
+    projectilePrefab: {fileID: 6577921205914836696, guid: 3366f412758983647bc28cc03a62a637, type: 3}
+    projectileSpeed: 2
+    debuffType: 1
+    debuffDuration: 5
+    debuffIntensity: 1
+    isPiercing: 1
+    hasAreaEffect: 0
+    areaRadius: 2
+    baseKnockbackForce: 0
+    knockbackDuration: 0
+    projectileType: 3
+    baseProjectileCount: 1
+    projectileCountPerCombo: 1
+    usesArcTrajectory: 0
+    arcHeight: 2
+    explosionDelay: 2
+    explodesOnTimer: 0
+    explodesOnContact: 0
+    isHoming: 0
+    homingStrength: 2
+    homingRange: 3
+    inFlightEffects: []
+    onContactEffects: []
   currentWave: 1
   totalWaves: 5
   waveClearDelay: 2
@@ -5306,9 +5336,9 @@ MonoBehaviour:
     debuffType: 0
     debuffDuration: 0
     debuffIntensity: 0
-    projectilePrefab: {fileID: 0}
+    projectilePrefab: {fileID: 6577921205914836696, guid: 3366f412758983647bc28cc03a62a637, type: 3}
     projectileSpeed: 5
-    isPiercing: 0
+    isPiercing: 1
     hasAreaEffect: 0
     areaRadius: 1
   - type: 5
@@ -5363,11 +5393,11 @@ MonoBehaviour:
     isPiercing: 0
     hasAreaEffect: 1
     areaRadius: 15
-  - type: 6
-    sprite: {fileID: 21300000, guid: d60f24b57ce98450e8a7624f85975706, type: 3}
+  - type: 8
+    sprite: {fileID: 21300000, guid: 0a45b979ac5144eb4aba3aa461dff52b, type: 3}
     color: {r: 1, g: 1, b: 1, a: 0}
     multiplier: 1
-    isOffensive: 1
+    isOffensive: 0
     debuffType: 0
     debuffDuration: 0
     debuffIntensity: 0
